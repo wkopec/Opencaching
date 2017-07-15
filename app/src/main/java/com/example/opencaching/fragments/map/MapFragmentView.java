@@ -5,4 +5,9 @@ package com.example.opencaching.fragments.map;
  */
 
 public interface MapFragmentView {
+
+    void showProgress();
+
+    void hideProgress();
+
 }

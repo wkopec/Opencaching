@@ -92,7 +92,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
         if (item.type == HEADER){
             holder.parent.setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimaryDark));
-            holder.iconImage.getDrawable().setColorFilter(null);
+            //holder.iconImage.getDrawable().setColorFilter(null);
         }
 
         if (item.type == GROUP){

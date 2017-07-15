@@ -8,17 +8,20 @@
     android:paddingTop="@dimen/spacing_normal_x2"
     android:background="@color/colorPrimaryDark"
     android:id="@+id/parent">
+
     <ImageView
         android:id="@+id/icon_image"
         android:layout_width="@dimen/spacing_normal"
         android:layout_height="@dimen/spacing_normal"
-        android:layout_marginEnd="@dimen/spacing_normal"/>
+        android:layout_marginEnd="@dimen/spacing_normal"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/nav_map"/>
+        android:textSize="@dimen/text_size_very_big"
+        android:text="@string/app_name"/>
 
     <View
         android:layout_width="match_parent"

@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">Opencaching</string>
+
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+    <string name="single_back_press_message">Wciśnij ponownie Wstecz aby wyjść</string>
+    <string name="main_menu">Menu główne</string>
+    <string name="user_menu">Menu użytkownika</string>
+    <string name="options">Menu użytkownika</string>
+
+    <!-- Navigation Drawer menu labels -->
+    <string name="nav_map">Mapa</string>
+    <string name="nav_notifications">Powiadomienia</string>
+    <string name="nav_search">Szukaj</string>
+    <string name="nav_settings">Ustawienia</string>
+    <string name="nav_logout">Wyloguj się</string>
+    <string name="action_logout">Wyloguj się</string>
+    <string name="nav_user_stats">Moje statystyki</string>
+    <string name="nav_user_geocaches">Moje skrzynki</string>
+    <string name="nav_user_neighbourhood">Moja okolica</string>
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>Mapa</item>
+        <item>Powiadomienia</item>
+        <item>Szukaj</item>
+        <item>Ustawienia</item>
+        <item>Wyloguj się</item>
+    </string-array>
+
+
 </resources>

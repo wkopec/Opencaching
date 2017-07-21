@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:stretchColumns="2"
+    android:padding="@dimen/spacing_small">
+    <TableRow>
+        <TextView
+            android:id="@+id/name"
+            style="@style/Text.Normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Krosno Airport" />
+        <TextView
+            android:id="@+id/code"
+            style="@style/Text.Normal"
+            android:gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle=""
+            android:text="OP7243" />
+    </TableRow>
+
+    <TableRow android:layout_marginTop="@dimen/spacing_very_small">
+        <TextView
+            android:id="@+id/sizeTextView"
+            style="@style/Text.VerySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wielkość: Normalna" />
+
+        <TextView
+            android:id="@+id/foundTextView"
+            style="@style/Text.VerySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:text="29x znaleziona"
+            android:drawableStart="@drawable/log_found"
+            android:drawablePadding="@dimen/spacing_very_small"/>
+    </TableRow>
+
+    <TableRow android:layout_marginTop="@dimen/spacing_very_small">
+        <TextView
+            android:id="@+id/rateTextView"
+            style="@style/Text.VerySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ocena: Znakomita" />
+
+        <TextView
+            android:id="@+id/notFoundTextView"
+            style="@style/Text.VerySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:text="0x nieznaleziona"
+            android:drawableStart="@drawable/log_dnf"
+            android:drawablePadding="@dimen/spacing_very_small"/>
+    </TableRow>
+
+    <TableRow android:layout_marginTop="@dimen/spacing_very_small">
+        <TextView
+            android:id="@+id/ownerTextView"
+            style="@style/Text.VerySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Właściciel: Volfram" />
+
+        <TextView
+            android:id="@+id/recomendationTextView"
+            style="@style/Text.VerySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:text="9x rekomendowana"
+            android:drawableStart="@drawable/ic_recomendation"
+            android:drawablePadding="@dimen/spacing_very_small"/>
+    </TableRow>
+
+</TableLayout>

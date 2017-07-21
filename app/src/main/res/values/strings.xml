@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Opencaching</string>
     <string name="google_maps_key">AIzaSyB2I-uCmanDnjzqZQyYZjAHGy29XElc4NY</string>
-
-
+    <string name="opencaching_key">eSLCuVzRJJsYUUfUs6Su</string>
+    <string name="opencaching_secret_key">nGdfx64ksCvwk7XDSnmsVCgGpnsFh9ZwG4B5Yweg</string>
 
     <string name="openDrawer">open_drawer</string>
     <string name="closeDrawer">close_drawer</string>

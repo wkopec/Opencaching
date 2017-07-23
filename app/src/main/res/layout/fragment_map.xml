@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+
+      <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -10,4 +11,14 @@
         tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/mapInfoMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pewna wiadomość"
+            android:padding="@dimen/spacing_very_small"
+            android:textColor="@color/white"
+            android:background="@color/black"
+            android:alpha="0.5"/>
+
+</RelativeLayout>

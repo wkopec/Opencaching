@@ -14,9 +14,15 @@ public class Results {
     @SerializedName("results")
     @Expose
     private ArrayList<String> results;
+    @SerializedName("more")
+    @Expose
+    private boolean more;
 
     public ArrayList<String> getResults() {
         return results;
     }
 
+    public boolean isMore() {
+        return more;
+    }
 }

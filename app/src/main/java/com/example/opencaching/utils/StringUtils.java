@@ -1,5 +1,9 @@
 package com.example.opencaching.utils;
 
+import android.content.Context;
+
+import com.example.opencaching.R;
+
 import java.util.ArrayList;
 
 /**
@@ -7,7 +11,6 @@ import java.util.ArrayList;
  */
 
 public class StringUtils {
-
 
     public static String getApiFormatedFields(ArrayList<String> fields) {
         String apiFormatedWaypoints = fields.get(0);
@@ -18,6 +21,5 @@ public class StringUtils {
         }
         return apiFormatedWaypoints;
     }
-
 
 }

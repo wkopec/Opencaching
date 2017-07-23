@@ -1,6 +1,9 @@
 package com.example.opencaching.fragments.map;
 
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,23 +13,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.opencaching.R;
 import com.example.opencaching.activities.MainActivity;
+import com.example.opencaching.models.CircleArea;
 import com.example.opencaching.models.Geocache;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.example.opencaching.utils.ResourceUtils.getGeocacheIcon;
+import static com.example.opencaching.utils.ResourceUtils.getGeocacheSelectedIcon;
 
 /**
  * Created by Volfram on 15.05.2017.
@@ -34,11 +49,22 @@ import butterknife.Unbinder;
 
 public class MapFragment extends Fragment implements MapFragmentView, OnMapReadyCallback {
 
+    private static final int GEOCACHE_REQUEST_KM_RADIUS = 20;
+    private static final float START_MAP_LATITUDE = (float) 51.92;
+    private static final float START_MAP_LONGITUDE = (float) 19.15;
+    private static final float START_MAP_ZOOM = (float) 5.6;
+
+    @BindView(R.id.mapInfoMessage)
+    TextView mapInfoMessage;
 
     private MapFragmentPresenter presenter;
     private MainActivity activity;
     private GoogleMap mMap;
-    private Map<String, Geocache> geocaches;
+    private ClusterManager<Geocache> mClusterManager;
+    private Map<String, Geocache> displayedGeocaches;
+    private Marker lastSelectedMarker;
+    private ArrayList<CircleArea> coveredArea;
+    private boolean isMapInfoShown;
     Unbinder unbinder;
 
     @Nullable
@@ -46,16 +72,15 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, null);
         unbinder = ButterKnife.bind(this, view);
-
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
         activity = (MainActivity) getActivity();
         activity.setActionBarTitle(R.string.app_name);
+
         presenter = new MapFragmentPresenter(this, activity);
-
-        presenter.getWaypoints("50.20|19.30");
-
+        displayedGeocaches = new HashMap<>();
+        coveredArea = new ArrayList<>();
+        hideMapInfo();
         return view;
     }
 
@@ -66,36 +91,21 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
         }
     }
 
-//    private void showLocationSettingsDialog() {
-//        new AlertDialog.Builder(activity)
-//                .setTitle(R.string.warning)
-//                .setMessage(R.string.message_location_settings)
-//                .setNegativeButton(R.string.cancel, null)
-//                .setPositiveButton(R.string.settings, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//                        startActivity(intent);
-//                    }
-//                })
-//                .show();
-//    }
-
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        float mapLat = (float) 51.92;
-        float mapLang = (float) 19.15;
-        float mapZoom = (float) 5.6;
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mapLat, mapLang), mapZoom));
-        configureInfoWindowAdapter();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(START_MAP_LATITUDE, START_MAP_LONGITUDE), START_MAP_ZOOM));
 
+        mClusterManager = new ClusterManager<>(activity, mMap);
+        mClusterManager.setRenderer(new OwnIconRendered(activity.getApplicationContext(), mMap, mClusterManager));
+        mMap.setOnCameraIdleListener(mClusterManager);
+        mMap.setOnMarkerClickListener(mClusterManager);
+        mMap.setOnInfoWindowClickListener(mClusterManager);
+        configureMap();
     }
 
-    private void configureInfoWindowAdapter() {
+    private void configureMap() {
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
             @Override
             public View getInfoWindow(Marker marker) {
                 return null;
@@ -103,34 +113,101 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
 
             @Override
             public View getInfoContents(Marker marker) {
-                View view =  LayoutInflater.from(activity).inflate(R.layout.item_geocache_marker_window, null);
-                TextView textView = (TextView) view.findViewById(R.id.name);
-                Geocache geocache = geocaches.get(marker.getSnippet());
-                //Log.d("Test", geocache.getCode());
-                //textView.setText(geocache.getName());
+                if (marker.getSnippet() == null)
+                    return null;
+                View view = LayoutInflater.from(activity).inflate(R.layout.item_geocache_marker_window, null);
+                Geocache geocache = displayedGeocaches.get(marker.getSnippet());
+                presenter.setMarkerWindowData(view, geocache);
                 return view;
             }
+        });
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                setLastSelectedMarkerIcon();
+            }
+        });
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.getSnippet() != null) {
+                    setLastSelectedMarkerIcon();
+                    lastSelectedMarker = marker;
+                    Geocache geocache = displayedGeocaches.get(marker.getSnippet());
+                    marker.setIcon(BitmapDescriptorFactory.fromResource(getGeocacheSelectedIcon(geocache.getType())));
+                }
+                //else
+                //TODO: zoom
+                return false;
+            }
+        });
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
 
+            }
+        });
+        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                mClusterManager.cluster();
+                CameraPosition cameraPosition = mMap.getCameraPosition();
+                Log.d("Test", String.valueOf(cameraPosition.zoom));
+                if (mMap.getCameraPosition().zoom > 10)
+                    presenter.getWaypoints(cameraPosition.target.latitude + "|" + cameraPosition.target.longitude, GEOCACHE_REQUEST_KM_RADIUS);
+                else
+                    showMapInfo(activity.getString(R.string.zoom_map_to_download));
+            }
         });
     }
 
-    @Override
-    public void showGeocaches(Map<String, Geocache> geocaches) {
-        this.geocaches = geocaches;
-        Iterator iterator = geocaches.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry pair = (Map.Entry)iterator.next();
-            Geocache geocache = (Geocache) pair.getValue();
-            String[] location = geocache.getLocation().split("\\|");
-            LatLng latLang = new LatLng(Double.parseDouble(location[0]), Double.parseDouble(location[1]));
-            MarkerOptions marker = new MarkerOptions().position(latLang).title(geocache.getName());
-            marker.snippet(geocache.getCode());
-            mMap.addMarker(marker);
-
-            iterator.remove();
+    private void setLastSelectedMarkerIcon() {
+        if (lastSelectedMarker != null) {
+            try {
+                Geocache geocache = displayedGeocaches.get(lastSelectedMarker.getSnippet());
+                lastSelectedMarker.setIcon(BitmapDescriptorFactory.fromResource(getGeocacheIcon(geocache.getType())));
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
         }
     }
 
+    @Override
+    public void showMapInfo(String message) {
+        mapInfoMessage.setText(message);
+        if(!isMapInfoShown){
+            AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_in_up);
+            set.setTarget(mapInfoMessage);
+            set.start();
+        }
+        isMapInfoShown = true;
+    }
+
+    @Override
+    public void hideMapInfo() {
+        AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_out_up);
+        set.setTarget(mapInfoMessage);
+        set.start();
+        isMapInfoShown = false;
+    }
+
+    @Override
+    public void addGeocachesOnMap(Map<String, Geocache> geocaches) {
+        Map<String, Geocache> newGeocaches = new HashMap<>();
+        Iterator iterator = geocaches.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry pair = (Map.Entry) iterator.next();
+            Geocache geocache = (Geocache) pair.getValue();
+            if (displayedGeocaches.containsKey(geocache.getCode()))
+                continue;
+            newGeocaches.put(geocache.getCode(), geocache);
+            mClusterManager.addItem(geocache);
+            iterator.remove();
+        }
+        displayedGeocaches.putAll(newGeocaches);
+        mClusterManager.cluster();
+
+    }
 
     @Override
     public void showProgress() {
@@ -160,4 +237,21 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
         super.onDestroyView();
         unbinder.unbind();
     }
+
+    private class OwnIconRendered extends DefaultClusterRenderer<Geocache> {
+
+        OwnIconRendered(Context context, GoogleMap map, ClusterManager<Geocache> clusterManager) {
+            super(context, map, clusterManager);
+        }
+
+        @Override
+        protected void onBeforeClusterItemRendered(Geocache geocache, MarkerOptions markerOptions) {
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(getGeocacheIcon(geocache.getType())));
+            markerOptions.snippet(geocache.getSnippet());
+            markerOptions.title(geocache.getTitle());
+
+            super.onBeforeClusterItemRendered(geocache, markerOptions);
+        }
+    }
+
 }

@@ -41,7 +41,7 @@ public class OpencachingApi {
 
 
         @GET("services/caches/search/nearest")
-        Call<Results> getWaypoints(@Query("consumer_key") String consumerKey, @Query("center") String center);
+        Call<Results> getWaypoints(@Query("consumer_key") String consumerKey, @Query("center") String center, @Query("limit") int limit, @Query("radius") int radius);
 
         @GET("services/caches/geocaches")
         Call<Map<String, Geocache>> getGeocaches(@Query("consumer_key") String consumerKey, @Query("cache_codes") String codes, @Query("fields") String fields);

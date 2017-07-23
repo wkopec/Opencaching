@@ -1,7 +1,9 @@
 package com.example.opencaching.models;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.google.maps.android.clustering.ClusterItem;
 
 import java.util.ArrayList;
 
@@ -9,7 +11,7 @@ import java.util.ArrayList;
  * Created by Volfram on 16.07.2017.
  */
 
-public class Geocache {
+public class Geocache implements ClusterItem {
 
     @SerializedName("code")
     @Expose
@@ -134,7 +136,6 @@ public class Geocache {
     @SerializedName("date_hidden")
     @Expose
     private String hiddenDate;          //date and time when (the geocache was first hidden / the geocache was first published / the event takes place) (ISO 8601)
-
 
     public String getCode() {
         return code;
@@ -298,5 +299,21 @@ public class Geocache {
 
     public String getHiddenDate() {
         return hiddenDate;
+    }
+
+    @Override
+    public LatLng getPosition() {
+        String[] location = getLocation().split("\\|");
+        return new LatLng(Double.parseDouble(location[0]), Double.parseDouble(location[1]));
+    }
+
+    @Override
+    public String getTitle() {
+        return name;
+    }
+
+    @Override
+    public String getSnippet() {
+        return code;
     }
 }

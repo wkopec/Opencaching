@@ -19,4 +19,15 @@ public class User {
     @Expose
     private String profileUrl;      //URL of the user profile page
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getProfileUrl() {
+        return profileUrl;
+    }
 }

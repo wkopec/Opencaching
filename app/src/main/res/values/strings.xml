@@ -45,6 +45,8 @@
 
     <string name="move_map_to_show_more_geocaches">Przesuń mapę aby wczytać więcej skrzynek</string>
     <string name="zoom_map_to_download">Przybliż mapę aby pobrać skrzynki</string>
+    <string name="check_internet_connection">Sprawdź połączenie internetowe</string>
+    <string name="something_went_wrong">Ops... Coś poszło nie tak.</string>
 
 
     <!-- Toolbar titles when navigation menu item is selected -->

@@ -1,6 +1,7 @@
 package com.example.opencaching.fragments.map;
 
 import com.example.opencaching.models.Geocache;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -16,11 +17,9 @@ public interface MapFragmentView {
 
     void hideProgress();
 
-    void showMapInfo(String message);
+    void showMapInfo(int message);
 
     void hideMapInfo();
 
-
-    void addGeocachesOnMap( Map<String, Geocache> newGeocaches);
-
+    void clusterGeocaches(ArrayList<Geocache> geocaches);
 }

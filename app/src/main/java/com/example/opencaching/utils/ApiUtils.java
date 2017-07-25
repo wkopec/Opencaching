@@ -2,7 +2,10 @@ package com.example.opencaching.utils;
 
 import android.util.Log;
 
+import com.example.opencaching.R;
+
 import java.io.IOException;
+import java.net.ConnectException;
 
 import okhttp3.ResponseBody;
 
@@ -19,6 +22,13 @@ public class ApiUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static int getFailureMessage(Throwable t){
+        if (t instanceof ConnectException){
+            return R.string.check_internet_connection;
+        }
+        return R.string.something_went_wrong;
     }
 
 }

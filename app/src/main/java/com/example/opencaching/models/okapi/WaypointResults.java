@@ -1,4 +1,4 @@
-package com.example.opencaching.models;
+package com.example.opencaching.models.okapi;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by Volfram on 16.07.2017.
  */
 
-public class Results {
+public class WaypointResults {
 
     @SerializedName("results")
     @Expose

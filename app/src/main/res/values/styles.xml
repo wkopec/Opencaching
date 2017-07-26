@@ -40,11 +40,16 @@
         <item name="spb_interpolator">spb_interpolator_acceleratedecelerate</item>
         <item name="spb_mirror_mode">true</item>
         <item name="spb_reversed">true</item>
-        <item name="spb_colors">@array/gplus_colors</item>
+        <item name="spb_colors">@array/progressbar_colors</item>
     </style>
 
-
-
-
+    <style name="MaterialSearchViewStyle">
+        <item name="searchBackground">@color/white</item>
+        <item name="searchSuggestionIcon">@drawable/ic_suggestion</item>
+        <item name="searchSuggestionBackground">@android:color/white</item>
+        <item name="android:textColorHint">@color/gray_hint</item>
+        <item name="android:hint">@string/map_search_hint</item>
+    </style>
+    
 </resources>
 

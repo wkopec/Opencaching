@@ -1,7 +1,7 @@
 package com.example.opencaching.retrofit;
 
-import com.example.opencaching.models.Geocache;
-import com.example.opencaching.models.Results;
+import com.example.opencaching.models.okapi.Geocache;
+import com.example.opencaching.models.okapi.WaypointResults;
 
 import java.util.Map;
 
@@ -19,7 +19,6 @@ public class OpencachingApi {
 
     private static Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl("https://opencaching.pl/okapi/")
-
             .addConverterFactory(GsonConverterFactory.create());
 
     private static Retrofit retrofit = builder.build();
@@ -41,7 +40,7 @@ public class OpencachingApi {
 
 
         @GET("services/caches/search/nearest")
-        Call<Results> getWaypoints(@Query("consumer_key") String consumerKey, @Query("center") String center, @Query("limit") int limit, @Query("radius") int radius);
+        Call<WaypointResults> getWaypoints(@Query("consumer_key") String consumerKey, @Query("center") String center, @Query("limit") int limit, @Query("radius") int radius);
 
         @GET("services/caches/geocaches")
         Call<Map<String, Geocache>> getGeocaches(@Query("consumer_key") String consumerKey, @Query("cache_codes") String codes, @Query("fields") String fields);

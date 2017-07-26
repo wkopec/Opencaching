@@ -7,8 +7,10 @@ import android.util.Log;
 import com.example.opencaching.R;
 import com.example.opencaching.interfaces.Presenter;
 import com.example.opencaching.models.CoveredArea;
-import com.example.opencaching.models.Geocache;
-import com.example.opencaching.models.Results;
+import com.example.opencaching.models.geocoding.GeocodingResults;
+import com.example.opencaching.models.geocoding.Location;
+import com.example.opencaching.models.okapi.Geocache;
+import com.example.opencaching.models.okapi.WaypointResults;
 
 import com.example.opencaching.retrofit.OpencachingApi;
 import com.example.opencaching.utils.ApiUtils;
@@ -24,6 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.opencaching.retrofit.GoogleMapsApi.service;
 import static com.example.opencaching.utils.ApiUtils.checkForErrors;
 import static com.example.opencaching.utils.Constants.GEOCACHES_STANDARD_FIELDS;
 import static com.example.opencaching.utils.IntegerUtils.getDistance;
@@ -36,14 +39,14 @@ import static com.example.opencaching.utils.StringUtils.getApiFormatedFields;
 public class MapFragmentPresenter implements Presenter {
 
     private static final int GEOCACHE_REQUEST_LIMIT = 500;      //max 500
+    private static final int MINIMUM_REQUEST_RADIUS = 10;      //in km
 
     private MapFragmentView view;
     private Context context;
     private LatLng center;
     private Map<String, Geocache> displayedGeocaches;
     private CoveredArea coveredArea;
-    private Marker lastSelectedMarker;
-
+    private boolean isActive;
 
     public MapFragmentPresenter(MapFragmentView view, Context context) {
         this.view = view;
@@ -52,51 +55,56 @@ public class MapFragmentPresenter implements Presenter {
         coveredArea = new CoveredArea();
     }
 
-    public void downloadGeocaches(LatLng center, int radius){
-        if(coveredArea.isWithin(center)) {
-            Log.d("Test", "Było");
+    public void downloadGeocaches(LatLng center, int radius) {
+        if (coveredArea.isWithin(center)) {
             return;
+        } else if (!isActive) {
+            if (radius < MINIMUM_REQUEST_RADIUS)
+                radius = MINIMUM_REQUEST_RADIUS;
+            getWaypoints(center, radius);
         }
-        Log.d("Test", "Nie było");
-        getWaypoints(center, radius);
     }
 
     private void getWaypoints(final LatLng center, int radius) {
+        isActive = true;
         this.center = center;
         String centerString = center.latitude + "|" + center.longitude;
-        Call<Results> loginCall = OpencachingApi.service().getWaypoints(context.getResources().getString(R.string.opencaching_key), centerString, GEOCACHE_REQUEST_LIMIT, radius);
+        Call<WaypointResults> loginCall = OpencachingApi.service().getWaypoints(context.getResources().getString(R.string.opencaching_key), centerString, GEOCACHE_REQUEST_LIMIT, radius);
         view.showProgress();
-        loginCall.enqueue(new Callback<Results>() {
+        loginCall.enqueue(new Callback<WaypointResults>() {
             @Override
-            public void onResponse(@NonNull Call<Results> call, @NonNull Response<Results> response) {
+            public void onResponse(@NonNull Call<WaypointResults> call, @NonNull Response<WaypointResults> response) {
                 Log.d("Retrofit response code", String.valueOf(response.code()));
-                Results waypoints = response.body();
+                WaypointResults waypoints = response.body();
                 switch (response.code()) {
                     case 200:
-                        if (waypoints != null && !waypoints.getResults().isEmpty()) {
+                        if (waypoints != null && !waypoints.getResults().isEmpty())
                             getGeocaches(getApiFormatedFields(waypoints.getResults()), waypoints.isMore());
+                        else {
+                            isActive = false;
+                            view.showMapInfo(R.string.no_cache_results);
                         }
                         break;
                     default:
+                        isActive = false;
                         view.hideProgress();
                 }
+
                 checkForErrors(response.errorBody());
             }
 
             @Override
-            public void onFailure(@NonNull Call<Results> call, @NonNull Throwable t) {
-                view.hideProgress();
+            public void onFailure(@NonNull Call<WaypointResults> call, @NonNull Throwable t) {
+                isActive = false;
                 view.showMapInfo(ApiUtils.getFailureMessage(t));
-                if(t.getMessage() != null)
+                if (t.getMessage() != null)
                     Log.d("Retrofit fail", t.getMessage());
-
             }
         });
     }
 
     private void getGeocaches(String codes, final boolean isMore) {
         Call<Map<String, Geocache>> loginCall = OpencachingApi.service().getGeocaches(context.getResources().getString(R.string.opencaching_key), codes, GEOCACHES_STANDARD_FIELDS);
-        //view.showProgress();
         loginCall.enqueue(new Callback<Map<String, Geocache>>() {
             @Override
             public void onResponse(@NonNull Call<Map<String, Geocache>> call, @NonNull Response<Map<String, Geocache>> response) {
@@ -104,11 +112,15 @@ public class MapFragmentPresenter implements Presenter {
                 Map<String, Geocache> geocaches = response.body();
                 switch (response.code()) {
                     case 200:
-                        if (geocaches != null) {
+                        if (geocaches != null)
                             addGeocaches(geocaches, isMore);
+                        else {
+                            view.hideProgress();
+                            isActive = false;
                         }
                         break;
                     default:
+                        isActive = false;
                         view.hideProgress();
                 }
                 checkForErrors(response.errorBody());
@@ -117,9 +129,10 @@ public class MapFragmentPresenter implements Presenter {
             @Override
             public void onFailure(@NonNull Call<Map<String, Geocache>> call, @NonNull Throwable t) {
                 view.showMapInfo(ApiUtils.getFailureMessage(t));
-                if(t.getMessage() != null)
+                if (t.getMessage() != null)
                     Log.d("Retrofit fail", t.getMessage());
                 view.hideProgress();
+                isActive = false;
             }
         });
     }
@@ -135,20 +148,51 @@ public class MapFragmentPresenter implements Presenter {
                 continue;
             newGeocaches.put(geocache.getCode(), geocache);
             newGeocachesArray.add(geocache);
-            if(!iterator.hasNext())
+            if (!iterator.hasNext())
                 coveredArea.addArea(center, getDistance(geocache.getPosition(), center));
 
             iterator.remove();
         }
         displayedGeocaches.putAll(newGeocaches);
         view.clusterGeocaches(newGeocachesArray);
-        if(isMore)
+        if (isMore)
             view.showMapInfo(R.string.move_map_to_show_more_geocaches);
         else
             view.hideMapInfo();
+        isActive = false;
     }
 
-    public Geocache getGeocache(Marker marker){
+
+    public void getLocation(String address) {
+        view.showProgress();
+        Call<GeocodingResults> call = service().getLoation(address, context.getString(R.string.google_geocoding_key));
+        call.enqueue(new Callback<GeocodingResults>() {
+            @Override
+            public void onResponse(@NonNull Call<GeocodingResults> call, @NonNull Response<GeocodingResults> response) {
+                GeocodingResults geocodingResponse = response.body();
+                if (geocodingResponse != null) {
+                    if (!geocodingResponse.getResults().isEmpty()) {
+                        Location location = geocodingResponse.getResults().get(0).getGeometry().getLocation();
+                        view.moveMapCamera(new LatLng(location.getLat(), location.getLng()));
+                    } else {
+                        view.showMapInfo(R.string.no_matches_for_location_querry);
+                    }
+                } else {
+                    view.showMapInfo(R.string.something_went_wrong);
+                }
+                view.hideProgress();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<GeocodingResults> call, @NonNull Throwable t) {
+                view.showMapInfo(R.string.something_went_wrong);
+                if (t.getMessage() != null)
+                    Log.d("Retrofit fail", t.getMessage());
+            }
+        });
+    }
+
+    public Geocache getGeocache(Marker marker) {
         return displayedGeocaches.get(marker.getSnippet());
     }
 
@@ -160,4 +204,6 @@ public class MapFragmentPresenter implements Presenter {
     public void onPause() {
 
     }
+
+
 }

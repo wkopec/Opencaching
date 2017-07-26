@@ -11,15 +11,17 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.opencaching.R;
 import com.example.opencaching.activities.MainActivity;
-import com.example.opencaching.models.Geocache;
+import com.example.opencaching.events.SearchMapEvent;
+import com.example.opencaching.models.okapi.Geocache;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -31,6 +33,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -72,13 +78,14 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_map, null);
+        final View view = inflater.inflate(R.layout.fragment_map, null);
         unbinder = ButterKnife.bind(this, view);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         activity = (MainActivity) getActivity();
         activity.setActionBarTitle(R.string.app_name);
         presenter = new MapFragmentPresenter(this, activity);
+
         return view;
     }
 
@@ -87,6 +94,11 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
         if (actionBar != null) {
             actionBar.setTitle(R.string.app_name);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.map_menu, menu);
     }
 
     @Override
@@ -107,6 +119,7 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
+                activity.hideSearchView();
                 setLastSelectedMarkerIcon();
             }
         });
@@ -135,6 +148,7 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
                 mClusterManager.cluster();
                 CameraPosition cameraPosition = mMap.getCameraPosition();
                 Log.d("Test", String.valueOf(cameraPosition.zoom));
+                hideMapInfo();
                 if (mMap.getCameraPosition().zoom > MINIMUM_REQUEST_ZOOM) {
                     LatLng center = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
                     int radius = getDistance(mMap.getProjection().fromScreenLocation(new Point(0, 0)), center) / 1000;
@@ -156,8 +170,15 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onSearchMap(SearchMapEvent event) {
+        presenter.getLocation(event.getQuerry());
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
     @Override
     public void showMapInfo(int message) {
+        hideProgress();
         mapInfoMessage.setText(activity.getString(message));
         if (!isMapInfoShown) {
             AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_in_up);
@@ -173,6 +194,15 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
         set.setTarget(mapInfoMessage);
         set.start();
         isMapInfoShown = false;
+    }
+
+    @Override
+    public void moveMapCamera(LatLng latLng) {
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(latLng)
+                .zoom(12)
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     @Override
@@ -196,6 +226,18 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         presenter.onPause();
@@ -213,6 +255,8 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
         super.onDestroyView();
         unbinder.unbind();
     }
+
+
 
     private class OwnIconRendered extends DefaultClusterRenderer<Geocache> {
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Progressbar colors-->
+    <integer-array name="progressbar_colors">
+        <item>@color/progressbar_color_1</item>
+        <item>@color/progressbar_color_2</item>
+        <item>@color/progressbar_color_3</item>
+        <item>@color/progressbar_color_4</item>
+    </integer-array>
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>Mapa</item>
+        <item>Powiadomienia</item>
+        <item>Szukaj</item>
+        <item>Ustawienia</item>
+        <item>Wyloguj się</item>
+    </string-array>
+
+    <!-- Ratings of a geocache from 1 to 5 -->
+    <string-array name="geocache_rates">
+        <item>Słaba</item>
+        <item>Poniżej przeciętnej</item>
+        <item>Normalna</item>
+        <item>Dobra</item>
+        <item>Znakomita</item>
+    </string-array>
+
+</resources>

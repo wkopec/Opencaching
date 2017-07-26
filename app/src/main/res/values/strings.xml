@@ -1,12 +1,14 @@
 <resources>
     <string name="app_name">Opencaching</string>
     <string name="google_maps_key">AIzaSyB2I-uCmanDnjzqZQyYZjAHGy29XElc4NY</string>
+    <string name="google_geocoding_key">AIzaSyA2XAPjU3kU11fGPQznBFmihw5puUaSqCk</string>
     <string name="opencaching_key">eSLCuVzRJJsYUUfUs6Su</string>
     <string name="opencaching_secret_key">nGdfx64ksCvwk7XDSnmsVCgGpnsFh9ZwG4B5Yweg</string>
 
     <string name="openDrawer">open_drawer</string>
     <string name="closeDrawer">close_drawer</string>
     <string name="single_back_press_message">Wciśnij ponownie Wstecz aby wyjść</string>
+    <string name="map_search_hint">Wyszukaj miejsca na mapie</string>
 
 
     <!-- Navigation Drawer menu labels -->
@@ -47,25 +49,8 @@
     <string name="zoom_map_to_download">Przybliż mapę aby pobrać skrzynki</string>
     <string name="check_internet_connection">Sprawdź połączenie internetowe</string>
     <string name="something_went_wrong">Ops... Coś poszło nie tak.</string>
-
-
-    <!-- Toolbar titles when navigation menu item is selected -->
-    <string-array name="nav_item_activity_titles">
-        <item>Mapa</item>
-        <item>Powiadomienia</item>
-        <item>Szukaj</item>
-        <item>Ustawienia</item>
-        <item>Wyloguj się</item>
-    </string-array>
-
-    <!-- Ratings of a geocache from 1 to 5 -->
-    <string-array name="geocache_rates">
-        <item>Słaba</item>
-        <item>Poniżej przeciętnej</item>
-        <item>Normalna</item>
-        <item>Dobra</item>
-        <item>Znakomita</item>
-    </string-array>
+    <string name="no_matches_for_location_querry">Nie udało się znaleźć pasujących wyników</string>
+    <string name="no_cache_results">Nie znaleziono żadnych skrzynek</string>
 
 
 </resources>

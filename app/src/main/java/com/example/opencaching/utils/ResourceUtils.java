@@ -20,6 +20,34 @@ public class ResourceUtils {
         }
     }
 
+    public static int getLogIcon(String type) {
+        switch (type) {
+            case "Found it": return R.drawable.ic_found;
+            case "Didn't find it": return R.drawable.ic_not_found;
+            case "Comment": return R.drawable.ic_comment;
+            case "Ready to search": return R.drawable.ic_power;
+            case "Archived": return R.drawable.ic_archive;
+            case "Temporarily unavailable": return R.drawable.ic_warning;
+            case "Needs maintenance": return R.drawable.ic_need_maintenance;
+            case "Maintenance performed": return R.drawable.ic_maintenance_performed;
+            case "Moved": return R.drawable.ic_moved;
+            case "OC Team comment": return R.drawable.ic_cog;
+            case "Attended": return R.drawable.ic_attended;
+            case "Will attend": return R.drawable.ic_will_attend;
+            default: return 0;
+        }
+    }
+
+    public static int getLogIconColor(String type) {
+        switch (type) {
+            case "Found it": return R.color.green;
+            case "Didn't find it": return R.color.red;
+            case "Ready to search": return R.color.colorPrimaryDark;
+            case "Temporarily unavailable": return R.color.colorAccent;
+            default: return R.color.black;
+        }
+    }
+
     public static int getGeocacheIcon(String type){
         switch (type) {
             case "Traditional": return R.drawable.cache_traditional;

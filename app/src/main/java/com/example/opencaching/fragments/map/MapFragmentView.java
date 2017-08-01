@@ -19,7 +19,7 @@ public interface MapFragmentView {
 
     void hideMapInfo();
 
-    void moveMapCamera(LatLng latLng);
+    void moveMapCamera(LatLng latLng, float zoom);
 
     void clusterGeocaches(ArrayList<Geocache> geocaches);
 }

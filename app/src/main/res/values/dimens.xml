@@ -2,6 +2,7 @@
 <resources>
 
     <!-- Text sizes -->
+    <dimen name="text_size_tiny">@dimen/_9sdp</dimen>
     <dimen name="text_size_very_small">@dimen/_11ssp</dimen>
     <dimen name="text_size_small">@dimen/_12ssp</dimen>
     <dimen name="text_size_normal">@dimen/_14ssp</dimen>

@@ -1,7 +1,5 @@
 package com.example.opencaching.activities;
 
-import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -11,12 +9,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
-
 import com.example.opencaching.Menu;
 import com.example.opencaching.R;
 import com.example.opencaching.adapters.MenuAdapter;
@@ -28,8 +23,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.R.id.list;
 
 public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItemCheckedListener, DrawerLayout.DrawerListener {
 
@@ -43,10 +36,10 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
     FrameLayout fragmentContainer;
     @BindView(R.id.menuRecyclerView)
     RecyclerView menuRecyclerView;
-
-    public Fragment currentFragment;
     @BindView(R.id.search_view)
     MaterialSearchView searchView;
+
+    public Fragment currentFragment;
     private MenuAdapter menuAdapter;
 
     @Override
@@ -56,17 +49,14 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, 0, 0);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, 0, 0);
 
         drawer.addDrawerListener(toggle);
         drawer.addDrawerListener(this);
         toggle.syncState();
         configureMenuRecyclerView();
         setSearchView();
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
@@ -95,7 +85,6 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //Do some magic
                 return false;
             }
         });
@@ -103,12 +92,10 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
         searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
             @Override
             public void onSearchViewShown() {
-                //Do some magic
             }
 
             @Override
             public void onSearchViewClosed() {
-                //Do some magic
             }
         });
     }

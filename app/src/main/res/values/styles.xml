@@ -1,34 +1,84 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
+
+    <style name="AppTheme.NoActionBar.Splash">
+        <item name="android:background">@drawable/image_splash_screen</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--Text-->
 
     <style name="Text">
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="Text.VerySmall">
-        <item name="android:textSize">@dimen/text_size_very_small</item>
+    <style name="Text.Primary">
+        <item name="android:alpha">0.87</item>
+    </style>
+    <style name="Text.Secondary">
+        <item name="android:alpha">0.54</item>
+    </style>
+    <style name="Text.Hint">
+        <item name="android:alpha">0.38</item>
     </style>
 
-    <style name="Text.Small">
+    <style name="Text.Primary.Normal">
+        <item name="android:textSize">@dimen/text_size_normal</item>
+    </style>
+
+    <style name="Text.Primary.Small">
         <item name="android:textSize">@dimen/text_size_small</item>
     </style>
 
-    <style name="Text.Normal">
+    <style name="Text.Primary.VerySmall">
+        <item name="android:textSize">@dimen/text_size_very_small</item>
+    </style>
+
+    <style name="Text.Primary.Tiny">
+        <item name="android:textSize">@dimen/text_size_very_small</item>
+    </style>
+
+    <style name="Text.Secondary.Normal">
         <item name="android:textSize">@dimen/text_size_normal</item>
+    </style>
+
+    <style name="Text.Secondary.Small">
+        <item name="android:textSize">@dimen/text_size_small</item>
+    </style>
+
+    <style name="Text.Secondary.VerySmall">
+        <item name="android:textSize">@dimen/text_size_very_small</item>
+    </style>
+
+    <style name="Text.Secondary.Tiny">
+        <item name="android:textSize">@dimen/text_size_tiny</item>
+    </style>
+
+    <!--Other-->
+
+    <style name="TabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">?attr/colorAccent</item>
+        <item name="tabBackground">@color/colorPrimary</item>
+        <item name="tabSelectedTextColor">@color/white</item>
+        <item name="tabTextAppearance">@style/TabTextAppearance</item>
+    </style>
+
+    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">@color/gray_hint</item>
     </style>
 
     <style name="GNowProgressBar" parent="SmoothProgressBar">
@@ -50,6 +100,6 @@
         <item name="android:textColorHint">@color/gray_hint</item>
         <item name="android:hint">@string/map_search_hint</item>
     </style>
-    
+
 </resources>
 

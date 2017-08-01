@@ -38,6 +38,7 @@ import static com.example.opencaching.utils.StringUtils.getApiFormatedFields;
 
 public class MapFragmentPresenter implements Presenter {
 
+    private static final float DEFAULT_LOCATION_ZOOM = 12;
     private static final int GEOCACHE_REQUEST_LIMIT = 500;      //max 500
     private static final int MINIMUM_REQUEST_RADIUS = 10;      //in km
 
@@ -131,7 +132,6 @@ public class MapFragmentPresenter implements Presenter {
                 view.showMapInfo(ApiUtils.getFailureMessage(t));
                 if (t.getMessage() != null)
                     Log.d("Retrofit fail", t.getMessage());
-                view.hideProgress();
                 isActive = false;
             }
         });
@@ -173,14 +173,14 @@ public class MapFragmentPresenter implements Presenter {
                 if (geocodingResponse != null) {
                     if (!geocodingResponse.getResults().isEmpty()) {
                         Location location = geocodingResponse.getResults().get(0).getGeometry().getLocation();
-                        view.moveMapCamera(new LatLng(location.getLat(), location.getLng()));
+                        view.moveMapCamera(new LatLng(location.getLat(), location.getLng()), DEFAULT_LOCATION_ZOOM);
+                        view.hideProgress();
                     } else {
                         view.showMapInfo(R.string.no_matches_for_location_querry);
                     }
                 } else {
                     view.showMapInfo(R.string.something_went_wrong);
                 }
-                view.hideProgress();
             }
 
             @Override

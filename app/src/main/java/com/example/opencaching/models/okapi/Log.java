@@ -25,5 +25,31 @@ public class Log {
     @Expose
     private String comment;     //full comment of a log
 
+    public Log(String uuid, String date, User user, String type, String comment) {
+        this.uuid = uuid;
+        this.date = date;
+        this.user = user;
+        this.type = type;
+        this.comment = comment;
+    }
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getComment() {
+        return comment;
+    }
 }

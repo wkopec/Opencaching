@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.example.opencaching.R;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 
 /**
@@ -21,5 +23,21 @@ public class StringUtils {
         }
         return apiFormatedWaypoints;
     }
+
+    public static String getDateString(DateTime date, Context context) {
+        DateTime today = new DateTime();
+        String displayDate = "";
+        if (date.toLocalDate().equals(today.toLocalDate()))
+            displayDate += context.getString(R.string.today);
+        else if(date.toLocalDate().equals(today.minusDays(1).toLocalDate()))
+            displayDate += context.getString(R.string.yesterday);
+        else {
+            String[] monhs = context.getResources().getStringArray(R.array.months_abbreviations);
+            displayDate += date.getDayOfMonth() + " " + monhs[date.getMonthOfYear()] + " " + date.getYear();
+        }
+        return displayDate;
+    }
+
+
 
 }

@@ -36,6 +36,7 @@ public class BaseActivity extends AppCompatActivity {
         builder.setView(new ProgressBar(this));
         dialog = builder.create();
 
+
     }
 
     public void setActionBarTitle(int title){

@@ -4,6 +4,7 @@ package com.example.opencaching.fragments.map;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.opencaching.R;
+import com.example.opencaching.activities.GeocacheActivity;
 import com.example.opencaching.activities.MainActivity;
 import com.example.opencaching.events.SearchMapEvent;
 import com.example.opencaching.models.okapi.Geocache;
@@ -31,6 +33,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
@@ -45,6 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
+import static com.example.opencaching.activities.GeocacheActivity.GEOCACHE_WAYPOINT;
 import static com.example.opencaching.utils.IntegerUtils.getDistance;
 import static com.example.opencaching.utils.ResourceUtils.getGeocacheIcon;
 import static com.example.opencaching.utils.ResourceUtils.getGeocacheSelectedIcon;
@@ -55,7 +59,6 @@ import static com.example.opencaching.utils.ResourceUtils.getGeocacheSize;
  */
 
 public class MapFragment extends Fragment implements MapFragmentView, OnMapReadyCallback {
-
 
     private static final float MINIMUM_REQUEST_ZOOM = (float) 10;
     private static final float START_MAP_LATITUDE = (float) 51.92;
@@ -105,17 +108,36 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(START_MAP_LATITUDE, START_MAP_LONGITUDE), START_MAP_ZOOM));
-
-        mClusterManager = new ClusterManager<>(activity, mMap);
-        mClusterManager.setRenderer(new OwnIconRendered(activity.getApplicationContext(), mMap, mClusterManager));
-        mMap.setOnCameraIdleListener(mClusterManager);
-        mMap.setOnMarkerClickListener(mClusterManager);
-        mMap.setOnInfoWindowClickListener(mClusterManager);
         configureMap();
     }
 
     private void configureMap() {
-        mMap.setInfoWindowAdapter(new MarkerAdapter());
+        mClusterManager = new ClusterManager<>(activity, mMap);
+        final CustomClusterRenderer renderer = new CustomClusterRenderer(activity.getApplicationContext(), mMap, mClusterManager);
+        mClusterManager.setRenderer(renderer);
+
+        mClusterManager.setOnClusterClickListener(
+                new ClusterManager.OnClusterClickListener<Geocache>() {
+                    @Override public boolean onClusterClick(Cluster<Geocache> cluster) {
+                        moveMapCamera(cluster.getPosition(), mMap.getCameraPosition().zoom + 1);
+                        return true;
+                    }
+                });
+        mClusterManager.setOnClusterItemClickListener(
+                new ClusterManager.OnClusterItemClickListener<Geocache>() {
+                    @Override public boolean onClusterItemClick(Geocache clusterItem) {
+                        Marker marker = renderer.getMarker(clusterItem);
+                        if (marker.getSnippet() != null) {
+                            setLastSelectedMarkerIcon();
+                            lastSelectedMarker = marker;
+                            marker.setIcon(BitmapDescriptorFactory.fromResource(getGeocacheSelectedIcon(presenter.getGeocache(marker).getType())));
+                        }
+                        return false;
+                    }
+                });
+
+        mMap.setOnMarkerClickListener(mClusterManager);
+        mMap.setInfoWindowAdapter(new CustomInfoViewAdapter());
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -123,23 +145,14 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
                 setLastSelectedMarkerIcon();
             }
         });
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                if (marker.getSnippet() != null) {
-                    setLastSelectedMarkerIcon();
-                    lastSelectedMarker = marker;
-                    marker.setIcon(BitmapDescriptorFactory.fromResource(getGeocacheSelectedIcon(presenter.getGeocache(marker).getType())));
-                }
-                //else
-                //TODO: zoom
-                return false;
-            }
-        });
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-
+                Intent intent = new Intent(activity, GeocacheActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(GEOCACHE_WAYPOINT, marker.getSnippet());
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
@@ -158,7 +171,6 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
             }
         });
     }
-
 
     private void setLastSelectedMarkerIcon() {
         if (lastSelectedMarker != null) {
@@ -197,10 +209,10 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
     }
 
     @Override
-    public void moveMapCamera(LatLng latLng) {
+    public void moveMapCamera(LatLng latLng, float zoom) {
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng)
-                .zoom(12)
+                .zoom(zoom)
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
@@ -256,11 +268,9 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
         unbinder.unbind();
     }
 
+    private class CustomClusterRenderer extends DefaultClusterRenderer<Geocache> {
 
-
-    private class OwnIconRendered extends DefaultClusterRenderer<Geocache> {
-
-        OwnIconRendered(Context context, GoogleMap map, ClusterManager<Geocache> clusterManager) {
+        CustomClusterRenderer(Context context, GoogleMap map, ClusterManager<Geocache> clusterManager) {
             super(context, map, clusterManager);
         }
 
@@ -274,14 +284,9 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
         }
     }
 
-    private class MarkerAdapter implements GoogleMap.InfoWindowAdapter {
+    private class CustomInfoViewAdapter implements GoogleMap.InfoWindowAdapter {
         @Override
         public View getInfoWindow(Marker marker) {
-            return null;
-        }
-
-        @Override
-        public View getInfoContents(Marker marker) {
             if (marker.getSnippet() == null)
                 return null;
             View view = LayoutInflater.from(activity).inflate(R.layout.item_geocache_marker_window, null);
@@ -317,6 +322,11 @@ public class MapFragment extends Fragment implements MapFragmentView, OnMapReady
             }
 
             return view;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            return null;
         }
     }
 

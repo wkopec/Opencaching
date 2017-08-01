@@ -51,6 +51,10 @@
     <string name="something_went_wrong">Ops... Coś poszło nie tak.</string>
     <string name="no_matches_for_location_querry">Nie udało się znaleźć pasujących wyników</string>
     <string name="no_cache_results">Nie znaleziono żadnych skrzynek</string>
+    <string name="info">Info</string>
+    <string name="logs">Logi</string>
+    <string name="today">Dzisiaj</string>
+    <string name="yesterday">Wczoraj</string>
 
 
 </resources>

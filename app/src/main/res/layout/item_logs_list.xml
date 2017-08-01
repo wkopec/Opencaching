@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingEnd="@dimen/spacing_small"
+    android:paddingStart="@dimen/spacing_small"
+    android:paddingTop="@dimen/spacing_very_small">
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        card_view:cardCornerRadius="@dimen/spacing_very_small"
+        card_view:cardUseCompatPadding="true"
+        card_view:contentPadding="@dimen/spacing_small">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom">
+
+                <ImageView
+                    android:id="@+id/logTypeImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_found"
+                    android:tint="@color/green" />
+
+                <TextView
+                    android:id="@+id/logDateTextView"
+                    style="@style/Text.Primary.VerySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_very_small"
+                    android:text="2017-06-12" />
+
+                <TextView
+                    android:id="@+id/logTimeTextView"
+                    style="@style/Text.Secondary.Tiny"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="@dimen/spacing_very_small"
+                    android:text="16:28" />
+
+                <TextView
+                    android:id="@+id/logAuthorTextView"
+                    style="@style/Text.Primary.Small"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="Volfram"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+            <WebView
+                android:id="@+id/logCommentTextView"
+                style="@style/Text.Primary.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_very_small"
+                android:scrollbars="none"
+                android:text="Szybko i sprawnie. TFTC!" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

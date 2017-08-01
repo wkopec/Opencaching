@@ -27,4 +27,36 @@
         <item>Znakomita</item>
     </string-array>
 
+    <!-- Months of year -->
+    <string-array name="months">
+        <item>Styczeń</item>
+        <item>Luty</item>
+        <item>Marzec</item>
+        <item>Kwiecień</item>
+        <item>Maj</item>
+        <item>Czerwiec</item>
+        <item>Lipiec</item>
+        <item>Sierpień</item>
+        <item>Wrzesień</item>
+        <item>Październik</item>
+        <item>Listopad</item>
+        <item>Grudzień</item>
+    </string-array>
+
+    <!-- Abbreviations months of year -->
+    <string-array name="months_abbreviations">
+        <item>Sty</item>
+        <item>Lut</item>
+        <item>Mar</item>
+        <item>Kwi</item>
+        <item>Maj</item>
+        <item>Cze</item>
+        <item>Lip</item>
+        <item>Sie</item>
+        <item>Wrz</item>
+        <item>Paz</item>
+        <item>Lis</item>
+        <item>Gru</item>
+    </string-array>
+
 </resources>

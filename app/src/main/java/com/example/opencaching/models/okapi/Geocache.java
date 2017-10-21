@@ -45,22 +45,22 @@ public class Geocache implements ClusterItem {
     private float distance;             //the distance to a cache, in meters
     @SerializedName("is_found")
     @Expose
-    private boolean found;              //true if the user already found this cache
+    private boolean isFound;              //true if the user already isFound this cache
     @SerializedName("is_not_found")
     @Expose
-    private boolean notFound;           //true if the user has submitted "Didn't find it" log entry for this cache
+    private boolean isNotFound;           //true if the user has submitted "Didn't find it" log entry for this cache
     @SerializedName("is_watched")
     @Expose
-    private boolean watched;            //true if the user is watching this cache.
+    private boolean isWatched;            //true if the user is watching this cache.
     @SerializedName("is_ignored")
     @Expose
-    private boolean ignored;            //true if the user is ignoring this cache
+    private boolean isIgnored;            //true if the user is ignoring this cache
     @SerializedName("founds")
     @Expose
-    private int founds;                 //number of times the geocache was successfully found
+    private int founds;                 //number of times the geocache was successfully isFound
     @SerializedName("notfounds")
     @Expose
-    private int notfounds;              //number of times the geocache was not found
+    private int notfounds;              //number of times the geocache was not isFound
     @SerializedName("willattends")
     @Expose
     private int willattends;            //n case of Event Caches, this is the number of "Will attend" log entries
@@ -75,7 +75,7 @@ public class Geocache implements ClusterItem {
     private float terrain;              //terrain rating of the cache (between 1 and 5)
     @SerializedName("tripTime")
     @Expose
-    private float trip_time;            //approximate total amount of time needed to find the cache, in hours
+    private float tripTime;            //approximate total amount of time needed to find the cache, in hours
     @SerializedName("trip_distance")
     @Expose
     private float tripDistance;         //approximate total distance needed to find the cache, in kilometers
@@ -105,10 +105,10 @@ public class Geocache implements ClusterItem {
     private ArrayList<Image> images;    //list of dictionaries
     @SerializedName("attr_acodes")
     @Expose
-    private ArrayList<String> attrAcodes;   //unordered list of OKAPI geocache-attribute IDs (A-codes) with which the cache was tagged
+    private ArrayList<String> attributes;   //unordered list of OKAPI geocache-attribute IDs (A-codes) with which the cache was tagged
     @SerializedName("latest_logs")
     @Expose
-    private ArrayList<Log> latestLogs;  //a couple of latest log entries in the cache
+    private ArrayList<GeocacheLog> latestGeocacheLogs;  //a couple of latest log entries in the cache
     @SerializedName("my_notes")
     @Expose
     private String notes;               //user's notes on the cache
@@ -120,13 +120,13 @@ public class Geocache implements ClusterItem {
     private ArrayList<Trackable> trackables;    //list of dictionaries, each dictionary represents one trackable hidden within the cache container
     @SerializedName("alt_wpts")
     @Expose
-    private ArrayList<AlternativeWaypoint> alternateAlternativeWaypoints;
+    private ArrayList<AlternativeWaypoint> alternativeWaypoints;
     @SerializedName("state")
     @Expose
     private String state;               //name of the state the cache is placed in
     @SerializedName("last_found")
     @Expose
-    private String lastFound;           //date and time when the geocache was last found (ISO 8601)
+    private String lastFound;           //date and time when the geocache was last isFound (ISO 8601)
     @SerializedName("last_modified")
     @Expose
     private String lastModified;        //date and time when the geocache was last modified (ISO 8601)
@@ -178,19 +178,19 @@ public class Geocache implements ClusterItem {
     }
 
     public boolean isFound() {
-        return found;
+        return isFound;
     }
 
     public boolean isNotFound() {
-        return notFound;
+        return isNotFound;
     }
 
     public boolean isWatched() {
-        return watched;
+        return isWatched;
     }
 
     public boolean isIgnored() {
-        return ignored;
+        return isIgnored;
     }
 
     public int getFounds() {
@@ -217,8 +217,8 @@ public class Geocache implements ClusterItem {
         return terrain;
     }
 
-    public float getTrip_time() {
-        return trip_time;
+    public float getTripTime() {
+        return tripTime;
     }
 
     public float getTripDistance() {
@@ -257,12 +257,12 @@ public class Geocache implements ClusterItem {
         return images;
     }
 
-    public ArrayList<String> getAttrAcodes() {
-        return attrAcodes;
+    public ArrayList<String> getAttributes() {
+        return attributes;
     }
 
-    public ArrayList<Log> getLatestLogs() {
-        return latestLogs;
+    public ArrayList<GeocacheLog> getLatestGeocacheLogs() {
+        return latestGeocacheLogs;
     }
 
     public String getNotes() {
@@ -277,8 +277,8 @@ public class Geocache implements ClusterItem {
         return trackables;
     }
 
-    public ArrayList<AlternativeWaypoint> getAlternateAlternativeWaypoints() {
-        return alternateAlternativeWaypoints;
+    public ArrayList<AlternativeWaypoint> getAlternativeWaypoints() {
+        return alternativeWaypoints;
     }
 
     public String getState() {

@@ -31,6 +31,8 @@ import static com.example.opencaching.utils.ApiUtils.checkForErrors;
 import static com.example.opencaching.utils.Constants.GEOCACHES_STANDARD_FIELDS;
 import static com.example.opencaching.utils.IntegerUtils.getDistance;
 import static com.example.opencaching.utils.StringUtils.getApiFormatedFields;
+import static com.example.opencaching.utils.UserUtils.getUserSecretToken;
+import static com.example.opencaching.utils.UserUtils.getUserToken;
 
 /**
  * Created by Volfram on 15.07.2017.
@@ -198,6 +200,7 @@ public class MapFragmentPresenter implements Presenter {
 
     @Override
     public void onResume() {
+
     }
 
     @Override

@@ -31,7 +31,7 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
     @BindView(R.id.viewPager)
     ViewPager viewPager;
 
-    private String geocacheWaypoint;
+    private static String geocacheWaypoint;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
         }
     }
 
-    public String getGeocacheWaypoint() {
+    public static String getGeocacheWaypoint() {
         return geocacheWaypoint;
     }
 

@@ -11,13 +11,15 @@ import android.view.ViewGroup;
 
 import com.example.opencaching.R;
 import com.example.opencaching.activities.BaseActivity;
-import com.example.opencaching.models.okapi.Log;
+import com.example.opencaching.models.okapi.GeocacheLog;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.example.opencaching.activities.GeocacheActivity.getGeocacheWaypoint;
 
 /**
  * Created by Volfram on 27.07.2017.
@@ -41,17 +43,17 @@ public class GeocacheLogsFragment extends Fragment implements GeocacheLogsFragme
         unbinder = ButterKnife.bind(this, view);
         activity = (BaseActivity) getActivity();
         presenter = new GeocacheLogsFragmentPresenter(this, activity);
-        presenter.getGeocacheLogs("OP8MDT");
+        presenter.getGeocacheLogs(getGeocacheWaypoint());
         return view;
     }
 
     @Override
-    public void setLogs(ArrayList<Log> logs) {
-        configureRecyclerView(logs);
+    public void setLogs(ArrayList<GeocacheLog> geocacheLogs) {
+        configureRecyclerView(geocacheLogs);
     }
 
-    private void configureRecyclerView(ArrayList<Log> logs) {
-        adapter = new LogsListAdapter(logs, activity);
+    private void configureRecyclerView(ArrayList<GeocacheLog> geocacheLogs) {
+        adapter = new LogsListAdapter(geocacheLogs, activity);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
     }

@@ -1,6 +1,6 @@
 package com.example.opencaching.fragments.geocache_logs;
 
-import com.example.opencaching.models.okapi.Log;
+import com.example.opencaching.models.okapi.GeocacheLog;
 
 import java.util.ArrayList;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public interface GeocacheLogsFragmentView {
 
-    void setLogs(ArrayList<Log> logs);
+    void setLogs(ArrayList<GeocacheLog> geocacheLogs);
 
     void showError(Error error);
 

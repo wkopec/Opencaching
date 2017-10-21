@@ -17,8 +17,10 @@ public class ApiUtils {
 
     public static void checkForErrors(ResponseBody response) {
         try {
-            if(response != null)
+            if(response != null) {
                 Log.d("Retrofit error", response.string());
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

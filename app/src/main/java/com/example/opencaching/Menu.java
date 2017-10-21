@@ -1,13 +1,17 @@
 package com.example.opencaching;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 
+import com.example.opencaching.activities.LoginActivity;
 import com.example.opencaching.activities.MainActivity;
 import com.example.opencaching.adapters.MenuAdapter;
 import com.example.opencaching.fragments.map.MapFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.opencaching.utils.UserUtils.setUserToken;
 
 /**
  * Created by Volfram on 15.07.2017.
@@ -53,8 +57,8 @@ public class Menu {
     public static void performAction(MainActivity mainActivity, int tag) {
         switch (tag){
             case R.string.nav_logout:
-                //setUserToken(mainActivity, "");
-                //mainActivity.startActivity(new Intent(mainActivity, LoginActivity.class));
+                setUserToken(mainActivity, "");
+                mainActivity.startActivity(new Intent(mainActivity, LoginActivity.class));
                 mainActivity.finish();
                 break;
         }

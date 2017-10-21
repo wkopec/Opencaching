@@ -42,7 +42,6 @@ public class GoogleMapsApi {
             });
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             httpClient.addInterceptor(logging);
-
         }
         return httpClient.build();
     }

@@ -10,7 +10,6 @@
     <string name="single_back_press_message">Wciśnij ponownie Wstecz aby wyjść</string>
     <string name="map_search_hint">Wyszukaj miejsca na mapie</string>
 
-
     <!-- Navigation Drawer menu labels -->
     <string name="main_menu">Menu główne</string>
     <string name="user_menu">Menu użytkownika</string>

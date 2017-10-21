@@ -26,6 +26,6 @@ public class Image {
     private String uniqueCaption;   //unique caption of the image
     @SerializedName("is_spoiler")
     @Expose
-    private boolean spoiler;        //if true then the image is a spoiler image
+    private boolean isSpoiler;        //if true then the image is a spoiler image
 
 }

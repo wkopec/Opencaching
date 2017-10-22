@@ -33,7 +33,7 @@ public class StringUtils {
             displayDate += context.getString(R.string.yesterday);
         else {
             String[] monhs = context.getResources().getStringArray(R.array.months_abbreviations);
-            displayDate += date.getDayOfMonth() + " " + monhs[date.getMonthOfYear() -1] + " " + date.getYear();
+            displayDate += date.getDayOfMonth() + " " + monhs[date.getMonthOfYear() - 1] + " " + date.getYear();
         }
         return displayDate;
     }

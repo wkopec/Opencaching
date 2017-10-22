@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme">
 
 
-        <activity android:name=".activities.LoginActivity"
+        <activity android:name=".ui.auth.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,11 +29,11 @@
 
         <activity
             android:theme="@style/AppTheme.NoActionBar"
-            android:name=".activities.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".activities.GeocacheActivity"
+            android:name=".ui.geocache.GeocacheActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data

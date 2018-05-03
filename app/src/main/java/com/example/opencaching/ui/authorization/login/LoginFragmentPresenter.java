@@ -7,7 +7,7 @@ import com.example.opencaching.R;
 import com.example.opencaching.ui.base.BasePresenter;
 import com.example.opencaching.network.api.OpencachingApi;
 import com.example.opencaching.utils.ApiUtils;
-import com.example.opencaching.utils.SessionManager;
+import com.example.opencaching.utils.UserUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -72,8 +72,8 @@ public class LoginFragmentPresenter extends BasePresenter implements LoginFragme
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.body() != null) {
-                    SessionManager.setOauthToken(context, getOathToken(response.body()));
-                    SessionManager.setOauthTokenSecret(context, getOathTokenSecret(response.body()));
+                    UserUtils.setOauthToken(context, getOathToken(response.body()));
+                    UserUtils.setOauthTokenSecret(context, getOathTokenSecret(response.body()));
                     view.startMainActivity();
                     view.hideProgress();
 

@@ -10,7 +10,7 @@ import com.example.opencaching.ui.main.map.MapFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.opencaching.utils.UserUtils.setUserToken;
+import static com.example.opencaching.utils.UserUtils.setOauthTokenSecret;
 
 /**
  * Created by Volfram on 15.07.2017.
@@ -56,7 +56,7 @@ public class Menu {
     public static void performAction(MainActivity mainActivity, int tag) {
         switch (tag){
             case R.string.nav_logout:
-                setUserToken(mainActivity, "");
+                setOauthTokenSecret(mainActivity, "");
                 mainActivity.startActivity(new Intent(mainActivity, LoginActivity.class));
                 mainActivity.finish();
                 break;

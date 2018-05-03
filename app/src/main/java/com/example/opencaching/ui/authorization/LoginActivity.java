@@ -26,7 +26,6 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_empty);
         if (isLoggedIn(this))
             startMainActivity();

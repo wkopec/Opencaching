@@ -5,7 +5,7 @@ import android.content.Context;
 import com.example.opencaching.network.models.okapi.Geocache;
 import com.example.opencaching.network.models.okapi.GeocacheLog;
 import com.example.opencaching.network.models.okapi.WaypointResults;
-import com.example.opencaching.utils.SessionManager;
+import com.example.opencaching.utils.UserUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -43,7 +43,7 @@ public class OpencachingApi {
     }
 
     public static OpencachingApi.Calls service(Context context) {
-        return service(OPENCACHING_CONSUMER_KEY, OPENCACHING_CONSUMER_KEY_SECRET, SessionManager.getOauthToken(context), SessionManager.getOauthTokenSecret(context));
+        return service(OPENCACHING_CONSUMER_KEY, OPENCACHING_CONSUMER_KEY_SECRET, UserUtils.getOauthToken(context), UserUtils.getOauthTokenSecret(context));
     }
 
     public static OpencachingApi.Calls service(String consumerKey, String consumerSecret, String tokenKey, String tokenSecret) {

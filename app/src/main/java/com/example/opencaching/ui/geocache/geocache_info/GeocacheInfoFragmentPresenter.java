@@ -14,9 +14,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.example.opencaching.utils.UserUtils.getUserSecretToken;
-import static com.example.opencaching.utils.UserUtils.getUserToken;
-
 /**
  * Created by Wojtek on 12.08.2017.
  */

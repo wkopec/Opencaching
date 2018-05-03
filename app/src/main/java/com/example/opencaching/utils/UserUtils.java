@@ -2,39 +2,39 @@ package com.example.opencaching.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 /**
- * Created by Wojtek on 13.08.2017.
+ * Created by Wojtek on 03.05.2018.
  */
 
 public class UserUtils {
-    private static String PREF_USER_TOKEN = "pref-user-token";
-    private static String PREF_USER_SECRET_TOKEN = "pref-user-secret-token";
 
-    public static void setUserToken(Context context, String token){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        preferences.edit().putString(PREF_USER_TOKEN, token).apply();
-    }
-    public static void setUserSecretToken(Context context, String secretToken){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        preferences.edit().putString(PREF_USER_SECRET_TOKEN, secretToken).apply();
+    private static String PREF_SESSION = "pref_session";
+    private static String OAUTH_TOKEN = "oauth_token";
+    private static String OAUTH_TOKEN_SECRET = "oauth_token_secret";
+
+    private static SharedPreferences getSharedPreferences(Context context){
+        return context.getSharedPreferences(PREF_SESSION, Context.MODE_PRIVATE);
     }
 
-
-    public static String getUserToken(Context context){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getString(PREF_USER_TOKEN, "");
+    public static String getOauthToken(Context context) {
+        return getSharedPreferences(context).getString(OAUTH_TOKEN, "");
     }
 
-    public static String getUserSecretToken(Context context){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getString(PREF_USER_SECRET_TOKEN, "");
+    public static void setOauthToken(Context context, String oauthToken) {
+        getSharedPreferences(context).edit().putString(OAUTH_TOKEN, oauthToken).apply();
+    }
+
+    public static String getOauthTokenSecret(Context context) {
+        return getSharedPreferences(context).getString(OAUTH_TOKEN_SECRET, "");
+    }
+
+    public static void setOauthTokenSecret(Context context, String oauthTokenSecret) {
+        getSharedPreferences(context).edit().putString(OAUTH_TOKEN_SECRET, oauthTokenSecret).apply();
     }
 
     public static boolean isLoggedIn(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return !preferences.getString(PREF_USER_TOKEN, "").matches("");
+        return !getSharedPreferences(context).getString(OAUTH_TOKEN_SECRET, "").matches("");
     }
 
 }

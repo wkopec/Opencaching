@@ -52,11 +52,10 @@ public class OAuthInterceptor implements Interceptor {
         Log.d("URL", original.url().toString());
         Log.d("URL", original.url().scheme());
         Log.d("encodedpath", original.url().encodedPath());
-        Log.d("query", ""+original.url().query());
-        Log.d("path", ""+original.url().host());
-        Log.d("encodedQuery", ""+original.url().encodedQuery());
-        ;
-        Log.d("method", ""+original.method());
+        Log.d("query", "" + original.url().query());
+        Log.d("path", "" + original.url().host());
+        Log.d("encodedQuery", "" + original.url().encodedQuery());
+        Log.d("method", "" + original.method());
 
         ////////////////////////////////////////////////////////////
 
@@ -67,30 +66,31 @@ public class OAuthInterceptor implements Interceptor {
 
         String dynamicStructureUrl = original.url().scheme() + "://" + original.url().host() + original.url().encodedPath();
 
-        Log.d("ENCODED PATH", ""+dynamicStructureUrl);
+        Log.d("ENCODED PATH", "" + dynamicStructureUrl);
         String firstBaseString = original.method() + "&" + urlEncoded(dynamicStructureUrl);
         Log.d("firstBaseString", firstBaseString);
         String generatedBaseString = "";
 
+        if (original.url().encodedQuery() != null) {
 
-        if(original.url().encodedQuery()!=null) {
-            generatedBaseString = original.url().encodedQuery() + "&oauth_consumer_key=" + consumerKey + "&oauth_nonce=" + nonce + "&oauth_token=" + tokenKey + "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" + timestamp + "&oauth_version=1.0";
-        }
-        else
-        {
-            generatedBaseString = "oauth_consumer_key=" + consumerKey + "&oauth_nonce=" + nonce  + "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" + timestamp + "&oauth_version=1.0";
-
+            if (tokenKey.equals("")) {
+                generatedBaseString = original.url().encodedQuery() + "&oauth_consumer_key=" + consumerKey + "&oauth_nonce=" + nonce + "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" + timestamp + "&oauth_version=1.0";
+            } else {
+                generatedBaseString = original.url().encodedQuery() + "&oauth_consumer_key=" + consumerKey + "&oauth_nonce=" + nonce + "&oauth_token=" + tokenKey + "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" + timestamp + "&oauth_version=1.0";
+            }
+        } else {
+            generatedBaseString = "oauth_consumer_key=" + consumerKey + "&oauth_nonce=" + nonce + "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" + timestamp + "&oauth_version=1.0";
         }
 
         ParameterList result = new ParameterList();
         result.addQuerystring(generatedBaseString);
-        generatedBaseString=result.sort().asOauthBaseString();
-        Log.d("Sorted","00--"+result.sort().asOauthBaseString());
+        generatedBaseString = result.sort().asOauthBaseString();
+        Log.d("Sorted", "00--" + result.sort().asOauthBaseString());
 
         String secoundBaseString = "&" + generatedBaseString;
 
         if (firstBaseString.contains("%3F")) {
-            Log.d("iff","yess iff");
+            Log.d("iff", "yess iff");
             secoundBaseString = "%26" + urlEncoded(generatedBaseString);
         }
 
@@ -99,18 +99,28 @@ public class OAuthInterceptor implements Interceptor {
         String signature = new HMACSha1SignatureService().getSignature(baseString, consumerSecret, tokenSecret);
         Log.d("Signature", signature);
 
-        HttpUrl url = originalHttpUrl.newBuilder()
+        HttpUrl url;
 
-                .addQueryParameter(OAUTH_SIGNATURE_METHOD, OAUTH_SIGNATURE_METHOD_VALUE)
-                .addQueryParameter(OAUTH_CONSUMER_KEY, consumerKey)
-                .addQueryParameter(OAUTH_VERSION, OAUTH_VERSION_VALUE)
-                .addQueryParameter(OAUTH_TIMESTAMP, timestamp)
-                .addQueryParameter(OAUTH_NONCE, nonce)
-                .addQueryParameter(OAUTH_TOKEN, tokenKey)
-                .addQueryParameter(OAUTH_SIGNATURE, signature)
-
-
-                .build();
+        if (tokenKey.equals("")) {
+            url = originalHttpUrl.newBuilder()
+                    .addQueryParameter(OAUTH_SIGNATURE_METHOD, OAUTH_SIGNATURE_METHOD_VALUE)
+                    .addQueryParameter(OAUTH_CONSUMER_KEY, consumerKey)
+                    .addQueryParameter(OAUTH_VERSION, OAUTH_VERSION_VALUE)
+                    .addQueryParameter(OAUTH_TIMESTAMP, timestamp)
+                    .addQueryParameter(OAUTH_NONCE, nonce)
+                    .addQueryParameter(OAUTH_SIGNATURE, signature)
+                    .build();
+        } else {
+            url = originalHttpUrl.newBuilder()
+                    .addQueryParameter(OAUTH_SIGNATURE_METHOD, OAUTH_SIGNATURE_METHOD_VALUE)
+                    .addQueryParameter(OAUTH_CONSUMER_KEY, consumerKey)
+                    .addQueryParameter(OAUTH_VERSION, OAUTH_VERSION_VALUE)
+                    .addQueryParameter(OAUTH_TIMESTAMP, timestamp)
+                    .addQueryParameter(OAUTH_NONCE, nonce)
+                    .addQueryParameter(OAUTH_TOKEN, tokenKey)
+                    .addQueryParameter(OAUTH_SIGNATURE, signature)
+                    .build();
+        }
 
         // Request customization: add request headers
         Request.Builder requestBuilder = original.newBuilder()
@@ -127,7 +137,7 @@ public class OAuthInterceptor implements Interceptor {
         private String consumerSecret;
         private String tokenKey;
         private String tokenSecret;
-        private int type;
+
 
         public Builder consumerKey(String consumerKey) {
             if (consumerKey == null) throw new NullPointerException("consumerKey = null");

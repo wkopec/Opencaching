@@ -1,10 +1,13 @@
 package com.example.opencaching.network.api;
 
+import android.content.Context;
+
 import com.example.opencaching.network.models.okapi.Geocache;
 import com.example.opencaching.network.models.okapi.GeocacheLog;
 import com.example.opencaching.network.models.okapi.WaypointResults;
-import com.github.scribejava.core.builder.api.DefaultApi10a;
-import com.github.scribejava.core.model.OAuth1RequestToken;
+import com.example.opencaching.utils.SessionManager;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -15,14 +18,18 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+
+import static com.example.opencaching.utils.Constants.OPENCACHING_CONSUMER_KEY;
+import static com.example.opencaching.utils.Constants.OPENCACHING_CONSUMER_KEY_SECRET;
 
 /**
  * Created by Volfram on 16.07.2017.
  */
 
-public class OpencachingApi extends DefaultApi10a {
+public class OpencachingApi {
 
     public static final String API_BASE_URL = "http://opencaching.pl/okapi/services/";
 
@@ -35,41 +42,51 @@ public class OpencachingApi extends DefaultApi10a {
         return service;
     }
 
+    public static OpencachingApi.Calls service(Context context) {
+        return service(OPENCACHING_CONSUMER_KEY, OPENCACHING_CONSUMER_KEY_SECRET, SessionManager.getOauthToken(context), SessionManager.getOauthTokenSecret(context));
+    }
+
     public static OpencachingApi.Calls service(String consumerKey, String consumerSecret, String tokenKey, String tokenSecret) {
 
-        OAuthInterceptor oauth1Woocommerce = new OAuthInterceptor.Builder()
+        OAuthInterceptor oAuthInterceptor = new OAuthInterceptor.Builder()
                 .consumerKey(consumerKey)
                 .consumerSecret(consumerSecret)
                 .tokenKey(tokenKey)
                 .tokenSecret(tokenSecret)
                 .build();
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
-                .addInterceptor(interceptor)
-                .addInterceptor(oauth1Woocommerce)
+                .addInterceptor(loggingInterceptor)
+                .addInterceptor(oAuthInterceptor)
                 .build();
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_BASE_URL).addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(API_BASE_URL)
                 .client(client)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        OpencachingApi.Calls service = retrofit.create(OpencachingApi.Calls.class);
-        return service;
+        return retrofit.create(Calls.class);
     }
 
     public interface Calls {
 
         //AUTH
-
         @GET("oauth/request_token")
-        Call<String> get(@Query("consumer_key") String consumerKey, @Query("center") String center, @Query("limit") int limit, @Query("radius") int radius);
+        Call<String> getRequestToken(@Query("oauth_callback") String oauthCallback);
 
+        @GET("oauth/access_token")
+        Call<String> getAccessToken(@Query("oauth_verifier") String oauthVerifier);
 
         //GEOCACHE
 
@@ -86,33 +103,6 @@ public class OpencachingApi extends DefaultApi10a {
         Call<Geocache> getGeocacheInfo(@Query("cache_code") String code, @Query("fields") String fields);
         //Call<Geocache> getGeocacheInfo(@Query("consumer_key") String consumerKey, @Query("cache_code") String code, @Query("fields") String fields);
 
-    }
-
-    //OAUTH
-
-    private static final String AUTHORIZE_URL = "http://opencaching.pl/okapi/services/oauth/authorize?oauth_token=%s";
-
-    private static class InstanceHolder {
-        private static final OpencachingApi INSTANCE = new OpencachingApi();
-    }
-
-    public static OpencachingApi instance() {
-        return InstanceHolder.INSTANCE;
-    }
-
-    @Override
-    public String getRequestTokenEndpoint() {
-        return "http://opencaching.pl/okapi/services/oauth/request_token";
-    }
-
-    @Override
-    public String getAccessTokenEndpoint() {
-        return "http://opencaching.pl/okapi/services/oauth/access_token";
-    }
-
-    @Override
-    public String getAuthorizationUrl(OAuth1RequestToken requestToken) {
-        return String.format(AUTHORIZE_URL, requestToken.getToken());
     }
 
 }

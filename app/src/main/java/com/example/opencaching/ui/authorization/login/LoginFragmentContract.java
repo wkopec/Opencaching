@@ -1,4 +1,4 @@
-package com.example.opencaching.ui.auth.login;
+package com.example.opencaching.ui.authorization.login;
 
 import com.example.opencaching.ui.base.BaseContract;
 
@@ -22,7 +22,7 @@ public class LoginFragmentContract {
 
     public interface Presenter extends BaseContract.Presenter {
 
-        void getOauthToken(final String verifier);
+        void getOauthTokenSecret(String verifier, String oauthToken);
 
     }
 

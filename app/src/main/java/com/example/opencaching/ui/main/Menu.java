@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 
 import com.example.opencaching.R;
-import com.example.opencaching.ui.auth.LoginActivity;
+import com.example.opencaching.ui.authorization.LoginActivity;
 import com.example.opencaching.ui.main.map.MapFragment;
 
 import java.util.ArrayList;

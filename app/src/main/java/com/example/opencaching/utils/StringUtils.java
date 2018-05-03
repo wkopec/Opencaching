@@ -38,6 +38,25 @@ public class StringUtils {
         return displayDate;
     }
 
+    public static String getOathToken(String url) {
+        url = url.substring(url.indexOf("oauth_token"));
+        String[] pairs = url.split("&");
+        String token = pairs[0].replace("oauth_token=", "");
+        return token;
+    }
 
+    public static String getOathTokenSecret(String url) {
+        url = url.substring(url.indexOf("oauth_token_secret"));
+        String[] pairs = url.split("&");
+        String tokenSecret = pairs[0].replace("oauth_token_secret=", "");
+        return tokenSecret;
+    }
+
+    public static String getOathVerifier(String url) {
+        url = url.substring(url.indexOf("oauth_token"));
+        String[] pairs = url.split("&");
+        String verifier = pairs[1].replace("oauth_verifier=", "");
+        return verifier;
+    }
 
 }

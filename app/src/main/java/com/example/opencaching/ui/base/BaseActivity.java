@@ -22,12 +22,10 @@ import android.widget.Toast;
 
 import com.example.opencaching.R;
 import com.example.opencaching.network.models.Error;
-import com.example.opencaching.ui.auth.LoginActivity;
+import com.example.opencaching.ui.authorization.LoginActivity;
 import com.example.opencaching.utils.UserUtils;
 
 import org.greenrobot.eventbus.EventBus;
-
-import static com.example.opencaching.network.models.Error.UNAUTHORIZED;
 
 /**
  * Created by Volfram on 15.07.2017.

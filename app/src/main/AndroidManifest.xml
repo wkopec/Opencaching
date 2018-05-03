@@ -12,18 +12,11 @@
         android:theme="@style/AppTheme">
 
 
-        <activity android:name=".ui.auth.LoginActivity"
+        <activity android:name=".ui.authorization.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:host="redirecturi"
-                    android:scheme="your" />
             </intent-filter>
         </activity>
 

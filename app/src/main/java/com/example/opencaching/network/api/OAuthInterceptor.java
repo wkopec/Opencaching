@@ -72,7 +72,6 @@ public class OAuthInterceptor implements Interceptor {
         String generatedBaseString = "";
 
         if (original.url().encodedQuery() != null) {
-
             if (tokenKey.equals("")) {
                 generatedBaseString = original.url().encodedQuery() + "&oauth_consumer_key=" + consumerKey + "&oauth_nonce=" + nonce + "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" + timestamp + "&oauth_version=1.0";
             } else {

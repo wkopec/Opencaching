@@ -5,6 +5,7 @@
     <color name="colorPrimaryLight">#67daff</color>
     <color name="colorAccent">#ffb300</color>
     <color name="white">#FFFFFF</color>
+    <color name="whiteTransparent">#dcffffff</color>
     <color name="white_gray">#FAFAFA</color>
     <color name="black">#000000</color>
     <color name="translucent">#80000000</color>
@@ -12,7 +13,6 @@
     <color name="red">#FF1D15</color>
     <color name="green">#3EC300</color>
     <color name="darkGreen">#287D00</color>
-
 
 
     <color name="progressbar_color_1">#f4b400</color>

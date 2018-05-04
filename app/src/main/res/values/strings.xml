@@ -60,6 +60,9 @@
     <string name="yesterday">Wczoraj</string>
     <string name="something_went_wrong_check_internet">Ops… Coś poszło nie tak. Sprawdź połączenie internetowe</string>
     <string name="something_went_wrong_couldn_connect_to_server">Nie udało się połączyć z serwerem</string>
+    <string name="login">Zaloguj</string>
+    <string name="password">Hasło</string>
+    <string name="username">Login</string>
 
 
 </resources>

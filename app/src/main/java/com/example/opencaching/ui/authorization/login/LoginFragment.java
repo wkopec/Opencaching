@@ -23,7 +23,6 @@ import butterknife.ButterKnife;
 import static com.example.opencaching.utils.StringUtils.getOathToken;
 import static com.example.opencaching.utils.StringUtils.getOathVerifier;
 
-
 /**
  * Created by Wojtek on 13.08.2017.
  */
@@ -43,6 +42,7 @@ public class LoginFragment extends BaseFragment implements LoginFragmentContract
         activity = (LoginActivity) getActivity();
         presenter = new LoginFragmentPresenter(this, activity);
         setPresenter(presenter);
+        setWebView();
         return view;
     }
 
@@ -63,7 +63,6 @@ public class LoginFragment extends BaseFragment implements LoginFragmentContract
 
     @Override
     public void loadUrl(String url) {
-        setWebView();
         webView.loadUrl(url);
     }
 
@@ -76,10 +75,11 @@ public class LoginFragment extends BaseFragment implements LoginFragmentContract
                     Log.d("Cookies", "Cookie removed: " + aBoolean);
                 }
             });
+        } else {
+            cookieManager.removeAllCookie();
         }
-        else cookieManager.removeAllCookie();
 
-        webView.setVisibility(View.VISIBLE);
+        //webView.setVisibility(View.VISIBLE);
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDisplayZoomControls(false);
         webView.getSettings().setJavaScriptEnabled(true);

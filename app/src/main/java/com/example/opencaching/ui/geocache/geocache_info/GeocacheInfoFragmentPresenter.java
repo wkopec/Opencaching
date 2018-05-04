@@ -32,7 +32,6 @@ public class GeocacheInfoFragmentPresenter extends BasePresenter implements Geoc
 
     public void getGeocacheInfo(String code) {
 
-        //Call<Geocache> loginCall = OpencachingApi.service(context.getResources().getString(R.string.opencaching_key), context.getResources().getString(R.string.opencaching_secret_key), getUserToken(context), getUserSecretToken(context)).getGeocacheInfo(code, INFO_STANDARD_FIELDS);
         Call<Geocache> loginCall = OpencachingApi.service(context).getGeocacheInfo(code, INFO_STANDARD_FIELDS);
         loginCall.enqueue(new Callback<Geocache>() {
             @Override

@@ -22,6 +22,12 @@
     <string name="nav_user_geocaches">Moje skrzynki</string>
     <string name="nav_user_neighbourhood">Moja okolica</string>
 
+    <!--Authorization-->
+    <string name="login">Zaloguj</string>
+    <string name="password">Hasło</string>
+    <string name="username">Login</string>
+    <string name="invalid_username_or_password">Nieprawidłowy login lub hasło</string>
+
     <!--Geocahce info-->
     <string name="found">znaleziona</string>
     <string name="not_found">nieznaleziona</string>
@@ -60,9 +66,6 @@
     <string name="yesterday">Wczoraj</string>
     <string name="something_went_wrong_check_internet">Ops… Coś poszło nie tak. Sprawdź połączenie internetowe</string>
     <string name="something_went_wrong_couldn_connect_to_server">Nie udało się połączyć z serwerem</string>
-    <string name="login">Zaloguj</string>
-    <string name="password">Hasło</string>
-    <string name="username">Login</string>
 
 
 </resources>

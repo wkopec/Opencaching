@@ -73,6 +73,10 @@ public class User {
         return givenRecommendations;
     }
 
+    public String getRawHomeLocation() {
+        return homeLocation;
+    }
+
     public LatLng getHomeLocation() {
         if(homeLocation != null) {
             String[] location = homeLocation.split("\\|");

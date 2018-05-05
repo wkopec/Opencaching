@@ -52,6 +52,7 @@ import static com.example.opencaching.utils.IntegerUtils.getDistance;
 import static com.example.opencaching.utils.ResourceUtils.getGeocacheIcon;
 import static com.example.opencaching.utils.ResourceUtils.getGeocacheSelectedIcon;
 import static com.example.opencaching.utils.ResourceUtils.getGeocacheSize;
+import static com.example.opencaching.utils.UserUtils.getUserHomeLocation;
 
 /**
  * Created by Volfram on 15.05.2017.
@@ -106,8 +107,13 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(START_MAP_LATITUDE, START_MAP_LONGITUDE), START_MAP_ZOOM));
+        if(getUserHomeLocation(activity) != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(getUserHomeLocation(activity), 10));
+        } else {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(START_MAP_LATITUDE, START_MAP_LONGITUDE), START_MAP_ZOOM));
+        }
         configureMap();
+        presenter.getUserData();
     }
 
     private void configureMap() {
@@ -163,7 +169,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
                 CameraPosition cameraPosition = mMap.getCameraPosition();
                 Log.d("Test", String.valueOf(cameraPosition.zoom));
                 hideMapInfo();
-                if (mMap.getCameraPosition().zoom > MINIMUM_REQUEST_ZOOM) {
+                if (mMap.getCameraPosition().zoom >= MINIMUM_REQUEST_ZOOM) {
                     LatLng center = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
                     int radius = getDistance(mMap.getProjection().fromScreenLocation(new Point(0, 0)), center) / 1000;
                     presenter.downloadGeocaches(center, radius);

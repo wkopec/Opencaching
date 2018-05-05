@@ -35,6 +35,8 @@ public class MapContract{
 
         void getLocation(String address);
 
+        void getUserData();
+
         Geocache getGeocache(Marker marker);
 
     }

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.opencaching.R;
+import com.example.opencaching.network.models.okapi.User;
 import com.example.opencaching.ui.base.BasePresenter;
 import com.example.opencaching.network.models.CoveredArea;
 import com.example.opencaching.network.models.geocoding.GeocodingResults;
@@ -28,8 +29,11 @@ import retrofit2.Response;
 
 import static com.example.opencaching.network.api.GoogleMapsApi.service;
 import static com.example.opencaching.utils.Constants.GEOCACHES_STANDARD_FIELDS;
+import static com.example.opencaching.utils.Constants.USERNAME_FIELDS;
 import static com.example.opencaching.utils.IntegerUtils.getDistance;
 import static com.example.opencaching.utils.StringUtils.getApiFormatedFields;
+import static com.example.opencaching.utils.UserUtils.getUserHomeLocation;
+import static com.example.opencaching.utils.UserUtils.setUserHomeLocation;
 
 /**
  * Created by Volfram on 15.07.2017.
@@ -75,7 +79,7 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
         loginCall.enqueue(new Callback<WaypointResults>() {
             @Override
             public void onResponse(@NonNull Call<WaypointResults> call, @NonNull Response<WaypointResults> response) {
-                if (response.body() != null){
+                if (response.body() != null) {
                     WaypointResults waypoints = response.body();
                     if (!waypoints.getResults().isEmpty())
                         getGeocaches(getApiFormatedFields(waypoints.getResults()), waypoints.isMore());
@@ -85,7 +89,7 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
                         view.hideProgress();
                     }
                 } else {
-                    if (response.errorBody() != null){
+                    if (response.errorBody() != null) {
                         view.showError(ApiUtils.getErrorSingle(response.errorBody()));
                         view.hideProgress();
                     }
@@ -106,7 +110,7 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
         loginCall.enqueue(new Callback<Map<String, Geocache>>() {
             @Override
             public void onResponse(@NonNull Call<Map<String, Geocache>> call, @NonNull Response<Map<String, Geocache>> response) {
-                if (response.body() != null){
+                if (response.body() != null) {
                     Map<String, Geocache> geocaches = response.body();
                     if (geocaches != null)
                         addGeocaches(geocaches, isMore);
@@ -115,7 +119,7 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
                         isActive = false;
                     }
                 } else {
-                    if (response.errorBody() != null){
+                    if (response.errorBody() != null) {
                         view.showError(ApiUtils.getErrorSingle(response.errorBody()));
                     }
                 }
@@ -179,6 +183,28 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
             @Override
             public void onFailure(@NonNull Call<GeocodingResults> call, @NonNull Throwable t) {
                 view.showMapInfo(R.string.something_went_wrong);
+                if (t.getMessage() != null)
+                    Log.d("Retrofit fail", t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void getUserData() {
+        Call<User> userCall = OpencachingApi.service(context).getLoggedInUserInfo("home_location");
+        userCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                User user = response.body();
+                LatLng userHomeLocation = getUserHomeLocation(context);
+                if (user != null && (userHomeLocation == null || !userHomeLocation.equals(user.getHomeLocation()))) {
+                    setUserHomeLocation(context, user.getRawHomeLocation());
+                    view.moveMapCamera(user.getHomeLocation(), 10);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
                 if (t.getMessage() != null)
                     Log.d("Retrofit fail", t.getMessage());
             }

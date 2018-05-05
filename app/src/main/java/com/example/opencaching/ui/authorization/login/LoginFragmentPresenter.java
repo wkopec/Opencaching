@@ -14,7 +14,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.example.opencaching.utils.Constants.USERNAME_FIELDS;
 import static com.example.opencaching.utils.StringUtils.getOathToken;
 import static com.example.opencaching.utils.StringUtils.getOathTokenSecret;
 
@@ -74,7 +73,8 @@ public class LoginFragmentPresenter extends BasePresenter implements LoginFragme
                 if (response.body() != null) {
                     UserUtils.setOauthToken(context, getOathToken(response.body()));
                     UserUtils.setOauthTokenSecret(context, getOathTokenSecret(response.body()));
-                    getUserData();
+                    view.hideProgress();
+                    view.startMainActivity();
                 } else {
                     if (response.errorBody() != null) {
                         view.showError(ApiUtils.getErrorSingle(response.errorBody()));
@@ -91,20 +91,4 @@ public class LoginFragmentPresenter extends BasePresenter implements LoginFragme
         });
     }
 
-    private void getUserData() {
-        Call<User> userCall = OpencachingApi.service(context).getLoggedInUserInfo(USERNAME_FIELDS);
-        userCall.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                User user = response.body();
-                view.hideProgress();
-                view.startMainActivity();
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-
-            }
-        });
-    }
 }

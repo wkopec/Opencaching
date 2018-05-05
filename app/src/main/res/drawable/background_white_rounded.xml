@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item>
+        <shape>
+            <solid android:color="@color/gray_hint"/>
+            <corners
+                android:radius="@dimen/spacing_small" />
+        </shape>
+    </item>
+    <item
+        android:bottom="@dimen/_1sdp">
         <shape>
             <solid android:color="@color/white"/>
             <corners
-                android:radius="90dp" />
+                android:radius="@dimen/spacing_small" />
             <padding
                 android:left="@dimen/spacing_small"
                 android:top="@dimen/spacing_small"
@@ -13,4 +21,4 @@
                 android:bottom="@dimen/spacing_small" />
         </shape>
     </item>
-</selector>
+</layer-list>

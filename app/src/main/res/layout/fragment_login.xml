@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_background"
+    android:background="@drawable/background_login_gradient"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.8"
-        android:background="@color/colorPrimary" />
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:alpha="0.8"-->
+        <!--android:background="@color/colorPrimary" />-->
 
     <ImageView
         android:id="@+id/icon"
@@ -18,80 +18,94 @@
         android:layout_height="@dimen/_100sdp"
         android:layout_marginTop="@dimen/spacing_normal"
         android:src="@drawable/logo"
-        app:layout_constraintBottom_toTopOf="@+id/loginInputLayout"
+        app:layout_constraintBottom_toTopOf="@+id/username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/loginInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/spacing_normal"
-        android:layout_marginStart="@dimen/spacing_normal"
-        android:layout_marginTop="@dimen/spacing_normal_x2"
-        android:textColorHint="@color/whiteTransparent"
-        app:layout_constraintBottom_toTopOf="@+id/passwordInputLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed">
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_normal"
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:layout_marginTop="@dimen/spacing_normal_x2"
+            android:background="@drawable/background_white_rounded"
+            android:drawableStart="@drawable/ic_username"
+            android:drawablePadding="@dimen/spacing_small"
             android:hint="@string/username"
             android:inputType="text"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_normal" />
+            android:textSize="@dimen/text_size_normal"
+            app:layout_constraintBottom_toTopOf="@+id/password"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"/>
 
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/passwordInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/spacing_normal"
-        android:layout_marginStart="@dimen/spacing_normal"
-        android:layout_marginTop="@dimen/spacing_normal"
-        android:textColorHint="@color/whiteTransparent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginInputLayout">
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/password"
             style="@style/EditText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_normal"
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:background="@drawable/background_white_rounded"
+            android:drawableStart="@drawable/ic_password_lock"
+            android:drawablePadding="@dimen/spacing_small"
             android:hint="@string/password"
             android:inputType="textPassword"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_normal" />
+            android:textSize="@dimen/text_size_normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/username"/>
 
-    </android.support.design.widget.TextInputLayout>
 
-    <Button
+    <FrameLayout
         android:id="@+id/loginButton"
-        style="@style/Button.White"
-        android:layout_width="match_parent"
+        android:background="@drawable/circle_button_white"
+        android:layout_width="@dimen/_45sdp"
+        android:layout_height="@dimen/_45sdp"
         android:layout_marginEnd="@dimen/spacing_normal_x2"
         android:layout_marginStart="@dimen/spacing_normal_x2"
-        android:text="@string/login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/passwordInputLayout"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintTop_toBottomOf="@id/password"
+        app:layout_constraintVertical_bias="0.2" >
+
+        <ImageView
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:paddingBottom="@dimen/_1sdp"
+            android:layout_gravity="center"
+            android:tint="@color/white"
+            android:src="@drawable/ic_arrow_right"/>
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/termsOfService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_margin="@dimen/spacing_normal"
+        android:text="@string/agree_terms_of_service"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <View
         android:id="@+id/mask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black"
-        android:alpha="0.7"/>
+        android:alpha="0.7"
+        android:visibility="gone"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -100,6 +114,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"/>
 
 </android.support.constraint.ConstraintLayout>

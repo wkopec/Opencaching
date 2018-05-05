@@ -1,20 +1,31 @@
 package com.example.opencaching.ui.authorization.login;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.webkit.CookieManager;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.opencaching.R;
@@ -44,10 +55,13 @@ public class LoginFragment extends BaseFragment implements LoginFragmentContract
     EditText password;
 
     @BindView(R.id.loginButton)
-    Button loginButton;
+    FrameLayout loginButton;
 
     @BindView(R.id.mask)
     View mask;
+
+    @BindView(R.id.termsOfService)
+    TextView termsOfService;
 
     private WebView webView;
     private LoginActivity activity;
@@ -62,6 +76,8 @@ public class LoginFragment extends BaseFragment implements LoginFragmentContract
         presenter = new LoginFragmentPresenter(this, activity);
         setPresenter(presenter);
         setWebView();
+        setTermsOfService();
+        setOnDoneClickListener();
         return view;
     }
 
@@ -145,5 +161,37 @@ public class LoginFragment extends BaseFragment implements LoginFragmentContract
     private void acceptOauthApplicationAccess() {
         webView.loadUrl("javascript:var x = document.getElementById('authform_result').setAttribute('value', 'granted'); document.forms['authform'].submit();");
 
+    }
+
+    private void setTermsOfService() {
+        SpannableString ss = new SpannableString(String.format(getString(R.string.agree_terms_of_service), getString(R.string.terms_of_service)));
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(activity.getString(R.string.terms_of_service_website)));
+                activity.startActivity(intent);
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(true);
+                ds.setColor(ContextCompat.getColor(activity, android.R.color.white));
+            }
+        };
+        ss.setSpan(clickableSpan, ss.length() - getString(R.string.terms_of_service).length() - 1, ss.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        termsOfService.setText(ss);
+        termsOfService.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private void setOnDoneClickListener() {
+        password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    onLoginButtonClick();
+                }
+                return false;
+            }
+        });
     }
 }

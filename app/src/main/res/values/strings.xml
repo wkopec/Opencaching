@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Opencaching</string>
+    <string name="terms_of_service_website">https://wiki.opencaching.pl/index.php?title=Regulamin_użytkownika_OC_PL</string>
     <string name="google_maps_key">AIzaSyB2I-uCmanDnjzqZQyYZjAHGy29XElc4NY</string>
     <string name="google_geocoding_key">AIzaSyA2XAPjU3kU11fGPQznBFmihw5puUaSqCk</string>
     <string name="opencaching_key">eSLCuVzRJJsYUUfUs6Su</string>
@@ -66,6 +67,9 @@
     <string name="yesterday">Wczoraj</string>
     <string name="something_went_wrong_check_internet">Ops… Coś poszło nie tak. Sprawdź połączenie internetowe</string>
     <string name="something_went_wrong_couldn_connect_to_server">Nie udało się połączyć z serwerem</string>
+    <string name="agree_terms_of_service">Korzystając z aplikacji akceptujesz %1$s.</string>
+    <string name="terms_of_service">regulamin serwisu</string>
+
 
 
 </resources>

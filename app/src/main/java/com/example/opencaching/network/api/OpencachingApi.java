@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.opencaching.network.models.okapi.Geocache;
 import com.example.opencaching.network.models.okapi.GeocacheLog;
+import com.example.opencaching.network.models.okapi.User;
 import com.example.opencaching.network.models.okapi.WaypointResults;
 import com.example.opencaching.utils.UserUtils;
 import com.google.gson.Gson;
@@ -88,6 +89,11 @@ public class OpencachingApi {
         @GET("oauth/access_token")
         Call<String> getAccessToken(@Query("oauth_verifier") String oauthVerifier);
 
+        //USER
+
+        @GET("users/user")
+        Call<User> getLoggedInUserInfo(@Query("fields") String fields);
+
         //GEOCACHE
 
         @GET("caches/search/nearest")
@@ -101,7 +107,7 @@ public class OpencachingApi {
 
         @GET("caches/geocache")
         Call<Geocache> getGeocacheInfo(@Query("cache_code") String code, @Query("fields") String fields);
-        //Call<Geocache> getGeocacheInfo(@Query("consumer_key") String consumerKey, @Query("cache_code") String code, @Query("fields") String fields);
+
 
     }
 

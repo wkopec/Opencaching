@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.example.opencaching.R;
+import com.example.opencaching.network.models.okapi.User;
 import com.example.opencaching.ui.base.BasePresenter;
 import com.example.opencaching.network.api.OpencachingApi;
 import com.example.opencaching.utils.ApiUtils;
@@ -13,6 +14,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.opencaching.utils.Constants.USERNAME_FIELDS;
 import static com.example.opencaching.utils.StringUtils.getOathToken;
 import static com.example.opencaching.utils.StringUtils.getOathTokenSecret;
 
@@ -30,9 +32,7 @@ public class LoginFragmentPresenter extends BasePresenter implements LoginFragme
     public LoginFragmentPresenter(LoginFragmentContract.View view, Context context) {
         this.view = view;
         this.context = context;
-
         getRequestToken();
-
     }
 
     private void getRequestToken() {
@@ -74,9 +74,7 @@ public class LoginFragmentPresenter extends BasePresenter implements LoginFragme
                 if (response.body() != null) {
                     UserUtils.setOauthToken(context, getOathToken(response.body()));
                     UserUtils.setOauthTokenSecret(context, getOathTokenSecret(response.body()));
-                    view.startMainActivity();
-                    view.hideProgress();
-
+                    getUserData();
                 } else {
                     if (response.errorBody() != null) {
                         view.showError(ApiUtils.getErrorSingle(response.errorBody()));
@@ -89,6 +87,23 @@ public class LoginFragmentPresenter extends BasePresenter implements LoginFragme
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 view.hideProgress();
                 view.showError(ApiUtils.getErrorSingle(t));
+            }
+        });
+    }
+
+    private void getUserData() {
+        Call<User> userCall = OpencachingApi.service(context).getLoggedInUserInfo(USERNAME_FIELDS);
+        userCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                User user = response.body();
+                view.hideProgress();
+                view.startMainActivity();
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
             }
         });
     }

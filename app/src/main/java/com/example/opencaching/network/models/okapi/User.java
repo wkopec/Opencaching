@@ -19,6 +19,9 @@ public class User {
     @SerializedName("profile_url")
     @Expose
     private String profileUrl;          //URL of the user profile page
+    @SerializedName("is_admin ")
+    @Expose
+    private boolean isAdmin;            //true if user has admin privileges
     @SerializedName("date_registered")
     @Expose
     private String registeredDate;      //date when the user has registered his Opencaching account

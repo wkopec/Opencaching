@@ -14,13 +14,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.opencaching.utils.Constants.GEOCACHE_INFO_FIELDS;
+
 /**
  * Created by Wojtek on 12.08.2017.
  */
 
 public class GeocacheInfoFragmentPresenter extends BasePresenter implements GeocacheInfoContract.Presenter {
-
-    private final static String INFO_STANDARD_FIELDS = "name|location|type|status|url|owner|gc_code|is_found|is_not_found|is_watched|founds|notfounds|willattends|size2|difficulty|terrain|trip_time|trip_distance|rating|rating_votes|recommendations|req_passwd|short_description|description|hint2|images|attr_acodes|my_notes|trackables_count|trackables|date_created|date_hidden";
 
     private GeocacheInfoContract.View view;
     private Context context;
@@ -32,7 +32,7 @@ public class GeocacheInfoFragmentPresenter extends BasePresenter implements Geoc
 
     public void getGeocacheInfo(String code) {
 
-        Call<Geocache> loginCall = OpencachingApi.service(context).getGeocacheInfo(code, INFO_STANDARD_FIELDS);
+        Call<Geocache> loginCall = OpencachingApi.service(context).getGeocacheInfo(code, GEOCACHE_INFO_FIELDS);
         loginCall.enqueue(new Callback<Geocache>() {
             @Override
             public void onResponse(@NonNull Call<Geocache> call, @NonNull Response<Geocache> response) {

@@ -3,7 +3,7 @@
 
     <item>
         <shape>
-            <solid android:color="@color/gray_hint"/>
+            <solid android:color="@color/colorAccentDark"/>
             <corners
                 android:radius="@dimen/spacing_very_small" />
         </shape>
@@ -11,7 +11,7 @@
     <item
         android:bottom="@dimen/_1sdp">
         <shape>
-            <solid android:color="@color/white"/>
+            <solid android:color="@color/colorAccent"/>
             <corners
                 android:radius="@dimen/spacing_very_small" />
             <padding

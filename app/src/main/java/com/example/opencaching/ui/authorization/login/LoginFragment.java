@@ -2,10 +2,13 @@ package com.example.opencaching.ui.authorization.login;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -13,10 +16,13 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.CookieManager;
 import android.webkit.ValueCallback;
@@ -24,11 +30,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.opencaching.R;
+import com.example.opencaching.network.models.okapi.Image;
 import com.example.opencaching.ui.authorization.LoginActivity;
 import com.example.opencaching.ui.base.BaseFragment;
 
@@ -62,6 +70,9 @@ public class LoginFragment extends BaseFragment implements LoginFragmentContract
 
     @BindView(R.id.termsOfService)
     TextView termsOfService;
+
+    @BindView(R.id.background)
+    ImageView background;
 
     private WebView webView;
     private LoginActivity activity;
@@ -160,7 +171,6 @@ public class LoginFragment extends BaseFragment implements LoginFragmentContract
 
     private void acceptOauthApplicationAccess() {
         webView.loadUrl("javascript:var x = document.getElementById('authform_result').setAttribute('value', 'granted'); document.forms['authform'].submit();");
-
     }
 
     private void setTermsOfService() {

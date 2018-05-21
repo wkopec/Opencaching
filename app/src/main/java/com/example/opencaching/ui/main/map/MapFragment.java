@@ -7,14 +7,16 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.opencaching.R;
@@ -30,9 +32,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
@@ -69,6 +71,24 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     TextView mapInfoMessage;
     @BindView(R.id.progressBar)
     SmoothProgressBar progressBar;
+    @BindView(R.id.geocacheBottomSheet)
+    ConstraintLayout geocacheBottomSheet;
+    @BindView(R.id.geocacheInfoHeader)
+    LinearLayout geocacheInfoHeader;
+    @BindView(R.id.geocacheName)
+    TextView geocacheName;
+    @BindView(R.id.geocacheSize)
+    TextView geocacheSize;
+    @BindView(R.id.geocacheRate)
+    TextView geocacheRate;
+    @BindView(R.id.geocacheOwner)
+    TextView geocacheOwner;
+    @BindView(R.id.geocacheFound)
+    TextView geocacheFound;
+    @BindView(R.id.geocacheNotFound)
+    TextView geocacheNotFound;
+    @BindView(R.id.geocacheRecommendation)
+    TextView geocacheRecommendation;
 
     private MapContract.Presenter presenter;
     private MainActivity activity;
@@ -76,6 +96,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     private ClusterManager<Geocache> mClusterManager;
     private Marker lastSelectedMarker;
     private boolean isMapInfoShown;
+    private BottomSheetBehavior sheetBehavior;
     Unbinder unbinder;
 
     @Nullable
@@ -89,6 +110,8 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         activity.setActionBarTitle(R.string.app_name);
         presenter = new MapFragmentPresenter(this, activity);
         setPresenter(presenter);
+        sheetBehavior = BottomSheetBehavior.from(geocacheBottomSheet);
+        sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         return view;
     }
 
@@ -117,65 +140,54 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     }
 
     private void configureMap() {
+        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(activity, R.raw.retro_map);
+        mMap.setMapStyle(style);
+
         mClusterManager = new ClusterManager<>(activity, mMap);
         final CustomClusterRenderer renderer = new CustomClusterRenderer(activity.getApplicationContext(), mMap, mClusterManager);
         mClusterManager.setRenderer(renderer);
 
         mClusterManager.setOnClusterClickListener(
-                new ClusterManager.OnClusterClickListener<Geocache>() {
-                    @Override
-                    public boolean onClusterClick(Cluster<Geocache> cluster) {
-                        moveMapCamera(cluster.getPosition(), mMap.getCameraPosition().zoom + 1);
-                        return true;
-                    }
+                cluster -> {
+                    moveMapCamera(cluster.getPosition(), mMap.getCameraPosition().zoom + 1);
+                    return true;
                 });
         mClusterManager.setOnClusterItemClickListener(
-                new ClusterManager.OnClusterItemClickListener<Geocache>() {
-                    @Override
-                    public boolean onClusterItemClick(Geocache clusterItem) {
-                        Marker marker = renderer.getMarker(clusterItem);
-                        if (marker.getSnippet() != null) {
-                            setLastSelectedMarkerIcon();
-                            lastSelectedMarker = marker;
-                            marker.setIcon(BitmapDescriptorFactory.fromResource(getGeocacheSelectedIcon(presenter.getGeocache(marker).getType())));
-                        }
-                        return false;
+                clusterItem -> {
+                    Marker marker = renderer.getMarker(clusterItem);
+                    if (marker.getSnippet() != null) {
+                        setLastSelectedMarkerIcon();
+                        lastSelectedMarker = marker;
+                        marker.setIcon(BitmapDescriptorFactory.fromResource(getGeocacheSelectedIcon(presenter.getGeocache(marker).getType())));
+                        showGeocahceInfo(presenter.getGeocache(marker));
                     }
+                    return false;
                 });
 
         mMap.setOnMarkerClickListener(mClusterManager);
         mMap.setInfoWindowAdapter(new CustomInfoViewAdapter());
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                activity.hideSearchView();
-                setLastSelectedMarkerIcon();
-            }
+        mMap.setOnMapClickListener(latLng -> {
+            activity.hideSearchView();
+            setLastSelectedMarkerIcon();
+            hideGeocacheInfo();
         });
-        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                Intent intent = new Intent(activity, GeocacheActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(GEOCACHE_WAYPOINT, marker.getSnippet());
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
+        mMap.setOnInfoWindowClickListener(marker -> {
+            Intent intent = new Intent(activity, GeocacheActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(GEOCACHE_WAYPOINT, marker.getSnippet());
+            intent.putExtras(bundle);
+            startActivity(intent);
         });
-        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-                mClusterManager.cluster();
-                CameraPosition cameraPosition = mMap.getCameraPosition();
-                Log.d("Test", String.valueOf(cameraPosition.zoom));
-                hideMapInfo();
-                if (mMap.getCameraPosition().zoom >= MINIMUM_REQUEST_ZOOM) {
-                    LatLng center = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
-                    int radius = getDistance(mMap.getProjection().fromScreenLocation(new Point(0, 0)), center) / 1000;
-                    presenter.downloadGeocaches(center, radius);
-                } else
-                    showMapInfo(R.string.zoom_map_to_download);
-            }
+        mMap.setOnCameraIdleListener(() -> {
+            mClusterManager.cluster();
+            CameraPosition cameraPosition = mMap.getCameraPosition();
+            hideMapInfo();
+            if (mMap.getCameraPosition().zoom >= MINIMUM_REQUEST_ZOOM) {
+                LatLng center = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
+                int radius = getDistance(mMap.getProjection().fromScreenLocation(new Point(0, 0)), center) / 1000;
+                presenter.downloadGeocaches(center, radius);
+            } else
+                showMapInfo(R.string.zoom_map_to_download);
         });
     }
 
@@ -187,6 +199,30 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
                 e.printStackTrace();
             }
         }
+    }
+
+    private void showGeocahceInfo(Geocache geocache) {
+        geocacheName.setText(geocache.getName());
+        geocacheSize.setText(String.format(getString(R.string.info_size), geocache.getSize()));
+        geocacheOwner.setText(String.format(getString(R.string.info_owner), geocache.getOwner().getUsername()));
+        geocacheFound.setText(String.format(getString(R.string.info_found), geocache.getFounds()));
+        geocacheNotFound.setText(String.format(getString(R.string.info_not_found), geocache.getNotFounds()));
+        geocacheRecommendation.setText(String.format(getString(R.string.info_recommended), geocache.getRecommendations()));
+        if ((int) geocache.getRating() > 0) {
+            String[] rates = activity.getResources().getStringArray(R.array.geocache_rates);
+            geocacheRate.setText(String.format(activity.getString(R.string.info_rating), rates[(int) geocache.getRating() - 1]));
+        } else {
+            geocacheRate.setVisibility(View.GONE);
+        }
+
+        sheetBehavior.setPeekHeight(geocacheInfoHeader.getHeight());
+        sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        //sheetBehavior.setHideable(false);
+    }
+
+    private void hideGeocacheInfo(){
+        //sheetBehavior.setHideable(true);
+        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -301,30 +337,30 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
                 return null;
             View view = LayoutInflater.from(activity).inflate(R.layout.item_geocache_marker_window, null);
             Geocache geocache = presenter.getGeocache(marker);
-            TextView nameTextView = (TextView) view.findViewById(R.id.name);
-            TextView codeTextView = (TextView) view.findViewById(R.id.code);
-            TextView sizeTextView = (TextView) view.findViewById(R.id.sizeTextView);
-            TextView rateTextView = (TextView) view.findViewById(R.id.rateTextView);
-            TextView ownerTextView = (TextView) view.findViewById(R.id.ownerTextView);
-            TextView foundsTextView = (TextView) view.findViewById(R.id.foundTextView);
-            TextView notFoundsTextView = (TextView) view.findViewById(R.id.notFoundTextView);
-            TextView recommendationsTextView = (TextView) view.findViewById(R.id.recommendationTextView);
+            TextView nameTextView = view.findViewById(R.id.geocacheName);
+            TextView codeTextView = view.findViewById(R.id.code);
+            TextView sizeTextView = view.findViewById(R.id.geocacheSize);
+            TextView rateTextView = view.findViewById(R.id.geocacheRate);
+            TextView ownerTextView = view.findViewById(R.id.geocacheOwner);
+            TextView foundsTextView = view.findViewById(R.id.geocacheFound);
+            TextView notFoundsTextView = view.findViewById(R.id.geocacheNotFound);
+            TextView recommendationsTextView = view.findViewById(R.id.geocacheRecommendation);
 
             nameTextView.setText(geocache.getName());
             codeTextView.setText(geocache.getCode());
-            sizeTextView.setText(activity.getString(R.string.marker_window_size) + " " + activity.getString(getGeocacheSize(geocache.getSize())));
-            ownerTextView.setText(activity.getString(R.string.marker_window_owner) + " " + geocache.getOwner().getUsername());
+            sizeTextView.setText(activity.getString(R.string.info_size) + " " + activity.getString(getGeocacheSize(geocache.getSize())));
+            ownerTextView.setText(activity.getString(R.string.info_owner) + " " + geocache.getOwner().getUsername());
             String[] rates = activity.getResources().getStringArray(R.array.geocache_rates);
             if ((int) geocache.getRating() > 0)
-                rateTextView.setText(activity.getString(R.string.marker_window_rating) + " " + rates[(int) geocache.getRating() - 1]);
+                rateTextView.setText(activity.getString(R.string.info_rating) + " " + rates[(int) geocache.getRating() - 1]);
             else
                 rateTextView.setVisibility(View.GONE);
 
             foundsTextView.setText(geocache.getFounds() + " x " + activity.getString(R.string.found));
-            notFoundsTextView.setText(geocache.getNotfounds() + " x " + activity.getString(R.string.not_found));
+            notFoundsTextView.setText(geocache.getNotFounds() + " x " + activity.getString(R.string.not_found));
 
             if (geocache.getRecommendations() == 0) {
-                ImageView recommendationImageView = (ImageView) view.findViewById(R.id.recommendationImageView);
+                ImageView recommendationImageView = view.findViewById(R.id.recommendationImageView);
                 recommendationImageView.setVisibility(View.GONE);
                 recommendationsTextView.setVisibility(View.GONE);
             } else {

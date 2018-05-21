@@ -33,11 +33,9 @@
     <string name="found">znaleziona</string>
     <string name="not_found">nieznaleziona</string>
     <string name="recommended">rekomendowana</string>
-
-    <!--Geocache marker window-->
-    <string name="marker_window_size">Wielkość:</string>
-    <string name="marker_window_rating">Ocena:</string>
-    <string name="marker_window_owner">Właściciel:</string>
+    <string name="info_size">Wielkość: %s</string>
+    <string name="info_rating">Ocena: %s</string>
+    <string name="info_owner">Właściciel: %s</string>
 
     <!--Sizes of geocache containers-->
     <string name="size_none">Bez pojemnika</string>
@@ -69,6 +67,9 @@
     <string name="something_went_wrong_couldn_connect_to_server">Nie udało się połączyć z serwerem</string>
     <string name="agree_terms_of_service">Korzystając z aplikacji akceptujesz %1$s.</string>
     <string name="terms_of_service">regulamin serwisu</string>
+    <string name="info_found">%d x znaleziona</string>
+    <string name="info_not_found">%d x nieznaleziona</string>
+    <string name="info_recommended">%d x rekomendowana</string>
 
 
 </resources>

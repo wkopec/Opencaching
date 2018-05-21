@@ -58,9 +58,9 @@ public class Geocache implements ClusterItem {
     @SerializedName("founds")
     @Expose
     private int founds;                 //number of times the geocache was successfully isFound
-    @SerializedName("notfounds")
+    @SerializedName("notFounds")
     @Expose
-    private int notfounds;              //number of times the geocache was not isFound
+    private int notFounds;              //number of times the geocache was not isFound
     @SerializedName("willattends")
     @Expose
     private int willattends;            //n case of Event Caches, this is the number of "Will attend" log entries
@@ -197,8 +197,8 @@ public class Geocache implements ClusterItem {
         return founds;
     }
 
-    public int getNotfounds() {
-        return notfounds;
+    public int getNotFounds() {
+        return notFounds;
     }
 
     public int getWillattends() {

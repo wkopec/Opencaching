@@ -2,13 +2,10 @@ package com.example.opencaching.ui.authorization.login;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -16,13 +13,10 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.CookieManager;
 import android.webkit.ValueCallback;
@@ -36,7 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.opencaching.R;
-import com.example.opencaching.network.models.okapi.Image;
 import com.example.opencaching.ui.authorization.LoginActivity;
 import com.example.opencaching.ui.base.BaseFragment;
 
@@ -139,7 +132,7 @@ public class LoginFragment extends BaseFragment implements LoginFragmentContract
     private class CustomWebViewClient extends WebViewClient {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            if(url.contains("/login.php")) {
+            if (url.contains("/login.php")) {
                 hideProgress();
             } else if (url.contains("oauth_verifier=")) {
                 presenter.getOauthTokenSecret(getOathVerifier(url), getOathToken(url));
@@ -149,9 +142,9 @@ public class LoginFragment extends BaseFragment implements LoginFragmentContract
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            if(url.contains("authorize?oauth_token")) {
+            if (url.contains("authorize?oauth_token")) {
                 acceptOauthApplicationAccess();
-            } else if(url.contains("https://opencaching.pl/UserAuthorization/login")) {
+            } else if (url.contains("https://opencaching.pl/UserAuthorization/login")) {
                 Toast.makeText(activity, getString(R.string.invalid_username_or_password), Toast.LENGTH_LONG).show();
                 hideProgress();
             }

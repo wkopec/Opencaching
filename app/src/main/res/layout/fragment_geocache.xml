@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/geocacheBottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="@dimen/_110sdp"
+    android:background="@color/white"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/marker_window_background"
+        android:id="@+id/geocacheInfoHeader"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_110sdp"
         android:orientation="vertical"
         android:padding="@dimen/spacing_small">
 
         <TextView
             android:id="@+id/geocacheName"
             style="@style/Text.Primary.Normal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxWidth="@dimen/_250sdp"
             android:text="Krosno Airporta sda sdas das dasda sdas das a sda sd" />
 
         <TextView
@@ -97,7 +101,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_very_small"
-                        android:text="29 x znaleziona" />
+                        android:text="@string/info_found" />
 
                 </LinearLayout>
 
@@ -120,7 +124,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_very_small"
-                        android:text="0 x nieznaleziona" />
+                        android:text="@string/info_not_found" />
 
                 </LinearLayout>
 
@@ -144,7 +148,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_very_small"
-                        android:text="9 x rekomendowana" />
+                        android:text="@string/info_recommended" />
 
                 </LinearLayout>
 
@@ -154,10 +158,4 @@
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="@dimen/spacing_normal_x1.5"
-        android:layout_height="@dimen/spacing_small"
-        android:layout_gravity="center"
-        android:background="@drawable/marker_window_rectangle" />
-
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

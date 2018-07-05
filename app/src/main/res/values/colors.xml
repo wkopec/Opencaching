@@ -15,6 +15,7 @@
     <color name="red">#FF1D15</color>
     <color name="green">#3EC300</color>
     <color name="darkGreen">#287D00</color>
+    <color name="low_transparent">#35000000</color>
 
 
     <color name="progressbar_color_1">#f4b400</color>

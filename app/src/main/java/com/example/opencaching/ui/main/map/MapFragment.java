@@ -72,7 +72,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     @BindView(R.id.progressBar)
     SmoothProgressBar progressBar;
     @BindView(R.id.geocacheBottomSheet)
-    ConstraintLayout geocacheBottomSheet;
+    LinearLayout geocacheBottomSheet;
     @BindView(R.id.geocacheInfoHeader)
     LinearLayout geocacheInfoHeader;
     @BindView(R.id.geocacheName)
@@ -110,8 +110,8 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         activity.setActionBarTitle(R.string.app_name);
         presenter = new MapFragmentPresenter(this, activity);
         setPresenter(presenter);
-        sheetBehavior = BottomSheetBehavior.from(geocacheBottomSheet);
-        sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        setGeocacheBottomSheet();
+
         return view;
     }
 
@@ -149,6 +149,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
         mClusterManager.setOnClusterClickListener(
                 cluster -> {
+                    hideGeocacheInfo();
                     moveMapCamera(cluster.getPosition(), mMap.getCameraPosition().zoom + 1);
                     return true;
                 });
@@ -160,24 +161,22 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
                         lastSelectedMarker = marker;
                         marker.setIcon(BitmapDescriptorFactory.fromResource(getGeocacheSelectedIcon(presenter.getGeocache(marker).getType())));
                         showGeocahceInfo(presenter.getGeocache(marker));
+                        moveMapCamera(marker.getPosition(), mMap.getCameraPosition().zoom);
                     }
-                    return false;
+                    return true;
                 });
 
         mMap.setOnMarkerClickListener(mClusterManager);
-        mMap.setInfoWindowAdapter(new CustomInfoViewAdapter());
+
         mMap.setOnMapClickListener(latLng -> {
             activity.hideSearchView();
-            setLastSelectedMarkerIcon();
+            //setLastSelectedMarkerIcon();
             hideGeocacheInfo();
         });
-        mMap.setOnInfoWindowClickListener(marker -> {
-            Intent intent = new Intent(activity, GeocacheActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(GEOCACHE_WAYPOINT, marker.getSnippet());
-            intent.putExtras(bundle);
-            startActivity(intent);
-        });
+
+        // Classic marker window
+        //mMap.setInfoWindowAdapter(new CustomInfoViewAdapter());
+        //mMap.setOnInfoWindowClickListener(marker -> startGeocacheActivity(marker.getSnippet()));
         mMap.setOnCameraIdleListener(() -> {
             mClusterManager.cluster();
             CameraPosition cameraPosition = mMap.getCameraPosition();
@@ -201,6 +200,14 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         }
     }
 
+    private void startGeocacheActivity(String geocacheWaypoint) {
+        Intent intent = new Intent(activity, GeocacheActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(GEOCACHE_WAYPOINT, geocacheWaypoint);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
     private void showGeocahceInfo(Geocache geocache) {
         geocacheName.setText(geocache.getName());
         geocacheSize.setText(String.format(getString(R.string.info_size), geocache.getSize()));
@@ -215,13 +222,21 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
             geocacheRate.setVisibility(View.GONE);
         }
 
-        sheetBehavior.setPeekHeight(geocacheInfoHeader.getHeight());
+        geocacheBottomSheet.setOnClickListener(view -> startGeocacheActivity(geocache.getCode()));
+
+        //sheetBehavior.setPeekHeight(geocacheInfoHeader.getHeight());
         sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        //sheetBehavior.setHideable(false);
+
+    }
+
+    private void setGeocacheBottomSheet() {
+        sheetBehavior = BottomSheetBehavior.from(geocacheBottomSheet);
+        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
     }
 
     private void hideGeocacheInfo(){
-        //sheetBehavior.setHideable(true);
+        setLastSelectedMarkerIcon();
         sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
@@ -257,7 +272,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
                 .target(latLng)
                 .zoom(zoom)
                 .build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 500, null);
     }
 
     @Override

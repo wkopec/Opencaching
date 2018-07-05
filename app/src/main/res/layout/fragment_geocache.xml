@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:id="@+id/geocacheBottomSheet"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/_30sdp"
+    android:maxHeight="@dimen/_200sdp"
+    android:orientation="vertical"
+    android:outlineProvider="bounds"
     app:behavior_hideable="true"
     app:behavior_peekHeight="@dimen/_110sdp"
-    android:background="@color/white"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_3sdp"
+        android:background="@drawable/shadow"/>
 
     <LinearLayout
         android:id="@+id/geocacheInfoHeader"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_110sdp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="vertical"
         android:padding="@dimen/spacing_small">
 
@@ -93,7 +102,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_found"
-                        android:tint="@color/green"/>
+                        android:tint="@color/green" />
 
                     <TextView
                         android:id="@+id/geocacheFound"
@@ -116,7 +125,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_not_found"
-                        android:tint="@color/red"/>
+                        android:tint="@color/red" />
 
                     <TextView
                         android:id="@+id/geocacheNotFound"
@@ -140,7 +149,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_star"
-                        android:tint="@color/darkGreen"/>
+                        android:tint="@color/darkGreen" />
 
                     <TextView
                         android:id="@+id/geocacheRecommendation"
@@ -158,4 +167,4 @@
 
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

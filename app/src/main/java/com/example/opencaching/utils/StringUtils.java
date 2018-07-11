@@ -1,8 +1,10 @@
 package com.example.opencaching.utils;
 
 import android.content.Context;
+import android.location.Location;
 
 import com.example.opencaching.R;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.joda.time.DateTime;
 
@@ -57,6 +59,45 @@ public class StringUtils {
         String[] pairs = url.split("&");
         String verifier = pairs[1].replace("oauth_verifier=", "");
         return verifier;
+    }
+
+    public static String getFormatedCoordinates(LatLng coordinates) {
+
+        StringBuilder builder = new StringBuilder();
+
+        if (coordinates.latitude < 0) {
+            builder.append("S ");
+        } else {
+            builder.append("N ");
+        }
+
+        String latitudeDegrees = Location.convert(Math.abs(coordinates.latitude), Location.FORMAT_SECONDS);
+        String[] latitudeSplit = latitudeDegrees.split(":");
+        builder.append(latitudeSplit[0]);
+        builder.append("°");
+        builder.append(latitudeSplit[1]);
+        builder.append("'");
+        builder.append(latitudeSplit[2]);
+        builder.append("\"");
+
+        builder.append(" ");
+
+        if (coordinates.longitude < 0) {
+            builder.append("W ");
+        } else {
+            builder.append("E ");
+        }
+
+        String longitudeDegrees = Location.convert(Math.abs(coordinates.longitude), Location.FORMAT_SECONDS);
+        String[] longitudeSplit = longitudeDegrees.split(":");
+        builder.append(longitudeSplit[0]);
+        builder.append("°");
+        builder.append(longitudeSplit[1]);
+        builder.append("'");
+        builder.append(longitudeSplit[2]);
+        builder.append("\"");
+
+        return builder.toString();
     }
 
 }

@@ -33,9 +33,11 @@
     <string name="found">znaleziona</string>
     <string name="not_found">nieznaleziona</string>
     <string name="recommended">rekomendowana</string>
-    <string name="info_size">Wielkość: %s</string>
-    <string name="info_rating">Ocena: %s</string>
-    <string name="info_owner">Właściciel: %s</string>
+    <string name="info_size">Wielkość: <b>%s</b></string>
+    <string name="info_rating">Ocena: <b>%s</b></string>
+    <string name="info_owner">Właściciel: <b>%s</b></string>
+    <string name="info_type">Typ: <b>%s</b></string>
+    <string name="info_last_found">Ostatnio znaleziona: <b>%s</b></string>
 
     <!--Sizes of geocache containers-->
     <string name="size_none">Bez pojemnika</string>
@@ -45,6 +47,18 @@
     <string name="size_regular">Normalna</string>
     <string name="size_large">Duża</string>
     <string name="size_xlarge">Bardzo duża</string>
+
+    <!--Type of geocache-->
+    <string name="type_traditional">Tradycyjna</string>
+    <string name="type_multi">Multicache</string>
+    <string name="type_quiz">Quiz</string>
+    <string name="type_virtual">Wirtualna</string>
+    <string name="type_event">Wydarzenie</string>
+    <string name="type_moving">Mobilna</string>
+    <string name="type_own">Own</string>
+    <string name="type_unknown">Nietypowa</string>
+    <string name="type_webcam">Webcam</string>
+
 
     <!--Main Map-->
     <string name="move_map_to_show_more_geocaches">Przesuń mapę aby wczytać więcej skrzynek</string>
@@ -70,6 +84,8 @@
     <string name="info_found">%d x znaleziona</string>
     <string name="info_not_found">%d x nieznaleziona</string>
     <string name="info_recommended">%d x rekomendowana</string>
+    <string name="separated_strings" formatted="false">%s | %s</string>
+    <string name="navigate">Prowadź</string>
 
 
 </resources>

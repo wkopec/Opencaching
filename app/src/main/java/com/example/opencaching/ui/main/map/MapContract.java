@@ -27,6 +27,8 @@ public class MapContract{
 
         void clusterGeocaches(ArrayList<Geocache> geocaches);
 
+        void hideGeocacheInfo();
+
     }
 
     public interface Presenter extends BaseContract.Presenter {

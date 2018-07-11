@@ -6,15 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,6 +56,8 @@ import static com.example.opencaching.utils.IntegerUtils.getDistance;
 import static com.example.opencaching.utils.ResourceUtils.getGeocacheIcon;
 import static com.example.opencaching.utils.ResourceUtils.getGeocacheSelectedIcon;
 import static com.example.opencaching.utils.ResourceUtils.getGeocacheSize;
+import static com.example.opencaching.utils.ResourceUtils.getGeocacheType;
+import static com.example.opencaching.utils.StringUtils.getFormatedCoordinates;
 import static com.example.opencaching.utils.UserUtils.getUserHomeLocation;
 
 /**
@@ -73,10 +77,14 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     SmoothProgressBar progressBar;
     @BindView(R.id.geocacheBottomSheet)
     LinearLayout geocacheBottomSheet;
-    @BindView(R.id.geocacheInfoHeader)
-    LinearLayout geocacheInfoHeader;
+    @BindView(R.id.navigateFloatingButton)
+    FloatingActionButton navigateButton;
+    @BindView(R.id.geocacheTopLabel)
+    TextView geocacheTopLabel;
     @BindView(R.id.geocacheName)
     TextView geocacheName;
+    @BindView(R.id.geocacheType)
+    TextView geocacheType;
     @BindView(R.id.geocacheSize)
     TextView geocacheSize;
     @BindView(R.id.geocacheRate)
@@ -141,7 +149,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     private void configureMap() {
         MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(activity, R.raw.retro_map);
-        mMap.setMapStyle(style);
+        //mMap.setMapStyle(style);
 
         mClusterManager = new ClusterManager<>(activity, mMap);
         final CustomClusterRenderer renderer = new CustomClusterRenderer(activity.getApplicationContext(), mMap, mClusterManager);
@@ -210,11 +218,13 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     private void showGeocahceInfo(Geocache geocache) {
         geocacheName.setText(geocache.getName());
-        geocacheSize.setText(String.format(getString(R.string.info_size), geocache.getSize()));
+        geocacheTopLabel.setText(String.format(getString(R.string.separated_strings), geocache.getCode(), getFormatedCoordinates(geocache.getPosition())));
+        geocacheSize.setText(String.format(getString(R.string.info_size), getString(getGeocacheSize(geocache.getSize()))));
         geocacheOwner.setText(String.format(getString(R.string.info_owner), geocache.getOwner().getUsername()));
-        geocacheFound.setText(String.format(getString(R.string.info_found), geocache.getFounds()));
-        geocacheNotFound.setText(String.format(getString(R.string.info_not_found), geocache.getNotFounds()));
-        geocacheRecommendation.setText(String.format(getString(R.string.info_recommended), geocache.getRecommendations()));
+        geocacheType.setText(String.format(getString(R.string.info_type), getString(getGeocacheType(geocache.getType()))));
+        geocacheFound.setText(String.valueOf(geocache.getFounds()));
+        geocacheNotFound.setText(String.valueOf(geocache.getNotFounds()));
+        geocacheRecommendation.setText(String.valueOf(geocache.getRecommendations()));
         if ((int) geocache.getRating() > 0) {
             String[] rates = activity.getResources().getStringArray(R.array.geocache_rates);
             geocacheRate.setText(String.format(activity.getString(R.string.info_rating), rates[(int) geocache.getRating() - 1]));
@@ -224,18 +234,42 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
         geocacheBottomSheet.setOnClickListener(view -> startGeocacheActivity(geocache.getCode()));
 
-        //sheetBehavior.setPeekHeight(geocacheInfoHeader.getHeight());
-        sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        geocacheBottomSheet.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                geocacheType.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                sheetBehavior.setPeekHeight(geocacheType.getTop());
+            }
+        });
 
+        if(sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
     }
 
     private void setGeocacheBottomSheet() {
         sheetBehavior = BottomSheetBehavior.from(geocacheBottomSheet);
         sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        navigateButton.setScaleX(0);
+        navigateButton.setScaleY(0);
+        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                if(slideOffset <= 0) {
+                    navigateButton.setScaleX(slideOffset + 1);
+                    navigateButton.setScaleY(slideOffset + 1);
+                }
+            }
+        });
 
     }
 
-    private void hideGeocacheInfo(){
+    @Override
+    public void hideGeocacheInfo(){
         setLastSelectedMarkerIcon();
         sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }

@@ -121,5 +121,12 @@
         <item name="android:hint">@string/map_search_hint</item>
     </style>
 
+    <style name="RectangleRatingBar" parent="android:style/Widget.Material.RatingBar.Small">
+        <item name="android:progressDrawable">@drawable/ratingbar_rectangle</item>
+        <item name="android:numStars">5</item>
+        <item name="android:maxHeight">@dimen/spacing_normal</item>
+
+    </style>
+
 </resources>
 

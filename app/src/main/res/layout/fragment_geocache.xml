@@ -4,7 +4,6 @@
     android:id="@+id/geocacheBottomSheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="@dimen/_30sdp"
     android:maxHeight="@dimen/_200sdp"
     android:orientation="vertical"
     android:outlineProvider="bounds"
@@ -12,13 +11,12 @@
     app:behavior_peekHeight="@dimen/_110sdp"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
-
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_3sdp"
-        android:background="@drawable/shadow"/>
+        android:background="@drawable/shadow" />
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/geocacheInfoHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,144 +25,209 @@
         android:padding="@dimen/spacing_small">
 
         <TextView
-            android:id="@+id/geocacheName"
-            style="@style/Text.Primary.Normal"
-            android:layout_width="match_parent"
+            android:id="@+id/geocacheTopLabel"
+            style="@style/Text.Primary.VerySmall"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Krosno Airporta sda sdas das dasda sdas das a sda sd" />
+            android:text="OP7243 | N 50° 39.201 E 40° 19.201"
+            android:textColor="@color/gray"
+            app:layout_constraintEnd_toStartOf="@+id/navigateButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/code"
+            android:id="@+id/geocacheName"
             style="@style/Text.Primary.Normal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_normal"
-            android:layout_toRightOf="@id/geocacheName"
-            android:text="OP7243"
-
-            android:visibility="gone"
-            app:layout_constraintRight_toRightOf="@+id/linearLayout" />
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_below="@id/geocacheTopLabel"
+            android:layout_marginTop="@dimen/spacing_very_small"
+            android:text="Krosno Airporta sda sdas das dasda sdas das a sda sd"
+            app:layout_constraintEnd_toStartOf="@+id/navigateButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/geocacheTopLabel" />
 
         <LinearLayout
+            android:id="@+id/navigateButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_4sdp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/geocacheFound"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
+            <ImageView
+                android:id="@+id/navigateImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:rotation="10"
+                android:src="@drawable/ic_navigation"
+                android:tint="@color/colorPrimaryDark"
+                android:visibility="gone"/>
+
+            <TextView
+                style="@style/Text.Primary.VerySmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_very_small"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/geocacheSize"
-                    style="@style/Text.Primary.VerySmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Wielkość: Normalna" />
-
-                <TextView
-                    android:id="@+id/geocacheRate"
-                    style="@style/Text.Primary.VerySmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_very_small"
-                    android:text="Ocena: Znakomita" />
-
-                <TextView
-                    android:id="@+id/geocacheOwner"
-                    style="@style/Text.Primary.VerySmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_very_small"
-                    android:maxWidth="@dimen/_130sdp"
-                    android:text="Właściciel: Volfram" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-
-                android:id="@+id/linearLayout2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_small"
-                android:layout_marginTop="@dimen/spacing_very_small"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_found"
-                        android:tint="@color/green" />
-
-                    <TextView
-                        android:id="@+id/geocacheFound"
-                        style="@style/Text.Primary.VerySmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_very_small"
-                        android:text="@string/info_found" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_very_small"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_not_found"
-                        android:tint="@color/red" />
-
-                    <TextView
-                        android:id="@+id/geocacheNotFound"
-                        style="@style/Text.Primary.VerySmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_very_small"
-                        android:text="@string/info_not_found" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_very_small"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/recommendationImageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_star"
-                        android:tint="@color/darkGreen" />
-
-                    <TextView
-                        android:id="@+id/geocacheRecommendation"
-                        style="@style/Text.Primary.VerySmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_very_small"
-                        android:text="@string/info_recommended" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
+                android:text="@string/navigate"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark" />
         </LinearLayout>
 
-    </LinearLayout>
+
+        <TextView
+            android:id="@+id/geocacheFound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_very_small"
+            android:drawablePadding="@dimen/spacing_very_small"
+            android:drawableStart="@drawable/ic_found"
+            android:drawableTint="@color/green"
+            android:gravity="center"
+            android:text="52"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/geocacheName" />
+
+        <TextView
+            android:id="@+id/geocacheNotFound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_marginTop="@dimen/spacing_very_small"
+            android:drawablePadding="@dimen/spacing_very_small"
+            android:drawableStart="@drawable/ic_not_found"
+            android:drawableTint="@color/red"
+            android:gravity="center"
+            android:text="1"
+            app:layout_constraintStart_toEndOf="@id/geocacheFound"
+            app:layout_constraintTop_toBottomOf="@id/geocacheName" />
+
+        <TextView
+            android:id="@+id/geocacheRecommendation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_marginTop="@dimen/spacing_very_small"
+            android:drawablePadding="@dimen/spacing_very_small"
+            android:drawableStart="@drawable/ic_star"
+            android:drawableTint="@color/darkGreen"
+            android:gravity="center"
+            android:text="3"
+            app:layout_constraintStart_toEndOf="@id/geocacheNotFound"
+            app:layout_constraintTop_toBottomOf="@id/geocacheName" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/verticalGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <TextView
+            android:id="@+id/geocacheType"
+            style="@style/Text.Primary.VerySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:text="Typ: Tradycyjna"
+            app:layout_constraintEnd_toEndOf="@id/verticalGuideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/geocacheFound" />
+
+        <TextView
+            android:id="@+id/geocacheRate"
+            style="@style/Text.Primary.VerySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_very_small"
+            android:text="Ocena: Znakomita"
+            app:layout_constraintEnd_toEndOf="@id/verticalGuideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/geocacheType" />
+
+        <TextView
+            android:id="@+id/geocacheSize"
+            style="@style/Text.Primary.VerySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_very_small"
+            android:text="Wielkość: Duża"
+            app:layout_constraintEnd_toEndOf="@id/verticalGuideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/geocacheRate" />
+
+        <TextView
+            android:id="@+id/geocacheOwner"
+            style="@style/Text.Primary.VerySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_very_small"
+            android:text="Właściciel: Volfram"
+            app:layout_constraintEnd_toEndOf="@+id/verticalGuideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/geocacheSize" />
+
+        <TextView
+            android:id="@+id/geocacheDifficulty"
+            style="@style/Text.Primary.VerySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:text="Trudność:"
+            app:layout_constraintStart_toStartOf="@id/verticalGuideline"
+            app:layout_constraintTop_toBottomOf="@id/geocacheFound" />
+
+        <RatingBar
+            android:id="@+id/difficulty"
+            style="@style/RectangleRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_very_small"
+            android:rating="3.5"
+            app:layout_constraintBottom_toBottomOf="@id/geocacheDifficulty"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/geocacheDifficulty"
+            app:layout_constraintTop_toTopOf="@id/geocacheDifficulty" />
+
+        <TextView
+            android:id="@+id/geocacheTerrain"
+            style="@style/Text.Primary.VerySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_very_small"
+            android:text="Teren:"
+            app:layout_constraintStart_toStartOf="@id/verticalGuideline"
+            app:layout_constraintTop_toBottomOf="@id/geocacheDifficulty" />
+
+        <RatingBar
+            android:id="@+id/terrain"
+            style="@style/RectangleRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_very_small"
+            android:rating="3.5"
+            app:layout_constraintBottom_toBottomOf="@id/geocacheTerrain"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/geocacheDifficulty"
+            app:layout_constraintTop_toTopOf="@id/geocacheTerrain" />
+
+        <TextView
+            android:id="@+id/geocacheLastFound"
+            style="@style/Text.Primary.VerySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_very_small"
+            android:text="Ostatnio znaleziona: 22.06.2018"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/verticalGuideline"
+            app:layout_constraintTop_toBottomOf="@id/geocacheTerrain" />
+
+
+    </android.support.constraint.ConstraintLayout>
 
 </LinearLayout>

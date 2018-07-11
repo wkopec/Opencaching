@@ -35,4 +35,18 @@
 
     <include layout="@layout/fragment_geocache" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/navigateFloatingButton"
+        android:layout_width="@dimen/spacing_normal_x2.5"
+        android:layout_height="@dimen/spacing_normal_x2.5"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:rotation="10"
+        android:src="@drawable/ic_navigation"
+        android:tint="@color/white"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        app:layout_anchor="@+id/geocacheBottomSheet"
+        app:layout_anchorGravity="top|end" />
+
 </android.support.design.widget.CoordinatorLayout>

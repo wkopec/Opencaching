@@ -20,6 +20,21 @@ public class ResourceUtils {
         }
     }
 
+    public static int getGeocacheType(String type){
+        switch (type) {
+            case "Traditional": return R.string.type_traditional;
+            case "Other": return R.string.type_unknown;
+            case "Quiz": return R.string.type_quiz;
+            case "Multi": return R.string.type_multi;
+            case "Virtual": return R.string.type_virtual;
+            case "Own": return R.string.type_own;
+            case "Moving": return R.string.type_moving;
+            case "Event": return R.string.type_event;
+            case "Webcam": return R.string.type_webcam;
+            default: return 0;
+        }
+    }
+
     public static int getLogIcon(String type) {
         switch (type) {
             case "Found it": return R.drawable.ic_found;

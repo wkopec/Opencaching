@@ -171,6 +171,7 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
                     if (!geocodingResponse.getResults().isEmpty()) {
                         Location location = geocodingResponse.getResults().get(0).getGeometry().getLocation();
                         view.moveMapCamera(new LatLng(location.getLat(), location.getLng()), DEFAULT_LOCATION_ZOOM);
+                        view.hideGeocacheInfo();
                         view.hideProgress();
                     } else {
                         view.showMapInfo(R.string.no_matches_for_location_querry);

@@ -23,7 +23,7 @@ public class MapContract{
 
         void hideMapInfo();
 
-        void moveMapCamera(LatLng latLng, float zoom);
+        void moveMapCamera(LatLng latLng, float zoom, int duration);
 
         void clusterGeocaches(ArrayList<Geocache> geocaches);
 

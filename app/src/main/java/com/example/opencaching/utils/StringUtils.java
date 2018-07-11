@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.joda.time.DateTime;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -64,6 +65,8 @@ public class StringUtils {
     public static String getFormatedCoordinates(LatLng coordinates) {
 
         StringBuilder builder = new StringBuilder();
+        DecimalFormat degreeFormat = new DecimalFormat("##");
+        DecimalFormat minutesFormat = new DecimalFormat("##.###");
 
         if (coordinates.latitude < 0) {
             builder.append("S ");
@@ -71,16 +74,15 @@ public class StringUtils {
             builder.append("N ");
         }
 
-        String latitudeDegrees = Location.convert(Math.abs(coordinates.latitude), Location.FORMAT_SECONDS);
+        String latitudeDegrees = Location.convert(Math.abs(coordinates.latitude), Location.FORMAT_MINUTES);
         String[] latitudeSplit = latitudeDegrees.split(":");
-        builder.append(latitudeSplit[0]);
-        builder.append("°");
-        builder.append(latitudeSplit[1]);
-        builder.append("'");
-        builder.append(latitudeSplit[2]);
-        builder.append("\"");
 
-        builder.append(" ");
+        builder.append(degreeFormat.format(Integer.parseInt(latitudeSplit[0])));
+        builder.append("° ");
+        builder.append(minutesFormat.format(Float.parseFloat(latitudeSplit[1].replaceAll(",", "."))));
+        builder.append("'");
+
+        builder.append("  ");
 
         if (coordinates.longitude < 0) {
             builder.append("W ");
@@ -88,14 +90,12 @@ public class StringUtils {
             builder.append("E ");
         }
 
-        String longitudeDegrees = Location.convert(Math.abs(coordinates.longitude), Location.FORMAT_SECONDS);
+        String longitudeDegrees = Location.convert(Math.abs(coordinates.longitude), Location.FORMAT_MINUTES);
         String[] longitudeSplit = longitudeDegrees.split(":");
-        builder.append(longitudeSplit[0]);
-        builder.append("°");
-        builder.append(longitudeSplit[1]);
+        builder.append(degreeFormat.format(Integer.parseInt(longitudeSplit[0])));
+        builder.append("° ");
+        builder.append(minutesFormat.format(Float.parseFloat(longitudeSplit[1].replaceAll(",", "."))));
         builder.append("'");
-        builder.append(longitudeSplit[2]);
-        builder.append("\"");
 
         return builder.toString();
     }

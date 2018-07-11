@@ -29,7 +29,6 @@ import retrofit2.Response;
 
 import static com.example.opencaching.network.api.GoogleMapsApi.service;
 import static com.example.opencaching.utils.Constants.GEOCACHES_STANDARD_FIELDS;
-import static com.example.opencaching.utils.Constants.USERNAME_FIELDS;
 import static com.example.opencaching.utils.IntegerUtils.getDistance;
 import static com.example.opencaching.utils.StringUtils.getApiFormatedFields;
 import static com.example.opencaching.utils.UserUtils.getUserHomeLocation;
@@ -170,7 +169,7 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
                 if (geocodingResponse != null) {
                     if (!geocodingResponse.getResults().isEmpty()) {
                         Location location = geocodingResponse.getResults().get(0).getGeometry().getLocation();
-                        view.moveMapCamera(new LatLng(location.getLat(), location.getLng()), DEFAULT_LOCATION_ZOOM);
+                        view.moveMapCamera(new LatLng(location.getLat(), location.getLng()), DEFAULT_LOCATION_ZOOM, 1000);
                         view.hideGeocacheInfo();
                         view.hideProgress();
                     } else {
@@ -200,7 +199,7 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
                 LatLng userHomeLocation = getUserHomeLocation(context);
                 if (user != null && (userHomeLocation == null || !userHomeLocation.equals(user.getHomeLocation()))) {
                     setUserHomeLocation(context, user.getRawHomeLocation());
-                    view.moveMapCamera(user.getHomeLocation(), 10);
+                    view.moveMapCamera(user.getHomeLocation(), 10, 1000);
                 }
             }
 

@@ -158,7 +158,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         mClusterManager.setOnClusterClickListener(
                 cluster -> {
                     hideGeocacheInfo();
-                    moveMapCamera(cluster.getPosition(), mMap.getCameraPosition().zoom + 1);
+                    moveMapCamera(cluster.getPosition(), mMap.getCameraPosition().zoom + 1, 500);
                     return true;
                 });
         mClusterManager.setOnClusterItemClickListener(
@@ -169,7 +169,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
                         lastSelectedMarker = marker;
                         marker.setIcon(BitmapDescriptorFactory.fromResource(getGeocacheSelectedIcon(presenter.getGeocache(marker).getType())));
                         showGeocahceInfo(presenter.getGeocache(marker));
-                        moveMapCamera(marker.getPosition(), mMap.getCameraPosition().zoom);
+                        moveMapCamera(marker.getPosition(), mMap.getCameraPosition().zoom, 500);
                     }
                     return true;
                 });
@@ -301,12 +301,12 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     }
 
     @Override
-    public void moveMapCamera(LatLng latLng, float zoom) {
+    public void moveMapCamera(LatLng latLng, float zoom, int duration) {
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(latLng)
                 .zoom(zoom)
                 .build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 500, null);
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), duration, null);
     }
 
     @Override

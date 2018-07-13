@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:maxHeight="@dimen/_200sdp"
     android:orientation="vertical"
-    android:outlineProvider="bounds"
     app:behavior_hideable="true"
     app:behavior_peekHeight="@dimen/_110sdp"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
@@ -47,35 +46,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/geocacheTopLabel" />
 
-        <LinearLayout
+        <TextView
             android:id="@+id/navigateButton"
+            style="@style/Text.Primary.VerySmall"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/_12sdp"
             android:layout_marginEnd="@dimen/_4sdp"
-            android:orientation="vertical"
+            android:paddingTop="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/spacing_normal"
+            android:text="@string/navigate"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/geocacheFound"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/navigateImage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:rotation="10"
-                android:src="@drawable/ic_navigation"
-                android:tint="@color/colorPrimaryDark"
-                android:visibility="gone"/>
-
-            <TextView
-                style="@style/Text.Primary.VerySmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/navigate"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimaryDark" />
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView

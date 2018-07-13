@@ -5,6 +5,8 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.maps.android.clustering.ClusterItem;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 
 /**
@@ -285,8 +287,8 @@ public class Geocache implements ClusterItem {
         return state;
     }
 
-    public String getLastFound() {
-        return lastFound;
+    public DateTime getLastFound() {
+        return lastFound == null ? null : new DateTime(lastFound);
     }
 
     public String getLastModified() {

@@ -17,6 +17,8 @@ import java.util.ArrayList;
 
 public class StringUtils {
 
+    public static String REQUET_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+
     public static String getApiFormatedFields(ArrayList<String> fields) {
         String apiFormatedWaypoints = fields.get(0);
         if (fields.size() > 1) {
@@ -28,6 +30,7 @@ public class StringUtils {
     }
 
     public static String getDateString(DateTime date, Context context) {
+
         DateTime today = new DateTime();
         String displayDate = "";
         if (date.toLocalDate().equals(today.toLocalDate()))
@@ -65,8 +68,8 @@ public class StringUtils {
     public static String getFormatedCoordinates(LatLng coordinates) {
 
         StringBuilder builder = new StringBuilder();
-        DecimalFormat degreeFormat = new DecimalFormat("##");
-        DecimalFormat minutesFormat = new DecimalFormat("##.###");
+        DecimalFormat degreeFormat = new DecimalFormat("00");
+        DecimalFormat minutesFormat = new DecimalFormat("00.000");
 
         if (coordinates.latitude < 0) {
             builder.append("S ");

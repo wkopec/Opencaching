@@ -72,8 +72,8 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHold
 //        holder.logAuthorTextView.setText(user.getUsername() + " (" + user.getFoundCaches() + ")");
 
         holder.logAuthorTextView.setText(geocacheLogs.get(position).getUser().getUsername());
-        DateTime logDate = new DateTime(geocacheLogs.get(position).getDate());
-        holder.logDateTextView.setText(getDateString(logDate, context));
+        DateTime logDate = geocacheLogs.get(position).getDate();
+        holder.logDateTextView.setText(getDateString(geocacheLogs.get(position).getDate(), context));
         holder.logTimeTextView.setText(logDate.getHourOfDay() + ":" + logDate.getMinuteOfHour());
         holder.logTypeImageView.setImageResource(getLogIcon(geocacheLogs.get(position).getType()));
         holder.logTypeImageView.setColorFilter(ContextCompat.getColor(context, getLogIconColor(geocacheLogs.get(position).getType())));

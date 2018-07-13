@@ -5,12 +5,15 @@ import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.opencaching.R;
@@ -37,14 +41,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,6 +64,7 @@ import static com.example.opencaching.utils.ResourceUtils.getGeocacheIcon;
 import static com.example.opencaching.utils.ResourceUtils.getGeocacheSelectedIcon;
 import static com.example.opencaching.utils.ResourceUtils.getGeocacheSize;
 import static com.example.opencaching.utils.ResourceUtils.getGeocacheType;
+import static com.example.opencaching.utils.StringUtils.getDateString;
 import static com.example.opencaching.utils.StringUtils.getFormatedCoordinates;
 import static com.example.opencaching.utils.UserUtils.getUserHomeLocation;
 
@@ -97,6 +105,12 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     TextView geocacheNotFound;
     @BindView(R.id.geocacheRecommendation)
     TextView geocacheRecommendation;
+    @BindView(R.id.geocacheLastFound)
+    TextView geocacheLastFound;
+    @BindView(R.id.difficulty)
+    RatingBar difficulty;
+    @BindView(R.id.terrain)
+    RatingBar terrain;
 
     private MapContract.Presenter presenter;
     private MainActivity activity;
@@ -138,7 +152,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if(getUserHomeLocation(activity) != null) {
+        if (getUserHomeLocation(activity) != null) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(getUserHomeLocation(activity), 10));
         } else {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(START_MAP_LATITUDE, START_MAP_LONGITUDE), START_MAP_ZOOM));
@@ -148,7 +162,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     }
 
     private void configureMap() {
-        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(activity, R.raw.retro_map);
+        //MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(activity, R.raw.retro_map);
         //mMap.setMapStyle(style);
 
         mClusterManager = new ClusterManager<>(activity, mMap);
@@ -178,13 +192,13 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
         mMap.setOnMapClickListener(latLng -> {
             activity.hideSearchView();
-            //setLastSelectedMarkerIcon();
             hideGeocacheInfo();
         });
 
         // Classic marker window
         //mMap.setInfoWindowAdapter(new CustomInfoViewAdapter());
         //mMap.setOnInfoWindowClickListener(marker -> startGeocacheActivity(marker.getSnippet()));
+
         mMap.setOnCameraIdleListener(() -> {
             mClusterManager.cluster();
             CameraPosition cameraPosition = mMap.getCameraPosition();
@@ -217,21 +231,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     }
 
     private void showGeocahceInfo(Geocache geocache) {
-        geocacheName.setText(geocache.getName());
-        geocacheTopLabel.setText(String.format(getString(R.string.separated_strings), geocache.getCode(), getFormatedCoordinates(geocache.getPosition())));
-        geocacheSize.setText(String.format(getString(R.string.info_size), getString(getGeocacheSize(geocache.getSize()))));
-        geocacheOwner.setText(String.format(getString(R.string.info_owner), geocache.getOwner().getUsername()));
-        geocacheType.setText(String.format(getString(R.string.info_type), getString(getGeocacheType(geocache.getType()))));
-        geocacheFound.setText(String.valueOf(geocache.getFounds()));
-        geocacheNotFound.setText(String.valueOf(geocache.getNotFounds()));
-        geocacheRecommendation.setText(String.valueOf(geocache.getRecommendations()));
-        if ((int) geocache.getRating() > 0) {
-            String[] rates = activity.getResources().getStringArray(R.array.geocache_rates);
-            geocacheRate.setText(String.format(activity.getString(R.string.info_rating), rates[(int) geocache.getRating() - 1]));
-        } else {
-            geocacheRate.setVisibility(View.GONE);
-        }
-
+        setGeocacheInfoView(geocache);
         geocacheBottomSheet.setOnClickListener(view -> startGeocacheActivity(geocache.getCode()));
 
         geocacheBottomSheet.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -242,9 +242,42 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
             }
         });
 
-        if(sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+        if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
             sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
+    }
+
+    private void setGeocacheInfoView(Geocache geocache) {
+        geocacheName.setText(geocache.getName());
+        geocacheTopLabel.setText(String.format(getString(R.string.separated_strings), geocache.getCode(), getFormatedCoordinates(geocache.getPosition())));
+
+        geocacheFound.setText(String.valueOf(geocache.getFounds()));
+        geocacheNotFound.setText(String.valueOf(geocache.getNotFounds()));
+        geocacheRecommendation.setText(String.valueOf(geocache.getRecommendations()));
+
+        geocacheSize.setText(getFormatedGeocacheInfoLabel(R.string.info_size, getString(getGeocacheSize(geocache.getSize()))));
+        geocacheOwner.setText(getFormatedGeocacheInfoLabel(R.string.info_owner, geocache.getOwner().getUsername()));
+        geocacheType.setText(getFormatedGeocacheInfoLabel(R.string.info_type, getString(getGeocacheType(geocache.getType()))));
+        if(geocache.getLastFound() == null) {
+            geocacheLastFound.setText(getFormatedGeocacheInfoLabel(R.string.info_empty, getString(R.string.waiting_for_ftf)));
+        } else {
+            geocacheLastFound.setText(getFormatedGeocacheInfoLabel(R.string.info_last_found, getDateString(geocache.getLastFound(), getContext())));
+        }
+
+        difficulty.setRating(geocache.getDifficulty());
+        terrain.setRating(geocache.getTerrain());
+        if ((int) geocache.getRating() > 0) {
+            String[] rates = activity.getResources().getStringArray(R.array.geocache_rates);
+            geocacheRate.setText(getFormatedGeocacheInfoLabel(R.string.info_rating, rates[(int) geocache.getRating() - 1]));
+        } else {
+            geocacheRate.setVisibility(View.GONE);
+        }
+    }
+
+    private SpannableStringBuilder getFormatedGeocacheInfoLabel(int res, String name) {
+        SpannableStringBuilder spannableString= new SpannableStringBuilder(String.format(getString(res), name));
+        spannableString.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), spannableString.length() - name.length(), spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannableString;
     }
 
     private void setGeocacheBottomSheet() {
@@ -255,11 +288,14 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (sheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+                    setLastSelectedMarkerIcon();
+                }
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                if(slideOffset <= 0) {
+                if (slideOffset <= 0) {
                     navigateButton.setScaleX(slideOffset + 1);
                     navigateButton.setScaleY(slideOffset + 1);
                 }
@@ -269,7 +305,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     }
 
     @Override
-    public void hideGeocacheInfo(){
+    public void hideGeocacheInfo() {
         setLastSelectedMarkerIcon();
         sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
@@ -282,7 +318,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     @Override
     public void showMapInfo(int message) {
-        hideProgress();
+        //hideProgress();
         mapInfoMessage.setText(activity.getString(message));
         if (!isMapInfoShown) {
             AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_in_up);
@@ -367,6 +403,14 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
         CustomClusterRenderer(Context context, GoogleMap map, ClusterManager<Geocache> clusterManager) {
             super(context, map, clusterManager);
+        }
+
+        @Override
+        protected void onClusterRendered(Cluster<Geocache> cluster, Marker marker) {
+            if (lastSelectedMarker != null && cluster.getItems().contains(presenter.getGeocache(lastSelectedMarker))) {
+                hideGeocacheInfo();
+            }
+            super.onClusterRendered(cluster, marker);
         }
 
         @Override

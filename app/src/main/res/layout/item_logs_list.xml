@@ -34,14 +34,6 @@
                     android:src="@drawable/ic_found"
                     android:tint="@color/green" />
 
-                <ImageView
-                    android:id="@+id/recommendationImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_star"
-                    android:tint="@color/darkGreen" />
-
                 <TextView
                     android:id="@+id/logDateTextView"
                     style="@style/Text.Primary.VerySmall"
@@ -58,6 +50,15 @@
                     android:layout_gravity="bottom"
                     android:layout_marginStart="@dimen/spacing_very_small"
                     android:text="16:28" />
+
+                <ImageView
+                    android:id="@+id/recommendationImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/spacing_very_small"
+                    android:src="@drawable/ic_star"
+                    android:tint="@color/darkGreen" />
 
                 <TextView
                     android:id="@+id/logAuthorTextView"

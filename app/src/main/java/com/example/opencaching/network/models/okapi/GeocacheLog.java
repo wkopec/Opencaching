@@ -3,6 +3,8 @@ package com.example.opencaching.network.models.okapi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.joda.time.DateTime;
+
 import java.util.List;
 
 /**
@@ -45,8 +47,8 @@ public class GeocacheLog {
         return uuid;
     }
 
-    public String getDate() {
-        return date;
+    public DateTime getDate() {
+        return new DateTime(date);
     }
 
     public User getUser() {

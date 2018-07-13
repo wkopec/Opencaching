@@ -25,6 +25,7 @@ import retrofit2.http.Query;
 
 import static com.example.opencaching.utils.Constants.OPENCACHING_CONSUMER_KEY;
 import static com.example.opencaching.utils.Constants.OPENCACHING_CONSUMER_KEY_SECRET;
+import static com.example.opencaching.utils.StringUtils.REQUET_DATE_FORMAT;
 
 /**
  * Created by Volfram on 16.07.2017.
@@ -67,6 +68,7 @@ public class OpencachingApi {
                 .build();
 
         Gson gson = new GsonBuilder()
+                .setDateFormat(REQUET_DATE_FORMAT)
                 .setLenient()
                 .create();
 

@@ -33,11 +33,12 @@
     <string name="found">znaleziona</string>
     <string name="not_found">nieznaleziona</string>
     <string name="recommended">rekomendowana</string>
-    <string name="info_size">Wielkość: <b>%s</b></string>
-    <string name="info_rating">Ocena: <b>%s</b></string>
-    <string name="info_owner">Właściciel: <b>%s</b></string>
+    <string name="info_size">Wielkość: %s</string>
+    <string name="info_rating">Ocena: %s</string>
+    <string name="info_owner">Właściciel: %s</string>
     <string name="info_type">Typ: <b>%s</b></string>
-    <string name="info_last_found">Ostatnio znaleziona: <b>%s</b></string>
+    <string name="info_last_found">Ostatnio znaleziona:\n%s</string>
+    <string name="info_empty">%s</string>
 
     <!--Sizes of geocache containers-->
     <string name="size_none">Bez pojemnika</string>
@@ -86,6 +87,7 @@
     <string name="info_recommended">%d x rekomendowana</string>
     <string name="separated_strings" formatted="false">%s | %s</string>
     <string name="navigate">Prowadź</string>
+    <string name="waiting_for_ftf">Czeka na FTF!</string>
 
 
 </resources>

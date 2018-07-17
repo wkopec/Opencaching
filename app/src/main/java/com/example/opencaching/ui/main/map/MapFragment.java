@@ -20,6 +20,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -55,6 +57,7 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
@@ -87,6 +90,12 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     LinearLayout geocacheBottomSheet;
     @BindView(R.id.navigateFloatingButton)
     FloatingActionButton navigateButton;
+    @BindView(R.id.notFoundButton)
+    FloatingActionButton notFoundButton;
+    @BindView(R.id.foundButton)
+    FloatingActionButton foundButton;
+
+
     @BindView(R.id.geocacheTopLabel)
     TextView geocacheTopLabel;
     @BindView(R.id.geocacheName)
@@ -118,7 +127,9 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     private ClusterManager<Geocache> mClusterManager;
     private Marker lastSelectedMarker;
     private boolean isMapInfoShown;
+    private boolean isGeocacheInfoShown;
     private BottomSheetBehavior sheetBehavior;
+    private Animation fabOpen, fabClose;
     Unbinder unbinder;
 
     @Nullable
@@ -133,7 +144,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         presenter = new MapFragmentPresenter(this, activity);
         setPresenter(presenter);
         setGeocacheBottomSheet();
-
+        setAnimations();
         return view;
     }
 
@@ -232,6 +243,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     private void showGeocahceInfo(Geocache geocache) {
         setGeocacheInfoView(geocache);
+
         geocacheBottomSheet.setOnClickListener(view -> startGeocacheActivity(geocache.getCode()));
 
         geocacheBottomSheet.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -295,13 +307,48 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                if (slideOffset <= 0) {
+                if (slideOffset < 0) {
+                    if(isGeocacheInfoShown) {
+                        foundButton.startAnimation(fabClose);
+                        notFoundButton.startAnimation(fabClose);
+                        foundButton.setClickable(false);
+                        notFoundButton.setClickable(false);
+                        isGeocacheInfoShown = false;
+                    }
                     navigateButton.setScaleX(slideOffset + 1);
                     navigateButton.setScaleY(slideOffset + 1);
+                } else {
+                    if(!isGeocacheInfoShown) {
+                        foundButton.startAnimation(fabOpen);
+                        notFoundButton.startAnimation(fabOpen);
+                        foundButton.setClickable(true);
+                        notFoundButton.setClickable(true);
+                        isGeocacheInfoShown = true;
+                    }
                 }
             }
         });
 
+    }
+
+    @OnClick(R.id.notFoundButton)
+    public void onNotFoundClick() {
+
+    }
+
+    @OnClick(R.id.foundButton)
+    public void onFoundClick() {
+
+    }
+
+    @OnClick(R.id.navigateFloatingButton)
+    public void onNavigateClick() {
+
+    }
+
+    private void setAnimations() {
+        fabOpen = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
+        fabClose = AnimationUtils.loadAnimation(getContext(),R.anim.fab_close);
     }
 
     @Override
@@ -318,7 +365,6 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     @Override
     public void showMapInfo(int message) {
-        //hideProgress();
         mapInfoMessage.setText(activity.getString(message));
         if (!isMapInfoShown) {
             AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_in_up);
@@ -349,7 +395,6 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     public void clusterGeocaches(ArrayList<Geocache> geocaches) {
         mClusterManager.addItems(geocaches);
         mClusterManager.cluster();
-        hideProgress();
     }
 
     @Override

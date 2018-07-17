@@ -60,9 +60,7 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
 
     @Override
     public void downloadGeocaches(LatLng center, int radius) {
-        if (coveredArea.isWithin(center)) {
-            return;
-        } else if (!isActive) {
+        if (!coveredArea.isWithin(center) && !isActive) {
             if (radius < MINIMUM_REQUEST_RADIUS)
                 radius = MINIMUM_REQUEST_RADIUS;
             getWaypoints(center, radius);
@@ -151,11 +149,13 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
         }
         displayedGeocaches.putAll(newGeocaches);
         view.clusterGeocaches(newGeocachesArray);
-        if (isMore)
+        if (isMore) {
             view.showMapInfo(R.string.move_map_to_show_more_geocaches);
-        else
+        } else {
             view.hideMapInfo();
+        }
         isActive = false;
+        view.hideProgress();
     }
 
     @Override

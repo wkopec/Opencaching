@@ -4,49 +4,152 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MapsActivity" />
+        android:layout_height="match_parent">
 
-    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
-        android:id="@+id/progressBar"
-        style="@style/GNowProgressBar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/spacing_very_small"
-        android:indeterminate="true"
-        android:visibility="gone"
-        app:spb_progressiveStart_activated="false" />
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".MapsActivity" />
 
-    <TextView
-        android:id="@+id/mapInfoMessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/translucent"
-        android:padding="@dimen/spacing_very_small"
-        android:text="Map info message"
-        android:textColor="@color/white" />
+        <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+            android:id="@+id/progressBar"
+            style="@style/GNowProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spacing_very_small"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:spb_progressiveStart_activated="false" />
+
+        <ImageButton
+            android:id="@+id/myLocationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/spacing_normal"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:background="@drawable/background_white_circle"
+            android:src="@drawable/ic_my_location"
+            android:tint="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="parent" />
+
+        <ImageButton
+            android:id="@+id/layersButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/spacing_normal"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:background="@drawable/background_white_circle"
+            android:src="@drawable/ic_layers"
+            android:tint="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/myLocationButton" />
+
+        <TextView
+            android:id="@+id/mapInfoMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/translucent"
+            android:padding="@dimen/spacing_very_small"
+            android:text="Map info message"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
 
     <include layout="@layout/fragment_geocache" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/navigateFloatingButton"
-        android:layout_width="@dimen/spacing_normal_x2.5"
-        android:layout_height="@dimen/spacing_normal_x2.5"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:rotation="10"
-        android:src="@drawable/ic_navigation"
-        android:tint="@color/white"
-        app:borderWidth="0dp"
-        app:fabSize="normal"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_normal"
+        app:layout_anchor="@+id/foundButton"
+        app:layout_anchorGravity="top|center">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/notFoundButton"
+            android:layout_width="@dimen/spacing_normal_x2"
+            android:layout_height="@dimen/spacing_normal_x2"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="@dimen/spacing_normal_x3"
+            android:backgroundTint="@color/red"
+            android:src="@drawable/ic_not_found"
+            android:tint="@color/white"
+            android:visibility="invisible"
+            app:borderWidth="0dp"
+            app:fabSize="normal"
+            app:pressedTranslationZ="@dimen/_8sdp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_normal"
+        app:layout_anchor="@+id/navigateFloatingButton"
+        app:layout_anchorGravity="top|center">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/foundButton"
+            android:layout_width="@dimen/spacing_normal_x2"
+            android:layout_height="@dimen/spacing_normal_x2"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="@dimen/spacing_normal_x2.5"
+            android:backgroundTint="@color/green"
+            android:src="@drawable/ic_found"
+            android:tint="@color/white"
+            android:visibility="invisible"
+            app:borderWidth="0dp"
+            app:fabSize="normal"
+            app:pressedTranslationZ="@dimen/_8sdp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_normal"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_anchor="@+id/geocacheBottomSheet"
-        app:layout_anchorGravity="top|end" />
+        app:layout_anchorGravity="top|end">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/navigateFloatingButton"
+            android:layout_width="@dimen/spacing_normal_x2.5"
+            android:layout_height="@dimen/spacing_normal_x2.5"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:rotation="10"
+            android:src="@drawable/ic_navigation"
+            android:tint="@color/white"
+            android:layout_marginTop="@dimen/spacing_normal"
+            app:borderWidth="0dp"
+            app:fabSize="normal"
+            app:pressedTranslationZ="@dimen/_8sdp" />
+
+        <TextView
+            android:id="@+id/navigateButton"
+            style="@style/Text.Primary.VerySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/navigate"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

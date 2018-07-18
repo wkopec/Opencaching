@@ -183,6 +183,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         mClusterManager.setOnClusterClickListener(
                 cluster -> {
                     hideGeocacheInfo();
+                    activity.hideSearchView();
                     moveMapCamera(cluster.getPosition(), mMap.getCameraPosition().zoom + 1, 500);
                     return true;
                 });
@@ -196,6 +197,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
                         showGeocahceInfo(presenter.getGeocache(marker));
                         moveMapCamera(marker.getPosition(), mMap.getCameraPosition().zoom, 500);
                     }
+                    activity.hideSearchView();
                     return true;
                 });
 

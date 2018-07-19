@@ -1,4 +1,4 @@
-package com.example.opencaching.ui.geocache.geocache_logs;
+package com.example.opencaching.ui.geocache.logs;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.example.opencaching.ui.geocache.geocache_logs;
+package com.example.opencaching.ui.geocache.logs;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -19,14 +19,14 @@ import retrofit2.Response;
  * Created by Wojtek on 27.07.2017.
  */
 
-public class GeocacheLogsFragmentPresenter extends BasePresenter implements GeocacheLogsContract.Presenter {
+public class GeocacheLogsPresenter extends BasePresenter implements GeocacheLogsContract.Presenter {
 
     private final static String LOGS_STANDARD_FIELDS = "uuid|date|user|type|comment|images|was_recommended";
 
     private GeocacheLogsContract.View view;
     private Context context;
 
-    public GeocacheLogsFragmentPresenter(GeocacheLogsContract.View view, Context context) {
+    public GeocacheLogsPresenter(GeocacheLogsContract.View view, Context context) {
         this.view = view;
         this.context = context;
     }

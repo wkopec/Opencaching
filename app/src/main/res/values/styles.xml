@@ -7,6 +7,13 @@
         <item name="android:windowBackground">@color/white</item>
     </style>
 
+
+    <style name="OverlayTheme" parent="AppTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/transparent</item>
+
+    </style>
+
+
     <style name="AppTheme.NoActionBar.Splash">
         <item name="android:background">@drawable/image_splash_screen</item>
     </style>

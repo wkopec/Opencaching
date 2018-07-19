@@ -1,4 +1,4 @@
-package com.example.opencaching.ui.geocache.geocache_logs;
+package com.example.opencaching.ui.geocache.logs;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -34,7 +34,7 @@ public class GeocacheLogsFragment extends BaseFragment implements GeocacheLogsCo
     private View view;
     private LogListAdapter adapter;
     private BaseActivity activity;
-    private GeocacheLogsFragmentPresenter presenter;
+    private GeocacheLogsPresenter presenter;
 
     @Nullable
     @Override
@@ -42,7 +42,7 @@ public class GeocacheLogsFragment extends BaseFragment implements GeocacheLogsCo
         view = inflater.inflate(R.layout.fragment_geocache_logs, null);
         unbinder = ButterKnife.bind(this, view);
         activity = (BaseActivity) getActivity();
-        presenter = new GeocacheLogsFragmentPresenter(this, activity);
+        presenter = new GeocacheLogsPresenter(this, activity);
         setPresenter(presenter);
         presenter.getGeocacheLogs(getGeocacheWaypoint());
         return view;

@@ -1,5 +1,8 @@
 package com.example.opencaching.network.models.okapi;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -13,7 +16,7 @@ import java.util.ArrayList;
  * Created by Volfram on 16.07.2017.
  */
 
-public class Geocache implements ClusterItem {
+public class Geocache implements ClusterItem, Parcelable {
 
     @SerializedName("code")
     @Expose
@@ -138,6 +141,34 @@ public class Geocache implements ClusterItem {
     @SerializedName("date_hidden")
     @Expose
     private String hiddenDate;          //date and time when (the geocache was first hidden / the geocache was first published / the event takes place) (ISO 8601)
+
+    private Geocache(Parcel in) {
+        this.code = in.readString();
+        this.location = in.readString();
+        this.type = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.code);
+        dest.writeString(this.location);
+        dest.writeString(this.type);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Geocache createFromParcel(Parcel in) {
+            return new Geocache(in);
+        }
+
+        public Geocache[] newArray(int size) {
+            return new Geocache[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
     public String getCode() {
         return code;
@@ -318,4 +349,6 @@ public class Geocache implements ClusterItem {
     public String getSnippet() {
         return code;
     }
+
+
 }

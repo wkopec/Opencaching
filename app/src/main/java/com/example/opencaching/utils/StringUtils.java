@@ -103,4 +103,9 @@ public class StringUtils {
         return builder.toString();
     }
 
+    public static LatLng getLatLngFromString(String stringLatLng) {
+        String[] location = stringLatLng.split("\\|");
+        return new LatLng(Double.parseDouble(location[0]), Double.parseDouble(location[1]));
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.example.opencaching.ui.geocache.geocache_logs;
+package com.example.opencaching.ui.geocache.logs;
 
 import com.example.opencaching.network.models.okapi.GeocacheLog;
 import com.example.opencaching.ui.base.BaseContract;

@@ -21,12 +21,13 @@
         </activity>
 
         <activity
-            android:theme="@style/AppTheme.NoActionBar"
             android:name=".ui.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
 
         <activity
             android:name=".ui.geocache.GeocacheActivity"
+            android:theme="@style/OverlayTheme"
             android:screenOrientation="portrait"/>
 
         <meta-data

@@ -1,4 +1,4 @@
-package com.example.opencaching.ui.geocache.geocache_info;
+package com.example.opencaching.ui.geocache.info;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -32,7 +32,7 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
         view = inflater.inflate(R.layout.fragment_geocache_info, null);
         unbinder = ButterKnife.bind(this, view);
         activity = (BaseActivity) getActivity();
-        presenter = new GeocacheInfoFragmentPresenter(this, activity);
+        presenter = new GeocacheInfoPresenter(this, activity);
         setPresenter(presenter);
         presenter.getGeocacheInfo(getGeocacheWaypoint());
         return view;

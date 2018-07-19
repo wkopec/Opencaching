@@ -1,9 +1,8 @@
-package com.example.opencaching.ui.geocache.geocache_info;
+package com.example.opencaching.ui.geocache.info;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.example.opencaching.R;
 import com.example.opencaching.network.models.Error;
 import com.example.opencaching.ui.base.BasePresenter;
 import com.example.opencaching.network.models.okapi.Geocache;
@@ -20,12 +19,12 @@ import static com.example.opencaching.utils.Constants.GEOCACHE_INFO_FIELDS;
  * Created by Wojtek on 12.08.2017.
  */
 
-public class GeocacheInfoFragmentPresenter extends BasePresenter implements GeocacheInfoContract.Presenter {
+public class GeocacheInfoPresenter extends BasePresenter implements GeocacheInfoContract.Presenter {
 
     private GeocacheInfoContract.View view;
     private Context context;
 
-    public GeocacheInfoFragmentPresenter(GeocacheInfoContract.View view, Context context) {
+    public GeocacheInfoPresenter(GeocacheInfoContract.View view, Context context) {
         this.view = view;
         this.context = context;
     }

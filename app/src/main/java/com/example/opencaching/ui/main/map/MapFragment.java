@@ -40,7 +40,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.Cluster;
@@ -50,10 +49,8 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,7 +58,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
-import static com.example.opencaching.ui.geocache.GeocacheActivity.GEOCACHE_WAYPOINT;
+import static com.example.opencaching.ui.geocache.GeocacheActivity.GEOCACHE;
 import static com.example.opencaching.utils.IntegerUtils.getDistance;
 import static com.example.opencaching.utils.ResourceUtils.getGeocacheIcon;
 import static com.example.opencaching.utils.ResourceUtils.getGeocacheSelectedIcon;
@@ -89,7 +86,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     @BindView(R.id.geocacheBottomSheet)
     LinearLayout geocacheBottomSheet;
     @BindView(R.id.navigateFloatingButton)
-    FloatingActionButton navigateButton;
+    LinearLayout navigateButton;
     @BindView(R.id.notFoundButton)
     FloatingActionButton notFoundButton;
     @BindView(R.id.foundButton)
@@ -145,6 +142,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         setPresenter(presenter);
         setGeocacheBottomSheet();
         setAnimations();
+        presenter.getUserData();
         return view;
     }
 
@@ -169,7 +167,6 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(START_MAP_LATITUDE, START_MAP_LONGITUDE), START_MAP_ZOOM));
         }
         configureMap();
-        presenter.getUserData();
     }
 
     private void configureMap() {
@@ -235,10 +232,10 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         }
     }
 
-    private void startGeocacheActivity(String geocacheWaypoint) {
+    private void startGeocacheActivity(Geocache geocache) {
         Intent intent = new Intent(activity, GeocacheActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString(GEOCACHE_WAYPOINT, geocacheWaypoint);
+        bundle.putParcelable(GEOCACHE, geocache);
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -246,7 +243,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     private void showGeocahceInfo(Geocache geocache) {
         setGeocacheInfoView(geocache);
 
-        geocacheBottomSheet.setOnClickListener(view -> startGeocacheActivity(geocache.getCode()));
+        geocacheBottomSheet.setOnClickListener(view -> startGeocacheActivity(geocache));
 
         geocacheBottomSheet.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -465,6 +462,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
             markerOptions.icon(BitmapDescriptorFactory.fromResource(getGeocacheIcon(geocache.getType())));
             markerOptions.snippet(geocache.getSnippet());
             markerOptions.title(geocache.getTitle());
+            markerOptions.anchor(0.5f, 0.5f);
 
             super.onBeforeClusterItemRendered(geocache, markerOptions);
         }

@@ -1,4 +1,4 @@
-package com.example.opencaching.ui.geocache.geocache_info;
+package com.example.opencaching.ui.geocache.info;
 
 import com.example.opencaching.ui.base.BaseContract;
 

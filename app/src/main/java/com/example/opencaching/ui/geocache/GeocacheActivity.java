@@ -1,13 +1,23 @@
 package com.example.opencaching.ui.geocache;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import com.example.opencaching.R;
 import com.example.opencaching.network.models.okapi.Geocache;
@@ -43,6 +53,8 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
     TabLayout tabLayout;
     @BindView(R.id.viewPager)
     ViewPager viewPager;
+    @BindView(R.id.mapFrame)
+    FrameLayout mapFrame;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -57,6 +69,8 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
         configureTabLayout();
         setSupportActionBar(toolbar);
         setupActionBar();
+        setTranslucentStatusBar(getWindow());
+        setupCollapsingToolbar();
         SupportMapFragment mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
@@ -71,6 +85,44 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
         tabLayout.addOnTabSelectedListener(this);
     }
 
+    private void setupCollapsingToolbar() {
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mapFrame.getLayoutParams();
+        params.setMargins(0, 0, 0, getStatusBarHeight() * -1);
+        mapFrame.setLayoutParams(params);
+    }
+
+    public static void setTranslucentStatusBar(Window window) {
+        if (window == null) return;
+        int sdkInt = Build.VERSION.SDK_INT;
+        if (sdkInt >= Build.VERSION_CODES.LOLLIPOP) {
+            setTranslucentStatusBarLollipop(window);
+        } else if (sdkInt >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatusBarKiKat(window);
+        }
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private static void setTranslucentStatusBarLollipop(Window window) {
+        window.setStatusBarColor(
+                window.getContext()
+                        .getResources()
+                        .getColor(R.color.translucent));
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private static void setTranslucentStatusBarKiKat(Window window) {
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    }
+
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -83,7 +135,6 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
     public static String getGeocacheWaypoint() {
         return geocache.getCode();
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

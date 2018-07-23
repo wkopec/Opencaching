@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,6 +31,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     public static int HEADER = 0;
     public static int GROUP = 1;
     public static int ITEM = 2;
+    public static int SEPARATOR = 3;
 
     private List<MenuItem> items;
     private OnMenuItemCheckedListener listener;
@@ -39,10 +42,12 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         this.listener = listener;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         ViewHolder holder = null;
+
         if (viewType == HEADER) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu_header, null);
             holder = new ViewHolder(view);
@@ -52,6 +57,9 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
             holder.iconImage.setVisibility(View.GONE);
         } else if (viewType == ITEM) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu, null);
+            holder = new ViewHolder(view);
+        }else if (viewType == SEPARATOR) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu_separator, null);
             holder = new ViewHolder(view);
         }
         return holder;
@@ -77,29 +85,35 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         final MenuItem item = items.get(position);
         holder.iconImage.setImageResource(item.iconResId);
         Context context = holder.parent.getContext();
-        int accentColor = ContextCompat.getColor(context, R.color.colorAccent);
+        int accentColor = ContextCompat.getColor(context, R.color.colorPrimaryDark);
         int grayColor = ContextCompat.getColor(context, R.color.black);
         if (position == newSelectedPosition){
-            holder.parent.setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimaryDark));
+            holder.parent.setBackgroundColor(ContextCompat.getColor(context,R.color.accent_gray));
             holder.iconImage.getDrawable().setColorFilter(accentColor, PorterDuff.Mode.SRC_ATOP);
+            holder.titleTextView.setTextColor(accentColor);
         } else {
             holder.parent.setBackgroundColor(Color.TRANSPARENT);
+            if(item.type != HEADER) {
+                holder.titleTextView.setTextColor(grayColor);
+            }
             Drawable drawable = holder.iconImage.getDrawable();
             if (drawable != null) {
                 drawable.setColorFilter(grayColor, PorterDuff.Mode.SRC_ATOP);
             }
         }
-
-        if (item.type == HEADER){
-            holder.parent.setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimaryDark));
-            //holder.iconImage.getDrawable().setColorFilter(null);
-        }
+//
+//        if (item.type == HEADER){
+//            holder.parent.setBackgroundColor(accentColor);
+//        }
 
         if (item.type == GROUP){
             holder.parent.setBackgroundColor(ContextCompat.getColor(context,R.color.white));
             holder.iconImage.setColorFilter(null);
         }
-        holder.titleTextView.setText(item.title);
+        if(item.type != SEPARATOR) {
+            holder.titleTextView.setText(item.title);
+        }
+
         holder.parent.setTag(item.tag);
     }
 
@@ -137,7 +151,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         @BindView(R.id.titleTextView)
         TextView titleTextView;
         @BindView(R.id.parent)
-        LinearLayout parent;
+        ConstraintLayout parent;
 
         @OnClick(R.id.parent)
         public void onClick(View view){

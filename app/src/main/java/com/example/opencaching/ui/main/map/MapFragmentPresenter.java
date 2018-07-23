@@ -31,6 +31,7 @@ import static com.example.opencaching.network.api.GoogleMapsApi.service;
 import static com.example.opencaching.utils.Constants.GEOCACHES_STANDARD_FIELDS;
 import static com.example.opencaching.utils.IntegerUtils.getDistance;
 import static com.example.opencaching.utils.StringUtils.getApiFormatedFields;
+import static com.example.opencaching.utils.SyncUtils.isInternetConnection;
 import static com.example.opencaching.utils.UserUtils.getUserHomeLocation;
 import static com.example.opencaching.utils.UserUtils.setUserHomeLocation;
 
@@ -182,7 +183,8 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
 
             @Override
             public void onFailure(@NonNull Call<GeocodingResults> call, @NonNull Throwable t) {
-                view.showMapInfo(R.string.something_went_wrong);
+                view.showError(ApiUtils.getErrorSingle(t));
+                view.hideProgress();
                 if (t.getMessage() != null)
                     Log.d("Retrofit fail", t.getMessage());
             }

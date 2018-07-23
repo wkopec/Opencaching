@@ -110,6 +110,7 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
         return result;
     }
 
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static void setTranslucentStatusBarLollipop(Window window) {
         window.setStatusBarColor(
@@ -153,6 +154,7 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.geocache_menu, menu);
         return true;
     }
 

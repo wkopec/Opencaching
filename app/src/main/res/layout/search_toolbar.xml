@@ -26,8 +26,7 @@
                 android:id="@+id/search_view"
                 style="@style/MaterialSearchViewStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/map_search_hint" />
+                android:layout_height="wrap_content" />
         </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>

@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import okhttp3.ResponseBody;
@@ -20,10 +21,10 @@ public class ApiUtils {
 
     public static Error getErrorSingle(Throwable t){
         t.printStackTrace();
-        if (t instanceof ConnectException){
-            return new Error(R.string.something_went_wrong_check_internet);
+        if (t instanceof ConnectException || t instanceof UnknownHostException){
+            return new Error(R.string.check_internet_connection);
         } else if (t instanceof SocketTimeoutException){
-            return new Error(R.string.something_went_wrong_couldn_connect_to_server);
+            return new Error(R.string.couldn_connect_to_server);
         }
         return Error.DEFAULT;
     }

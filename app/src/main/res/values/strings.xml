@@ -13,14 +13,17 @@
     <string name="main_menu">Menu główne</string>
     <string name="user_menu">Menu użytkownika</string>
     <string name="options">Menu użytkownika</string>
+    <string name="nav_news">Aktualności</string>
     <string name="nav_map">Mapa</string>
     <string name="nav_notifications">Powiadomienia</string>
     <string name="nav_search">Szukaj</string>
     <string name="nav_settings">Ustawienia</string>
     <string name="nav_logout">Wyloguj się</string>
     <string name="action_logout">Wyloguj się</string>
+    <string name="nav_user_profile">Profil</string>
     <string name="nav_user_stats">Moje statystyki</string>
     <string name="nav_user_geocaches">Moje skrzynki</string>
+    <string name="nav_user_watched">Obserwowane</string>
     <string name="nav_user_neighbourhood">Moja okolica</string>
 
     <!--Authorization-->
@@ -78,8 +81,7 @@
     <string name="logs">Logi</string>
     <string name="today">Dzisiaj</string>
     <string name="yesterday">Wczoraj</string>
-    <string name="something_went_wrong_check_internet">Ops… Coś poszło nie tak. Sprawdź połączenie internetowe</string>
-    <string name="something_went_wrong_couldn_connect_to_server">Nie udało się połączyć z serwerem</string>
+    <string name="couldn_connect_to_server">Nie udało się połączyć z serwerem</string>
     <string name="agree_terms_of_service">Korzystając z aplikacji akceptujesz %1$s.</string>
     <string name="terms_of_service">regulamin serwisu</string>
     <string name="info_found">%d x znaleziona</string>
@@ -88,6 +90,11 @@
     <string name="separated_strings" formatted="false">%s | %s</string>
     <string name="navigate">Prowadź</string>
     <string name="waiting_for_ftf">Czeka na FTF!</string>
+    <string name="filter">Filtruj</string>
+    <string name="search">Szukaj</string>
+    <string name="list_view">Pokaż w liście</string>
+    <string name="save_all">Zapisz skrzynki</string>
+    <string name="compass">Kompas</string>
 
 
 </resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/parent">
+
+    <ImageView
+        android:id="@+id/icon_image"
+        android:layout_width="@dimen/spacing_normal"
+        android:layout_height="@dimen/spacing_normal"
+        android:layout_marginEnd="@dimen/spacing_normal"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/accent_gray"
+        android:layout_marginTop="@dimen/spacing_very_small"
+        android:layout_marginBottom="@dimen/spacing_very_small"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>
+

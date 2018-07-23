@@ -75,7 +75,6 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
     }
 
     private void setSearchView(){
-        MaterialSearchView searchView = (MaterialSearchView) findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -102,7 +101,6 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START))
             drawer.closeDrawer(GravityCompat.START);
         else if(searchView.isSearchOpen())

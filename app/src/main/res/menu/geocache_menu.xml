@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_action_action_search"
+        android:id="@+id/action_navigate"
+        android:icon="@drawable/ic_drive_navigation"
         android:orderInCategory="1"
         android:title="@string/search"
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_filter"
-        android:icon="@drawable/ic_filter"
+        android:id="@+id/action_compass"
+        android:icon="@drawable/ic_compass"
         android:orderInCategory="2"
-        android:title="@string/filter"
+        android:title="@string/compass"
         app:showAsAction="always" />
 
     <item

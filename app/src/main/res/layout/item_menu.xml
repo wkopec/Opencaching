@@ -1,26 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="@dimen/spacing_normal"
-    android:paddingEnd="@dimen/spacing_normal"
-    android:paddingTop="@dimen/spacing_menu"
+    android:orientation="horizontal"
     android:paddingBottom="@dimen/spacing_menu"
-    android:id="@+id/parent">
+    android:paddingEnd="@dimen/spacing_normal"
+    android:paddingStart="@dimen/spacing_normal"
+    android:paddingTop="@dimen/spacing_menu">
+
     <ImageView
         android:id="@+id/icon_image"
         android:layout_width="@dimen/spacing_normal"
         android:layout_height="@dimen/spacing_normal"
         android:layout_gravity="center"
-        android:layout_marginEnd="@dimen/spacing_normal"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/titleTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nav_map" />
+        android:text="@string/nav_map"
+        android:layout_marginStart="@dimen/spacing_normal"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/icon_image"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0dp"/>
-</LinearLayout>
+        android:layout_height="@dimen/_1sdp" />
+
+</android.support.constraint.ConstraintLayout>

@@ -73,7 +73,7 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
         isActive = true;
         this.center = center;
         String centerString = center.latitude + "|" + center.longitude;
-        Call<WaypointResults> loginCall = OpencachingApi.service().getWaypoints(context.getResources().getString(R.string.opencaching_key), centerString, GEOCACHE_REQUEST_LIMIT, radius);
+        Call<WaypointResults> loginCall = OpencachingApi.service(context).getWaypoints(context.getResources().getString(R.string.opencaching_key), centerString, GEOCACHE_REQUEST_LIMIT, radius, "Available|Temporarily unavailable|Archived");
         loginCall.enqueue(new Callback<WaypointResults>() {
             @Override
             public void onResponse(@NonNull Call<WaypointResults> call, @NonNull Response<WaypointResults> response) {
@@ -104,7 +104,7 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
     }
 
     private void getGeocaches(String codes, final boolean isMore) {
-        Call<Map<String, Geocache>> loginCall = OpencachingApi.service().getGeocaches(context.getResources().getString(R.string.opencaching_key), codes, GEOCACHES_STANDARD_FIELDS);
+        Call<Map<String, Geocache>> loginCall = OpencachingApi.service(context).getGeocaches(context.getResources().getString(R.string.opencaching_key), codes, GEOCACHES_STANDARD_FIELDS);
         loginCall.enqueue(new Callback<Map<String, Geocache>>() {
             @Override
             public void onResponse(@NonNull Call<Map<String, Geocache>> call, @NonNull Response<Map<String, Geocache>> response) {

@@ -34,30 +34,12 @@
             android:layout_marginTop="@dimen/spacing_small">
 
             <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/ignoredFilter"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/filter_ignored"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline" />
-
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/ownFilter"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/filter_own"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ignoredFilter"
-                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline" />
-
-            <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/foundFilter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_found"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ownFilter"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"/>
 
             <android.support.v7.widget.AppCompatCheckBox
@@ -70,12 +52,30 @@
                 app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"/>
 
             <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/ownFilter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_own"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/notFoundFilter"
+                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/ignoredFilter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_ignored"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ownFilter"
+                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline" />
+
+            <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/trackableFilter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_contains_trackable"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/notFoundFilter"
+                app:layout_constraintTop_toBottomOf="@+id/ignoredFilter"
                 app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"/>
 
             <android.support.constraint.Guideline
@@ -86,12 +86,21 @@
                 app:layout_constraintGuide_percent="0.5"/>
 
             <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/availableFilter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_available"
+                app:layout_constraintStart_toEndOf="@+id/verticalGuideline"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/temporaryUnavailableFilter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_temporary_unavailable"
                 app:layout_constraintStart_toEndOf="@+id/verticalGuideline"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/availableFilter"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <android.support.v7.widget.AppCompatCheckBox

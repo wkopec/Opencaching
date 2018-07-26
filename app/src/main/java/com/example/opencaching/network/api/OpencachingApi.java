@@ -33,16 +33,7 @@ import static com.example.opencaching.utils.StringUtils.REQUET_DATE_FORMAT;
 
 public class OpencachingApi {
 
-    public static final String API_BASE_URL = "http://opencaching.pl/okapi/services/";
-
-    public static OpencachingApi.Calls service(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_BASE_URL).addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        OpencachingApi.Calls service = retrofit.create(OpencachingApi.Calls.class);
-        return service;
-    }
+    private static final String API_BASE_URL = "http://opencaching.pl/okapi/services/";
 
     public static OpencachingApi.Calls service(Context context) {
         return service(OPENCACHING_CONSUMER_KEY, OPENCACHING_CONSUMER_KEY_SECRET, UserUtils.getOauthToken(context), UserUtils.getOauthTokenSecret(context));
@@ -99,7 +90,7 @@ public class OpencachingApi {
         //GEOCACHE
 
         @GET("caches/search/nearest")
-        Call<WaypointResults> getWaypoints(@Query("consumer_key") String consumerKey, @Query("center") String center, @Query("limit") int limit, @Query("radius") int radius);
+        Call<WaypointResults> getWaypoints(@Query("consumer_key") String consumerKey, @Query("center") String center, @Query("limit") int limit, @Query("radius") int radius, @Query("status") String status);
 
         @GET("caches/geocaches")
         Call<Map<String, Geocache>> getGeocaches(@Query("consumer_key") String consumerKey, @Query("cache_codes") String codes, @Query("fields") String fields);

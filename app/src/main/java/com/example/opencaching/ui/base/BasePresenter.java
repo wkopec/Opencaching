@@ -6,7 +6,7 @@ import android.support.annotation.CallSuper;
  * Created by Wojtek on 22.10.2017.
  */
 
-public class BasePresenter implements BaseContract.Presenter{
+public abstract class BasePresenter implements BaseContract.Presenter{
     private boolean isSubscribed;
 
     @CallSuper

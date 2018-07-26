@@ -17,6 +17,7 @@ import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 
 import com.example.opencaching.R;
 import com.example.opencaching.ui.base.BaseFragment;
+import com.example.opencaching.ui.dialogs.MapFilterDialog;
 import com.example.opencaching.ui.geocache.GeocacheActivity;
 import com.example.opencaching.ui.main.MainActivity;
 import com.example.opencaching.utils.events.SearchMapEvent;
@@ -92,7 +94,6 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     @BindView(R.id.foundButton)
     FloatingActionButton foundButton;
 
-
     @BindView(R.id.geocacheTopLabel)
     TextView geocacheTopLabel;
     @BindView(R.id.geocacheName)
@@ -143,6 +144,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         setGeocacheBottomSheet();
         setAnimations();
         presenter.getUserData();
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -154,8 +156,18 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.map_menu, menu);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_filter:
+                MapFilterDialog filterDialog = MapFilterDialog.newInstance();
+                filterDialog.show(activity.getSupportFragmentManager(), MapFilterDialog.class.getName());
+                return false;
+            case R.id.action_save:
+                return false;
+            case R.id.action_list_view:
+                return false;
+        }
+        return false;
     }
 
     @Override

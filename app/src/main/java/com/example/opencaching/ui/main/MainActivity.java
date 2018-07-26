@@ -62,8 +62,22 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         getMenuInflater().inflate(R.menu.map_menu, menu);
         MenuItem item = menu.findItem(R.id.action_search);
-        searchView.setMenuItem(item);
-        return true;
+        if(item != null) {
+            searchView.setMenuItem(item);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return false;
+        }
+
+        return false;
     }
 
     private void configureMenuRecyclerView() {
@@ -109,15 +123,6 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
             menuAdapter.setItemSelected(R.string.nav_map);
         else
             finish();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            onBackPressed();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public void hideSearchView() {

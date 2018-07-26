@@ -32,7 +32,7 @@ import static com.example.opencaching.utils.UserUtils.setOauthTokenSecret;
  * Created by Volfram on 15.07.2017.
  */
 
-public class BaseActivity extends AppCompatActivity implements BaseContract.View{
+public abstract class BaseActivity extends AppCompatActivity implements BaseContract.View{
 
     public static final int REQUEST_LOCATION = 2;
     private AlertDialog dialog;

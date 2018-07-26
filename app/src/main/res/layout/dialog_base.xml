@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent">
+
+    <RelativeLayout
+        android:id="@+id/dialogContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_normal_x1.5"
+        android:background="@drawable/background_dialog"
+        android:gravity="center"
+        android:minWidth="@dimen/_200sdp"
+        android:paddingTop="@dimen/spacing_normal_x2"
+        android:paddingStart="@dimen/spacing_normal"
+        android:paddingEnd="@dimen/spacing_normal"
+        android:paddingBottom="@dimen/spacing_normal"
+        app:layout_constraintTop_toTopOf="@id/dialogIcon" />
+
+    <ImageView
+        android:id="@+id/dialogIcon"
+        android:layout_width="@dimen/spacing_normal_x3"
+        android:layout_height="@dimen/spacing_normal_x3"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/bg_circle"
+        android:padding="@dimen/spacing_small"
+        app:layout_constraintEnd_toEndOf="@id/dialogContainer"
+        app:layout_constraintStart_toStartOf="@id/dialogContainer" />
+
+</android.support.constraint.ConstraintLayout>

@@ -97,4 +97,17 @@
     <string name="compass">Kompas</string>
 
 
+    <!--Map Filter-->
+    <string name="filter_geocaches">Filtruj skrzynki</string>
+    <string name="filter_ignored">Ignorowane</string>
+    <string name="filter_own">Własne</string>
+    <string name="filter_found">Znalezione</string>
+    <string name="filter_not_found">Nieznalezione</string>
+    <string name="filter_contains_trackable">Tylko z geokretami</string>
+    <string name="filter_temporary_unavailable">Tymczasowo niedostępne</string>
+    <string name="filter_archived">Zarchiwizowane</string>
+    <string name="filter_ftf">Tylko FTF</string>
+    <string name="filter_power_trail">Tylko z geocieżek</string>
+
+
 </resources>

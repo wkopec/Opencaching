@@ -6,7 +6,7 @@ import com.example.opencaching.network.models.Error;
  * Created by Wojtek on 22.10.2017.
  */
 
-public class BaseContract {
+public abstract class BaseContract {
     public interface Presenter {
         void subscribe();
 

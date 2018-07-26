@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+
+    android:minWidth="@dimen/_240sdp">
+
+    <!--<TextView-->
+        <!--android:id="@+id/title"-->
+        <!--style="@style/Text.Primary.Normal"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center"-->
+        <!--android:text="@string/filter_geocaches"-->
+        <!--android:textStyle="bold"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/filterGeocaches">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small">
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/ignoredFilter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_ignored"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/ownFilter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_own"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ignoredFilter"
+                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/foundFilter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_found"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ownFilter"
+                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/notFoundFilter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_not_found"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/foundFilter"
+                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/trackableFilter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_contains_trackable"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/notFoundFilter"
+                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"/>
+
+            <android.support.constraint.Guideline
+                android:id="@+id/verticalGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/temporaryUnavailableFilter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_temporary_unavailable"
+                app:layout_constraintStart_toEndOf="@+id/verticalGuideline"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/archivedFilter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_archived"
+                app:layout_constraintStart_toEndOf="@+id/verticalGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/temporaryUnavailableFilter"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/ftfFilter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_ftf"
+                app:layout_constraintStart_toEndOf="@+id/verticalGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/archivedFilter"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/powerTrailFilter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_power_trail"
+                app:layout_constraintStart_toEndOf="@+id/verticalGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/ftfFilter"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </ScrollView>
+
+    <TextView
+        style="@style/Text.Primary.Normal"
+        android:id="@+id/filterGeocaches"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="@string/filter_geocaches"
+        android:textStyle="bold"
+        android:padding="@dimen/spacing_small"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+</android.support.constraint.ConstraintLayout>

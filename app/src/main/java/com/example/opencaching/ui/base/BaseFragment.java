@@ -9,7 +9,7 @@ import com.example.opencaching.network.models.Error;
  * Created by Wojtek on 22.10.2017.
  */
 
-public class BaseFragment extends Fragment implements BaseContract.View {
+public abstract class BaseFragment extends Fragment implements BaseContract.View {
 
 
     private BaseContract.Presenter presenter;

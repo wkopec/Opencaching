@@ -4,29 +4,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/transparent"
-
-    android:minWidth="@dimen/_240sdp">
+    android:minWidth="@dimen/_245sdp">
 
     <!--<TextView-->
-        <!--android:id="@+id/title"-->
-        <!--style="@style/Text.Primary.Normal"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="center"-->
-        <!--android:text="@string/filter_geocaches"-->
-        <!--android:textStyle="bold"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
+    <!--android:id="@+id/title"-->
+    <!--style="@style/Text.Primary.Normal"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center"-->
+    <!--android:text="@string/filter_geocaches"-->
+    <!--android:textStyle="bold"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent" />-->
 
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/spacing_small"
+        app:layout_constraintBottom_toTopOf="@+id/filterGeocaches"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/filterGeocaches">
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -38,114 +37,217 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_found"
+                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/notFoundFilter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_not_found"
+                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/foundFilter"
-                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"/>
+                app:layout_constraintTop_toBottomOf="@+id/foundFilter" />
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/ownFilter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_own"
+                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/notFoundFilter"
-                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline" />
+                app:layout_constraintTop_toBottomOf="@+id/notFoundFilter" />
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/ignoredFilter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_ignored"
+                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ownFilter"
-                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline" />
+                app:layout_constraintTop_toBottomOf="@+id/ownFilter" />
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/trackableFilter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_contains_trackable"
+                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ignoredFilter"
-                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"/>
+                app:layout_constraintTop_toBottomOf="@+id/ignoredFilter" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/verticalGuideline"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5"/>
+                app:layout_constraintGuide_percent="0.5" />
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/availableFilter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_available"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/verticalGuideline"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/temporaryUnavailableFilter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_temporary_unavailable"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/verticalGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/availableFilter"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/availableFilter" />
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/archivedFilter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_archived"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/verticalGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/temporaryUnavailableFilter"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/temporaryUnavailableFilter" />
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/ftfFilter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_ftf"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/verticalGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/archivedFilter"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/archivedFilter" />
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/powerTrailFilter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_power_trail"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/verticalGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/ftfFilter"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/ftfFilter" />
+
+
+            <!--GEOCACHE FILTERS-->
+
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/traditionalFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:background="@drawable/cache_traditional"
+                android:button="@color/transparent"
+                app:layout_constraintEnd_toStartOf="@+id/multicacheFilter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/powerTrailFilter" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/multicacheFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:background="@drawable/cache_multi"
+                android:button="@color/transparent"
+                app:layout_constraintEnd_toStartOf="@+id/quizFilter"
+                app:layout_constraintStart_toEndOf="@+id/traditionalFilter"
+                app:layout_constraintTop_toBottomOf="@+id/powerTrailFilter" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/quizFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:background="@drawable/cache_quiz"
+                android:button="@color/transparent"
+                app:layout_constraintEnd_toStartOf="@+id/unknownFilter"
+                app:layout_constraintStart_toEndOf="@+id/multicacheFilter"
+                app:layout_constraintTop_toBottomOf="@+id/powerTrailFilter" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/unknownFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:background="@drawable/cache_unknown"
+                android:button="@color/transparent"
+                app:layout_constraintEnd_toStartOf="@+id/virtualFilter"
+                app:layout_constraintStart_toEndOf="@+id/quizFilter"
+                app:layout_constraintTop_toBottomOf="@+id/powerTrailFilter" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/virtualFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:background="@drawable/cache_virtual"
+                android:button="@color/transparent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/unknownFilter"
+                app:layout_constraintTop_toBottomOf="@+id/powerTrailFilter" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/eventFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:background="@drawable/cache_event"
+                android:button="@color/transparent"
+                app:layout_constraintEnd_toStartOf="@+id/owncacheFilter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/traditionalFilter" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/owncacheFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:background="@drawable/cache_own"
+                android:button="@color/transparent"
+                app:layout_constraintEnd_toStartOf="@+id/movingFilter"
+                app:layout_constraintStart_toEndOf="@+id/eventFilter"
+                app:layout_constraintTop_toBottomOf="@+id/traditionalFilter" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/movingFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:background="@drawable/cache_moving"
+                android:button="@color/transparent"
+                app:layout_constraintEnd_toStartOf="@+id/webcamFilter"
+                app:layout_constraintStart_toEndOf="@+id/owncacheFilter"
+                app:layout_constraintTop_toBottomOf="@+id/traditionalFilter" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/webcamFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:background="@drawable/cache_webcam"
+                android:button="@color/transparent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/movingFilter"
+                app:layout_constraintTop_toBottomOf="@+id/traditionalFilter" />
 
         </android.support.constraint.ConstraintLayout>
 
     </ScrollView>
 
     <TextView
-        style="@style/Text.Primary.Normal"
         android:id="@+id/filterGeocaches"
+        style="@style/Text.Primary.Normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryDark"
-        android:text="@string/filter_geocaches"
-        android:textStyle="bold"
         android:padding="@dimen/spacing_small"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/filter_geocaches"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

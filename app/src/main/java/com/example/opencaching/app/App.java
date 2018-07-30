@@ -1,4 +1,4 @@
-package com.example.opencaching;
+package com.example.opencaching.app;
 
 import android.app.Application;
 

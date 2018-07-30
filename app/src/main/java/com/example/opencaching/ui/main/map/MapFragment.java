@@ -1,19 +1,27 @@
 package com.example.opencaching.ui.main.map;
 
+import android.Manifest;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,6 +55,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -128,6 +138,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     private boolean isGeocacheInfoShown;
     private BottomSheetBehavior sheetBehavior;
     private Animation fabOpen, fabClose;
+    private Location deviceLocation;
     Unbinder unbinder;
 
     @Nullable
@@ -182,6 +193,8 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     }
 
     private void configureMap() {
+        setupLocationListener();
+
         //MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(activity, R.raw.retro_map);
         //mMap.setMapStyle(style);
 
@@ -232,6 +245,38 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
             } else
                 showMapInfo(R.string.zoom_map_to_download);
         });
+    }
+
+    private void setupLocationListener() {
+        if( ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            LocationListener locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    deviceLocation = location;
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+
+                }
+            };
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, locationListener);
+        }
+
     }
 
     private void setLastSelectedMarkerIcon() {
@@ -339,6 +384,40 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
                 }
             }
         });
+
+    }
+
+    private void checkFineLocationPermission() {
+        new TedPermission(getActivity())
+                .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+                .setDeniedMessage(R.string.permission_denied_message_fine_location)
+                .setPermissionListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted() {
+                        setupLocationListener();
+                    }
+
+                    @Override
+                    public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+
+                    }
+                })
+                .check();
+    }
+
+    @OnClick(R.id.myLocationButton)
+    public void onMyLocationClick() {
+        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            checkFineLocationPermission();
+        } else {
+            if(deviceLocation != null) {
+                moveMapCamera(new LatLng(deviceLocation.getLatitude(), deviceLocation.getLongitude()), mMap.getCameraPosition().zoom, 1000);
+            }
+        }
+    }
+
+    @OnClick(R.id.layersButton)
+    public void onLayersClick() {
 
     }
 

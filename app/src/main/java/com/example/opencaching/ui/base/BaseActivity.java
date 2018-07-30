@@ -154,8 +154,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
             Log.e("MVP " + this.getClass().getSimpleName(), "########### PRESENTER IS IS NULL ###########");
         }
         isResumed = true;
-//        if(!EventBus.getDefault().isRegistered(this))
-//            EventBus.getDefault().register(this);
     }
 
     @Override
@@ -171,18 +169,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
             EventBus.getDefault().unregister(this);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_LOCATION: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    permissionListener.onPermissionGranted();
-                } else {
-                    permissionListener.onPermissionDenied();
-                }
-            }
-        }
-    }
+
 
     public void showToast(String message) {
         if (message.equals(getString(R.string.session_has_ended))){

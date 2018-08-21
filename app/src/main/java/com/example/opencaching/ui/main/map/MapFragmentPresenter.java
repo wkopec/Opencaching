@@ -1,10 +1,12 @@
 package com.example.opencaching.ui.main.map;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.opencaching.R;
+import com.example.opencaching.app.prefs.MapFiltersManager;
 import com.example.opencaching.network.models.okapi.User;
 import com.example.opencaching.ui.base.BasePresenter;
 import com.example.opencaching.network.models.CoveredArea;
@@ -27,11 +29,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.example.opencaching.app.prefs.MapFiltersManager.MAP_FILTER_PREF;
 import static com.example.opencaching.network.api.GoogleMapsApi.service;
 import static com.example.opencaching.utils.Constants.GEOCACHES_STANDARD_FIELDS;
 import static com.example.opencaching.utils.IntegerUtils.getDistance;
 import static com.example.opencaching.utils.StringUtils.getApiFormatedFields;
-import static com.example.opencaching.utils.SyncUtils.isInternetConnection;
 import static com.example.opencaching.utils.UserUtils.getUserHomeLocation;
 import static com.example.opencaching.utils.UserUtils.setUserHomeLocation;
 
@@ -48,22 +51,28 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
     private MapContract.View view;
     private Context context;
     private LatLng center;
-    private Map<String, Geocache> displayedGeocaches;
+    private Map<String, Geocache> storedGeocaches;
     private CoveredArea coveredArea;
     private boolean isActive;
+
+    private MapFiltersManager mapFiltersManager;
 
     public MapFragmentPresenter(MapContract.View view, Context context) {
         this.view = view;
         this.context = context;
-        displayedGeocaches = new HashMap<>();
+        storedGeocaches = new HashMap<>();
         coveredArea = new CoveredArea();
+        //FIXME: change to DI
+        SharedPreferences sharedPreferences = context.getSharedPreferences(MAP_FILTER_PREF, MODE_PRIVATE);
+        mapFiltersManager = new MapFiltersManager(sharedPreferences);
     }
 
     @Override
     public void downloadGeocaches(LatLng center, int radius) {
         if (!coveredArea.isWithin(center) && !isActive) {
-            if (radius < MINIMUM_REQUEST_RADIUS)
+            if (radius < MINIMUM_REQUEST_RADIUS) {
                 radius = MINIMUM_REQUEST_RADIUS;
+            }
             getWaypoints(center, radius);
         }
     }
@@ -73,7 +82,7 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
         isActive = true;
         this.center = center;
         String centerString = center.latitude + "|" + center.longitude;
-        Call<WaypointResults> loginCall = OpencachingApi.service(context).getWaypoints(context.getResources().getString(R.string.opencaching_key), centerString, GEOCACHE_REQUEST_LIMIT, radius, "Available|Temporarily unavailable|Archived");
+        Call<WaypointResults> loginCall = OpencachingApi.service(context).getWaypoints(context.getResources().getString(R.string.opencaching_key), centerString, GEOCACHE_REQUEST_LIMIT, radius, getSelectedStatus());
         loginCall.enqueue(new Callback<WaypointResults>() {
             @Override
             public void onResponse(@NonNull Call<WaypointResults> call, @NonNull Response<WaypointResults> response) {
@@ -110,16 +119,21 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
             public void onResponse(@NonNull Call<Map<String, Geocache>> call, @NonNull Response<Map<String, Geocache>> response) {
                 if (response.body() != null) {
                     Map<String, Geocache> geocaches = response.body();
-                    if (geocaches != null)
-                        addGeocaches(geocaches, isMore);
-                    else {
+                    if (geocaches != null) {
+                        storeAndShowGeocaches(geocaches);
+                        if (isMore) {
+                            view.showMapInfo(R.string.move_map_to_show_more_geocaches);
+                        } else {
+                            view.hideMapInfo();
+                        }
+                        isActive = false;
+                        view.hideProgress();
+                    } else {
                         view.hideProgress();
                         isActive = false;
                     }
-                } else {
-                    if (response.errorBody() != null) {
-                        view.showError(ApiUtils.getErrorSingle(response.errorBody()));
-                    }
+                } else if (response.errorBody() != null) {
+                    view.showError(ApiUtils.getErrorSingle(response.errorBody()));
                 }
             }
 
@@ -132,32 +146,46 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
         });
     }
 
-    private void addGeocaches(Map<String, Geocache> geocaches, boolean isMore) {
+    private void storeAndShowGeocaches(Map<String, Geocache> geocaches) {
         Map<String, Geocache> newGeocaches = new HashMap<>();
         ArrayList<Geocache> newGeocachesArray = new ArrayList<>();
         Iterator iterator = geocaches.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry pair = (Map.Entry) iterator.next();
             Geocache geocache = (Geocache) pair.getValue();
-            if (displayedGeocaches.containsKey(geocache.getCode()))
+            if (storedGeocaches.containsKey(geocache.getCode())) {
                 continue;
+            }
             newGeocaches.put(geocache.getCode(), geocache);
             newGeocachesArray.add(geocache);
-            if (!iterator.hasNext())
+            if (!iterator.hasNext()) {
                 coveredArea.addArea(center, getDistance(geocache.getPosition(), center));
-
+            }
             iterator.remove();
         }
-        displayedGeocaches.putAll(newGeocaches);
-        view.clusterGeocaches(newGeocachesArray);
-        if (isMore) {
-            view.showMapInfo(R.string.move_map_to_show_more_geocaches);
-        } else {
-            view.hideMapInfo();
-        }
-        isActive = false;
-        view.hideProgress();
+        storedGeocaches.putAll(newGeocaches);
+
+        view.addGeocaches(filterGeocaches(newGeocachesArray));
+
     }
+
+    private ArrayList<Geocache> filterGeocaches(ArrayList<Geocache> geocaches) {
+        ArrayList<Geocache> filteredGeocaches = new ArrayList<>(geocaches);
+        for(Geocache geocache : geocaches) {
+            if(!mapFiltersManager.isFoundFilter() && geocache.isFound()) {
+                filteredGeocaches.remove(geocache);
+            } else if(!mapFiltersManager.isNotFoundFilter() && !geocache.isFound()) {
+                filteredGeocaches.remove(geocache);
+            }
+//            else if(mapFiltersManager.isOwnedFilter() && geocache.o){
+//
+//            }
+        }
+
+
+        return filteredGeocaches;
+    }
+
 
     @Override
     public void getLocation(String address) {
@@ -185,8 +213,9 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
             public void onFailure(@NonNull Call<GeocodingResults> call, @NonNull Throwable t) {
                 view.showError(ApiUtils.getErrorSingle(t));
                 view.hideProgress();
-                if (t.getMessage() != null)
+                if (t.getMessage() != null) {
                     Log.d("Retrofit fail", t.getMessage());
+                }
             }
         });
     }
@@ -207,15 +236,55 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                if (t.getMessage() != null)
+                if (t.getMessage() != null) {
                     Log.d("Retrofit fail", t.getMessage());
+                }
             }
         });
     }
 
     @Override
     public Geocache getGeocache(Marker marker) {
-        return displayedGeocaches.get(marker.getSnippet());
+        return storedGeocaches.get(marker.getSnippet());
+    }
+
+    @Override
+    public void filterMap(boolean isAvailabilityChanged) {
+        if (isAvailabilityChanged) {
+            clearStoredGeocaches();
+            view.downloadGeocaches();
+        } else {
+            view.clearMap();
+            ArrayList<Geocache> geocaches = new ArrayList<>(storedGeocaches.values());
+            view.addGeocaches(filterGeocaches(geocaches));
+        }
+    }
+
+    public void clearStoredGeocaches() {
+        coveredArea.clear();
+        storedGeocaches.clear();
+        view.clearMap();
+    }
+
+    private String getSelectedStatus() {
+        StringBuilder status = new StringBuilder();
+        if (mapFiltersManager.isAvailableFilter()) {
+            status.append("Available");
+        }
+        if (mapFiltersManager.isTempUnavailableFilter()) {
+            if (status.length() != 0) {
+                status.append("|");
+            }
+            status.append("Temporarily unavailable");
+        }
+        if (mapFiltersManager.isArchivedFilter()) {
+            if (status.length() != 0) {
+                status.append("|");
+            }
+            status.append("Archived");
+        }
+
+        return status.toString();
     }
 
 }

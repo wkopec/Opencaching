@@ -1,14 +1,10 @@
 package com.example.opencaching.ui.base;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -37,7 +33,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
     public static final int REQUEST_LOCATION = 2;
     private AlertDialog dialog;
     protected OnBackListener onBackListener;
-    private PermissionListener permissionListener;
     private boolean isResumed;
     private BaseContract.Presenter presenter;
 
@@ -47,7 +42,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(new ProgressBar(this));
         dialog = builder.create();
-
 
     }
 
@@ -91,7 +85,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
         });
     }
 
-
     public void setOnBackListener(OnBackListener listener) {
         onBackListener = listener;
     }
@@ -122,27 +115,10 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
         }
     }
 
-    public boolean requestLocationPermission(PermissionListener listener) {
-        permissionListener = listener;
-        if (!isLocationPermissionGranted()) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION);
-            return false;
-        } else {
-            permissionListener.onPermissionGranted();
-            return true;
-        }
-    }
-
     public void performSessionEnded (){
         setOauthTokenSecret(this, "");
         startActivity(new Intent(this, LoginActivity.class));
         finish();
-    }
-
-    public boolean isLocationPermissionGranted() {
-        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
@@ -194,12 +170,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
             view = new View(this);
         }
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    public interface PermissionListener {
-        void onPermissionGranted();
-
-        void onPermissionDenied();
     }
 
     public interface OnBackListener {

@@ -41,6 +41,7 @@ import com.example.opencaching.ui.base.BaseFragment;
 import com.example.opencaching.ui.dialogs.MapFilterDialog;
 import com.example.opencaching.ui.geocache.GeocacheActivity;
 import com.example.opencaching.ui.main.MainActivity;
+import com.example.opencaching.utils.events.MapFilterChangeEvent;
 import com.example.opencaching.utils.events.SearchMapEvent;
 import com.example.opencaching.network.models.okapi.Geocache;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -234,17 +235,21 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         //mMap.setInfoWindowAdapter(new CustomInfoViewAdapter());
         //mMap.setOnInfoWindowClickListener(marker -> startGeocacheActivity(marker.getSnippet()));
 
-        mMap.setOnCameraIdleListener(() -> {
-            mClusterManager.cluster();
-            CameraPosition cameraPosition = mMap.getCameraPosition();
-            hideMapInfo();
-            if (mMap.getCameraPosition().zoom >= MINIMUM_REQUEST_ZOOM) {
-                LatLng center = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
-                int radius = getDistance(mMap.getProjection().fromScreenLocation(new Point(0, 0)), center) / 1000;
-                presenter.downloadGeocaches(center, radius);
-            } else
-                showMapInfo(R.string.zoom_map_to_download);
-        });
+        mMap.setOnCameraIdleListener(this::downloadGeocaches);
+    }
+
+    @Override
+    public void downloadGeocaches() {
+        mClusterManager.cluster();
+        CameraPosition cameraPosition = mMap.getCameraPosition();
+        hideMapInfo();
+        if (mMap.getCameraPosition().zoom >= MINIMUM_REQUEST_ZOOM) {
+            LatLng center = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
+            int radius = getDistance(mMap.getProjection().fromScreenLocation(new Point(0, 0)), center) / 1000;
+            presenter.downloadGeocaches(center, radius);
+        } else {
+            showMapInfo(R.string.zoom_map_to_download);
+        }
     }
 
     private void setupLocationListener() {
@@ -447,10 +452,11 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onSearchMap(SearchMapEvent event) {
-        presenter.getLocation(event.getQuerry());
-        EventBus.getDefault().removeStickyEvent(event);
+    @Override
+    public void clearMap() {
+        hideGeocacheInfo();
+        mClusterManager.clearItems();
+        //mMap.clear();
     }
 
     @Override
@@ -482,7 +488,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     }
 
     @Override
-    public void clusterGeocaches(ArrayList<Geocache> geocaches) {
+    public void addGeocaches(ArrayList<Geocache> geocaches) {
         mClusterManager.addItems(geocaches);
         mClusterManager.cluster();
     }
@@ -532,6 +538,18 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onSearchMap(SearchMapEvent event) {
+        presenter.getLocation(event.getQuerry());
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onMapFilter(MapFilterChangeEvent event) {
+        presenter.filterMap(event.isAvailabilityChanged());
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     private class CustomClusterRenderer extends DefaultClusterRenderer<Geocache> {

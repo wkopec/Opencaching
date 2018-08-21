@@ -11,6 +11,7 @@ public class Constants {
 
     public static final String OPENCACHING_CONSUMER_KEY = "eSLCuVzRJJsYUUfUs6Su";
     public static final String OPENCACHING_CONSUMER_KEY_SECRET = "nGdfx64ksCvwk7XDSnmsVCgGpnsFh9ZwG4B5Yweg";
-    public static final String GEOCACHES_STANDARD_FIELDS = "code|name|location|type|status|owner|size2|rating|founds|notfounds|recommendations|last_found|difficulty|terrain";
+    //public static final String GEOCACHES_STANDARD_FIELDS = "code|name|location|type|status|owner|size2|rating|founds|notfounds|recommendations|last_found|difficulty|terrain";
+    public static final String GEOCACHES_STANDARD_FIELDS = "code|name|location|type|status|url|owner|gc_code|is_found|is_not_found|is_watched|founds|notfounds|willattends|size2|difficulty|terrain|trip_time|trip_distance|rating|rating_votes|recommendations|req_passwd|short_description|description|hint2|images|attr_acodes|my_notes|trackables_count|trackables|date_created|date_hidden|last_found";
 
 }

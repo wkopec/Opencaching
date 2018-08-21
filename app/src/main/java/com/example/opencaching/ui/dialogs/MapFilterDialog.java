@@ -2,25 +2,34 @@ package com.example.opencaching.ui.dialogs;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatCheckBox;
 
 import com.example.opencaching.R;
+import com.example.opencaching.app.prefs.MapFiltersManager;
 import com.example.opencaching.ui.base.BaseDialog;
+import com.example.opencaching.utils.events.MapFilterChangeEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.example.opencaching.app.prefs.MapFiltersManager.MAP_FILTER_PREF;
+
 public class MapFilterDialog extends BaseDialog {
+
 
     @BindView(R.id.foundFilter)
     AppCompatCheckBox foundFilter;
     @BindView(R.id.notFoundFilter)
     AppCompatCheckBox notFoundFilter;
-    @BindView(R.id.ownFilter)
-    AppCompatCheckBox ownFilter;
+    @BindView(R.id.ownedFilter)
+    AppCompatCheckBox ownedFilter;
     @BindView(R.id.ignoredFilter)
     AppCompatCheckBox ignoredFilter;
     @BindView(R.id.trackableFilter)
@@ -55,6 +64,8 @@ public class MapFilterDialog extends BaseDialog {
     @BindView(R.id.webcamFilter)
     AppCompatCheckBox webcamFilter;
 
+    private MapFiltersManager mapFiltersManager;
+
     public static MapFilterDialog newInstance() {
         return new MapFilterDialog();
     }
@@ -67,41 +78,75 @@ public class MapFilterDialog extends BaseDialog {
     @Override
     protected void setupView() {
         setIcon(R.drawable.ic_filter);
+        //FIXME: change to DI
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(MAP_FILTER_PREF, MODE_PRIVATE);
+        mapFiltersManager = new MapFiltersManager(sharedPreferences);
+
         setFilters();
         setListeners();
     }
 
     @OnClick(R.id.filterGeocaches)
     public void onFilterButtonClick() {
-        //TODO: save filters
+        boolean isAvailabilityChanged = false;
+        if (mapFiltersManager.isAvailableFilter() != availableFilter.isChecked() ||
+                mapFiltersManager.isTempUnavailableFilter() != tempUnavailableFilter.isChecked() ||
+                mapFiltersManager.isArchivedFilter() != archivedFilter.isChecked()) {
+            isAvailabilityChanged = true;
+        }
+        saveFilters();
+        EventBus.getDefault().postSticky(new MapFilterChangeEvent(isAvailabilityChanged));
         dismiss();
     }
 
     private void setFilters() {
-        foundFilter.setChecked(false);
-        notFoundFilter.setChecked(true);
-        ownFilter.setChecked(true);
-        ignoredFilter.setChecked(false);
-        trackableFilter.setChecked(false);
-        availableFilter.setChecked(true);
-        tempUnavailableFilter.setChecked(false);
-        archivedFilter.setChecked(false);
-        ftfFilter.setChecked(false);
-        powerTrailFilter.setChecked(false);
+        foundFilter.setChecked(mapFiltersManager.isFoundFilter());
+        notFoundFilter.setChecked(mapFiltersManager.isNotFoundFilter());
+        ownedFilter.setChecked(mapFiltersManager.isOwnedFilter());
+        ignoredFilter.setChecked(mapFiltersManager.isIgnoredFilter());
+        trackableFilter.setChecked(mapFiltersManager.isTrackableFilter());
+        availableFilter.setChecked(mapFiltersManager.isAvailableFilter());
+        tempUnavailableFilter.setChecked(mapFiltersManager.isTempUnavailableFilter());
+        archivedFilter.setChecked(mapFiltersManager.isArchivedFilter());
+        ftfFilter.setChecked(mapFiltersManager.isFTFFilter());
+        powerTrailFilter.setChecked(mapFiltersManager.isPowerTrailFilter());
 
-        setGeocacheFilter(traditionalFilter, true);
-        setGeocacheFilter(multicacheFilter, true);
-        setGeocacheFilter(quizFilter, true);
-        setGeocacheFilter(unknownFilter, true);
-        setGeocacheFilter(virtualFilter, false);
-        setGeocacheFilter(eventFilter, true);
-        setGeocacheFilter(owncacheFilter, true);
-        setGeocacheFilter(movingFilter, false);
-        setGeocacheFilter(webcamFilter, false);
+        setGeocacheFilter(traditionalFilter, mapFiltersManager.isTraditionalFilter());
+        setGeocacheFilter(multicacheFilter, mapFiltersManager.isMulticacheFilter());
+        setGeocacheFilter(quizFilter, mapFiltersManager.isQuizFilter());
+        setGeocacheFilter(unknownFilter, mapFiltersManager.isUnknownFilter());
+        setGeocacheFilter(virtualFilter, mapFiltersManager.isVirtualFilter());
+        setGeocacheFilter(eventFilter, mapFiltersManager.isEventFilter());
+        setGeocacheFilter(owncacheFilter, mapFiltersManager.isOwncacheFilter());
+        setGeocacheFilter(movingFilter, mapFiltersManager.isMovingFilter());
+        setGeocacheFilter(webcamFilter, mapFiltersManager.isWebcamFilter());
 
     }
 
-    private void setGeocacheFilter(AppCompatCheckBox checkBox, boolean isChecked){
+    private void saveFilters() {
+        mapFiltersManager.saveFoundFilter(foundFilter.isChecked());
+        mapFiltersManager.saveNotFoundFilter(notFoundFilter.isChecked());
+        mapFiltersManager.saveOwnedFilter(ownedFilter.isChecked());
+        mapFiltersManager.saveIgnoredFilter(ignoredFilter.isChecked());
+        mapFiltersManager.saveTrackableFilter(trackableFilter.isChecked());
+        mapFiltersManager.saveAvailableFilter(availableFilter.isChecked());
+        mapFiltersManager.saveTempUnavailableFilter(tempUnavailableFilter.isChecked());
+        mapFiltersManager.saveArchivedFilter(archivedFilter.isChecked());
+        mapFiltersManager.saveFTFFilter(ftfFilter.isChecked());
+        mapFiltersManager.savePowerTrailFilter(powerTrailFilter.isChecked());
+
+        mapFiltersManager.saveTraditionalFilter(traditionalFilter.isChecked());
+        mapFiltersManager.saveMulticacheFilter(multicacheFilter.isChecked());
+        mapFiltersManager.saveQuizFilter(quizFilter.isChecked());
+        mapFiltersManager.saveUnknownFilter(unknownFilter.isChecked());
+        mapFiltersManager.saveVirtualFilter(virtualFilter.isChecked());
+        mapFiltersManager.saveEventFilter(eventFilter.isChecked());
+        mapFiltersManager.saveOwncacheFilter(owncacheFilter.isChecked());
+        mapFiltersManager.saveMovingFilter(movingFilter.isChecked());
+        mapFiltersManager.saveWebcamFilter(webcamFilter.isChecked());
+    }
+
+    private void setGeocacheFilter(AppCompatCheckBox checkBox, boolean isChecked) {
         checkBox.setChecked(isChecked);
         animateDrawable(checkBox.getBackground(), isChecked);
     }
@@ -118,28 +163,28 @@ public class MapFilterDialog extends BaseDialog {
         webcamFilter.setOnCheckedChangeListener((buttonView, isChecked) -> animateDrawable(buttonView.getBackground(), isChecked));
 
         foundFilter.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(!isChecked && !notFoundFilter.isChecked()) {
+            if (!isChecked && !notFoundFilter.isChecked()) {
                 notFoundFilter.setChecked(true);
             }
         });
         notFoundFilter.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(!isChecked && !foundFilter.isChecked()) {
+            if (!isChecked && !foundFilter.isChecked()) {
                 foundFilter.setChecked(true);
             }
         });
 
         availableFilter.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(!isChecked && !tempUnavailableFilter.isChecked() && !archivedFilter.isChecked()) {
+            if (!isChecked && !tempUnavailableFilter.isChecked() && !archivedFilter.isChecked()) {
                 tempUnavailableFilter.setChecked(true);
             }
         });
         tempUnavailableFilter.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(!isChecked && !availableFilter.isChecked() && !archivedFilter.isChecked()) {
+            if (!isChecked && !availableFilter.isChecked() && !archivedFilter.isChecked()) {
                 availableFilter.setChecked(true);
             }
         });
         archivedFilter.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(!isChecked && !availableFilter.isChecked() && !tempUnavailableFilter.isChecked()) {
+            if (!isChecked && !availableFilter.isChecked() && !tempUnavailableFilter.isChecked()) {
                 availableFilter.setChecked(true);
             }
         });
@@ -147,7 +192,7 @@ public class MapFilterDialog extends BaseDialog {
 
     public void animateDrawable(final Drawable drawable, boolean isSelected) {
         ValueAnimator colorAnim;
-        if(isSelected) {
+        if (isSelected) {
             colorAnim = ObjectAnimator.ofFloat(0.8f, 0f);
         } else {
             colorAnim = ObjectAnimator.ofFloat(0f, 0.8f);

@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 
 public class MapFiltersManager {
 
+    public static String MAP_FILTER_PREF = "pref_map_filter";
+
     private static final String KEY_MAP_FILTER_FOUND = "map_filter_found:";
     private static final String KEY_MAP_FILTER_NOT_FOUND = "map_filter_not_found:";
     private static final String KEY_MAP_FILTER_OWNED = "map_filter_owned:";
@@ -21,7 +23,7 @@ public class MapFiltersManager {
     private static final String KEY_MAP_UNKNOWN = "map_filter_unknown:";
     private static final String KEY_MAP_VIRTUAL = "map_filter_virtual:";
     private static final String KEY_MAP_EVENT = "map_filter_event:";
-    private static final String KEY_MAP_OWN = "map_filter_own:";
+    private static final String KEY_MAP_OWNCACHE = "map_filter_owncache:";
     private static final String KEY_MAP_MOVING = "map_filter_moving:";
     private static final String KEY_MAP_WEBCAM = "map_filter_webcam:";
 
@@ -161,12 +163,12 @@ public class MapFiltersManager {
     public boolean isEventFilter() {
         return prefs.getBoolean(KEY_MAP_EVENT, true);
     }
-    public void saveOwnFilter(boolean isOwnFilter) {
-        getEditor().putBoolean(KEY_MAP_OWN, isOwnFilter).commit();
+    public void saveOwncacheFilter(boolean isOwnFilter) {
+        getEditor().putBoolean(KEY_MAP_OWNCACHE, isOwnFilter).commit();
     }
 
-    public boolean isOwnFilter() {
-        return prefs.getBoolean(KEY_MAP_OWN, true);
+    public boolean isOwncacheFilter() {
+        return prefs.getBoolean(KEY_MAP_OWNCACHE, true);
     }
     public void saveMovingFilter(boolean isMovingFilter) {
         getEditor().putBoolean(KEY_MAP_MOVING, isMovingFilter).commit();

@@ -1,7 +1,5 @@
 package com.example.opencaching.network.models;
 
-import android.location.Location;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -24,12 +22,14 @@ public class CoveredArea {
             if(getDistance(area.getCenter(), point) < area.getRadius())
                 return true;
         return false;
-
-        //return getDistance(center, point) < area.getRadius();
     }
 
     public void addArea(LatLng center, int radius){
         coveredArea.add(new Area(center, radius));
+    }
+
+    public void clear() {
+        coveredArea.clear();
     }
 
     private class Area {

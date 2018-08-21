@@ -25,9 +25,13 @@ public class MapContract{
 
         void moveMapCamera(LatLng latLng, float zoom, int duration);
 
-        void clusterGeocaches(ArrayList<Geocache> geocaches);
+        void addGeocaches(ArrayList<Geocache> geocaches);
 
         void hideGeocacheInfo();
+
+        void clearMap();
+
+        void downloadGeocaches();
 
     }
 
@@ -38,6 +42,8 @@ public class MapContract{
         void getLocation(String address);
 
         void getUserData();
+
+        void filterMap(boolean isAvailabilityChanged);
 
         Geocache getGeocache(Marker marker);
 

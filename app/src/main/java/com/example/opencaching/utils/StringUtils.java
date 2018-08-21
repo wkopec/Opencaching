@@ -20,13 +20,13 @@ public class StringUtils {
     public static String REQUET_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
     public static String getApiFormatedFields(ArrayList<String> fields) {
-        String apiFormatedWaypoints = fields.get(0);
+        StringBuilder apiFormatedWaypoints = new StringBuilder(fields.get(0));
         if (fields.size() > 1) {
             for (int i = 1; i < fields.size(); i++) {
-                apiFormatedWaypoints += "|" + fields.get(i);
+                apiFormatedWaypoints.append("|").append(fields.get(i));
             }
         }
-        return apiFormatedWaypoints;
+        return apiFormatedWaypoints.toString();
     }
 
     public static String getDateString(DateTime date, Context context) {

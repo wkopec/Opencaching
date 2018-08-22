@@ -1,4 +1,4 @@
-package com.example.opencaching.network.models.okapi;
+package com.example.opencaching.data.models.okapi;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -12,11 +12,13 @@ import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 
+import io.realm.RealmObject;
+
 /**
  * Created by Volfram on 16.07.2017.
  */
 
-public class Geocache implements ClusterItem, Parcelable {
+public class Geocache extends RealmObject implements ClusterItem, Parcelable {
 
     @SerializedName("code")
     @Expose

@@ -1,4 +1,4 @@
-package com.example.opencaching.network.models;
+package com.example.opencaching.data.models;
 
 import com.example.opencaching.R;
 import com.google.gson.annotations.SerializedName;

@@ -1,6 +1,6 @@
-package com.example.opencaching.network.models.okapi;
+package com.example.opencaching.data.models.okapi;
 
-import com.example.opencaching.network.models.Error;
+import com.example.opencaching.data.models.Error;
 import com.google.gson.annotations.SerializedName;
 
 

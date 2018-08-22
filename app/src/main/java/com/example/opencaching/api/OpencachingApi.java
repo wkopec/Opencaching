@@ -1,11 +1,11 @@
-package com.example.opencaching.network.api;
+package com.example.opencaching.api;
 
 import android.content.Context;
 
-import com.example.opencaching.network.models.okapi.Geocache;
-import com.example.opencaching.network.models.okapi.GeocacheLog;
-import com.example.opencaching.network.models.okapi.User;
-import com.example.opencaching.network.models.okapi.WaypointResults;
+import com.example.opencaching.data.models.okapi.Geocache;
+import com.example.opencaching.data.models.okapi.GeocacheLog;
+import com.example.opencaching.data.models.okapi.User;
+import com.example.opencaching.data.models.okapi.WaypointResults;
 import com.example.opencaching.utils.UserUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

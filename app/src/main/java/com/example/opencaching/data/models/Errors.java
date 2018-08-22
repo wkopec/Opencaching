@@ -1,4 +1,4 @@
-package com.example.opencaching.network.models;
+package com.example.opencaching.data.models;
 
 import java.util.ArrayList;
 

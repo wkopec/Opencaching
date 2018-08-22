@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.opencaching.R;
 import com.example.opencaching.ui.base.BaseActivity;
-import com.example.opencaching.network.models.okapi.GeocacheLog;
+import com.example.opencaching.data.models.okapi.GeocacheLog;
 import com.example.opencaching.ui.base.BaseFragment;
 
 import java.util.ArrayList;

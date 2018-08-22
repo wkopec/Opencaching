@@ -3,10 +3,10 @@ package com.example.opencaching.ui.geocache.info;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.example.opencaching.network.models.Error;
+import com.example.opencaching.data.models.Error;
 import com.example.opencaching.ui.base.BasePresenter;
-import com.example.opencaching.network.models.okapi.Geocache;
-import com.example.opencaching.network.api.OpencachingApi;
+import com.example.opencaching.data.models.okapi.Geocache;
+import com.example.opencaching.api.OpencachingApi;
 import com.example.opencaching.utils.ApiUtils;
 
 import retrofit2.Call;

@@ -7,15 +7,15 @@ import android.util.Log;
 
 import com.example.opencaching.R;
 import com.example.opencaching.app.prefs.MapFiltersManager;
-import com.example.opencaching.network.models.okapi.User;
+import com.example.opencaching.data.models.okapi.User;
 import com.example.opencaching.ui.base.BasePresenter;
-import com.example.opencaching.network.models.CoveredArea;
-import com.example.opencaching.network.models.geocoding.GeocodingResults;
-import com.example.opencaching.network.models.geocoding.Location;
-import com.example.opencaching.network.models.okapi.Geocache;
-import com.example.opencaching.network.models.okapi.WaypointResults;
+import com.example.opencaching.data.models.CoveredArea;
+import com.example.opencaching.data.models.geocoding.GeocodingResults;
+import com.example.opencaching.data.models.geocoding.Location;
+import com.example.opencaching.data.models.okapi.Geocache;
+import com.example.opencaching.data.models.okapi.WaypointResults;
 
-import com.example.opencaching.network.api.OpencachingApi;
+import com.example.opencaching.api.OpencachingApi;
 import com.example.opencaching.utils.ApiUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -31,7 +31,7 @@ import retrofit2.Response;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.opencaching.app.prefs.MapFiltersManager.MAP_FILTER_PREF;
-import static com.example.opencaching.network.api.GoogleMapsApi.service;
+import static com.example.opencaching.api.GoogleMapsApi.service;
 import static com.example.opencaching.utils.Constants.GEOCACHES_STANDARD_FIELDS;
 import static com.example.opencaching.utils.IntegerUtils.getDistance;
 import static com.example.opencaching.utils.StringUtils.getApiFormatedFields;

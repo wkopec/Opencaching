@@ -1,6 +1,6 @@
 package com.example.opencaching.ui.base;
 
-import com.example.opencaching.network.models.Error;
+import com.example.opencaching.data.models.Error;
 
 /**
  * Created by Wojtek on 22.10.2017.

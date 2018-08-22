@@ -1,4 +1,4 @@
-package com.example.opencaching.network.models.okapi;
+package com.example.opencaching.data.models.okapi;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.Expose;

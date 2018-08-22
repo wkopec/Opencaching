@@ -1,4 +1,4 @@
-package com.example.opencaching.network.models.okapi;
+package com.example.opencaching.data.models.okapi;
 
 /**
  * Created by Volfram on 16.07.2017.

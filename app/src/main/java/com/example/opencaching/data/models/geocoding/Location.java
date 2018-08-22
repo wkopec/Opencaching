@@ -1,4 +1,4 @@
-package com.example.opencaching.network.models.geocoding;
+package com.example.opencaching.data.models.geocoding;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

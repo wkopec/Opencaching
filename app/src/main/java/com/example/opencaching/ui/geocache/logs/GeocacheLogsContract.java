@@ -1,6 +1,6 @@
 package com.example.opencaching.ui.geocache.logs;
 
-import com.example.opencaching.network.models.okapi.GeocacheLog;
+import com.example.opencaching.data.models.okapi.GeocacheLog;
 import com.example.opencaching.ui.base.BaseContract;
 
 import java.util.ArrayList;

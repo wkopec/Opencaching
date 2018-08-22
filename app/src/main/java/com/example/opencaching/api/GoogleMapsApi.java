@@ -1,9 +1,9 @@
-package com.example.opencaching.network.api;
+package com.example.opencaching.api;
 
 import android.util.Log;
 
 import com.example.opencaching.BuildConfig;
-import com.example.opencaching.network.models.geocoding.GeocodingResults;
+import com.example.opencaching.data.models.geocoding.GeocodingResults;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

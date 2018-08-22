@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.opencaching.R;
-import com.example.opencaching.network.models.okapi.GeocacheLog;
+import com.example.opencaching.data.models.okapi.GeocacheLog;
 import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;

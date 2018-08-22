@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.opencaching.R;
-import com.example.opencaching.network.models.Error;
+import com.example.opencaching.data.models.Error;
 import com.example.opencaching.ui.authorization.LoginActivity;
 
 import org.greenrobot.eventbus.EventBus;

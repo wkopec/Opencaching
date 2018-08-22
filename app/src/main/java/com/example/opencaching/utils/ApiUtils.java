@@ -2,8 +2,8 @@ package com.example.opencaching.utils;
 
 
 import com.example.opencaching.R;
-import com.example.opencaching.network.models.Error;
-import com.example.opencaching.network.models.Errors;
+import com.example.opencaching.data.models.Error;
+import com.example.opencaching.data.models.Errors;
 import com.google.gson.Gson;
 
 import java.net.ConnectException;

@@ -1,6 +1,6 @@
 package com.example.opencaching.ui.main.map;
 
-import com.example.opencaching.network.models.okapi.Geocache;
+import com.example.opencaching.data.models.okapi.Geocache;
 import com.example.opencaching.ui.base.BaseContract;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;

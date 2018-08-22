@@ -4,9 +4,8 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.example.opencaching.R;
-import com.example.opencaching.network.models.okapi.User;
 import com.example.opencaching.ui.base.BasePresenter;
-import com.example.opencaching.network.api.OpencachingApi;
+import com.example.opencaching.api.OpencachingApi;
 import com.example.opencaching.utils.ApiUtils;
 import com.example.opencaching.utils.UserUtils;
 

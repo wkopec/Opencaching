@@ -1,4 +1,4 @@
-package com.example.opencaching.network.api;
+package com.example.opencaching.api;
 
 import android.util.Log;
 

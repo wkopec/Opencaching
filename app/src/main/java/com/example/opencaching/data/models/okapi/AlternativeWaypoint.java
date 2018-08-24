@@ -3,11 +3,13 @@ package com.example.opencaching.data.models.okapi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 /**
  * Created by Volfram on 16.07.2017.
  */
 
-public class AlternativeWaypoint {
+public class AlternativeWaypoint extends RealmObject {
 
     @SerializedName("name")
     @Expose
@@ -50,5 +52,8 @@ public class AlternativeWaypoint {
 
     public String getDescription() {
         return description;
+    }
+
+    public AlternativeWaypoint() {
     }
 }

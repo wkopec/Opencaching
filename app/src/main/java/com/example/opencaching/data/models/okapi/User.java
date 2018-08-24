@@ -4,11 +4,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 /**
  * Created by Volfram on 16.07.2017.
  */
 
-public class User {
+public class User extends RealmObject {
 
     @SerializedName("uuid")
     @Expose
@@ -40,6 +42,9 @@ public class User {
     @SerializedName("home_location")
     @Expose
     private String homeLocation;        //home location of the user;
+
+    public User() {
+    }
 
     public String getUuid() {
         return uuid;

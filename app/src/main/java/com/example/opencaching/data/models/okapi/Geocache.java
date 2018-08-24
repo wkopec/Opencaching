@@ -10,8 +10,7 @@ import com.google.maps.android.clustering.ClusterItem;
 
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
-
+import io.realm.RealmList;
 import io.realm.RealmObject;
 
 /**
@@ -109,13 +108,13 @@ public class Geocache extends RealmObject implements ClusterItem, Parcelable {
     private String hint;                //cache hints/spoilers
     @SerializedName("images")
     @Expose
-    private ArrayList<Image> images;    //list of dictionaries
+    private RealmList<Image> images;    //list of dictionaries
     @SerializedName("attr_acodes")
     @Expose
-    private ArrayList<String> attributes;   //unordered list of OKAPI geocache-attribute IDs (A-codes) with which the cache was tagged
+    private RealmList<String> attributes;   //unordered list of OKAPI geocache-attribute IDs (A-codes) with which the cache was tagged
     @SerializedName("latest_logs")
     @Expose
-    private ArrayList<GeocacheLog> latestGeocacheLogs;  //a couple of latest log entries in the cache
+    private RealmList<GeocacheLog> latestGeocacheLogs;  //a couple of latest log entries in the cache
     @SerializedName("my_notes")
     @Expose
     private String notes;               //user's notes on the cache
@@ -124,10 +123,10 @@ public class Geocache extends RealmObject implements ClusterItem, Parcelable {
     private int trackablesCount;        //a total number of trackables hidden within the cache
     @SerializedName("trackables")
     @Expose
-    private ArrayList<Trackable> trackables;    //list of dictionaries, each dictionary represents one trackable hidden within the cache container
+    private RealmList<Trackable> trackables;    //list of dictionaries, each dictionary represents one trackable hidden within the cache container
     @SerializedName("alt_wpts")
     @Expose
-    private ArrayList<AlternativeWaypoint> alternativeWaypoints;
+    private RealmList<AlternativeWaypoint> alternativeWaypoints;
     @SerializedName("state")
     @Expose
     private String state;               //name of the state the cache is placed in
@@ -143,6 +142,9 @@ public class Geocache extends RealmObject implements ClusterItem, Parcelable {
     @SerializedName("date_hidden")
     @Expose
     private String hiddenDate;          //date and time when (the geocache was first hidden / the geocache was first published / the event takes place) (ISO 8601)
+
+    public Geocache() {
+    }
 
     private Geocache(Parcel in) {
         this.code = in.readString();
@@ -288,15 +290,15 @@ public class Geocache extends RealmObject implements ClusterItem, Parcelable {
         return hint;
     }
 
-    public ArrayList<Image> getImages() {
+    public RealmList<Image> getImages() {
         return images;
     }
 
-    public ArrayList<String> getAttributes() {
+    public RealmList<String> getAttributes() {
         return attributes;
     }
 
-    public ArrayList<GeocacheLog> getLatestGeocacheLogs() {
+    public RealmList<GeocacheLog> getLatestGeocacheLogs() {
         return latestGeocacheLogs;
     }
 
@@ -308,11 +310,11 @@ public class Geocache extends RealmObject implements ClusterItem, Parcelable {
         return trackablesCount;
     }
 
-    public ArrayList<Trackable> getTrackables() {
+    public RealmList<Trackable> getTrackables() {
         return trackables;
     }
 
-    public ArrayList<AlternativeWaypoint> getAlternativeWaypoints() {
+    public RealmList<AlternativeWaypoint> getAlternativeWaypoints() {
         return alternativeWaypoints;
     }
 

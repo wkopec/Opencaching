@@ -5,13 +5,14 @@ import com.google.gson.annotations.SerializedName;
 
 import org.joda.time.DateTime;
 
-import java.util.List;
+import io.realm.RealmList;
+import io.realm.RealmObject;
 
 /**
  * Created by Volfram on 16.07.2017.
  */
 
-public class GeocacheLog {
+public class GeocacheLog extends RealmObject {
 
     @SerializedName("uuid")
     @Expose
@@ -33,7 +34,10 @@ public class GeocacheLog {
     private boolean isRecommended;  //true if the author included his recommendation in this log entry
     @SerializedName("images")
     @Expose
-    private List<Image> images;     //list of dictionaries
+    private RealmList<Image> images;     //list of dictionaries
+
+    public GeocacheLog() {
+    }
 
     public GeocacheLog(String uuid, String date, User user, String type, String comment) {
         this.uuid = uuid;
@@ -67,7 +71,7 @@ public class GeocacheLog {
         return isRecommended;
     }
 
-    public List<Image> getImages() {
+    public RealmList<Image> getImages() {
         return images;
     }
 }

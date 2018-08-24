@@ -3,11 +3,13 @@ package com.example.opencaching.data.models.okapi;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 /**
  * Created by Volfram on 16.07.2017.
  */
 
-public class Image {
+public class Image extends RealmObject {
 
     @SerializedName("uuid")
     @Expose
@@ -28,4 +30,6 @@ public class Image {
     @Expose
     private boolean isSpoiler;        //if true then the image is a spoiler image
 
+    public Image() {
+    }
 }

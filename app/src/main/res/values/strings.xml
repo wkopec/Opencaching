@@ -108,6 +108,7 @@
     <string name="save_all">Zapisz skrzynki</string>
     <string name="compass">Kompas</string>
     <string name="permission_denied_message_fine_location">Ta funkcja wymaga uprawnie do lokalizacji urządzenia.</string>
+    <string name="save">zapisz</string>
 
 
 </resources>

@@ -25,6 +25,7 @@ public class GeocacheLogsContract {
 
     public interface Presenter extends BaseContract.Presenter {
 
+        void getGeocacheLogs(String code);
 
     }
 

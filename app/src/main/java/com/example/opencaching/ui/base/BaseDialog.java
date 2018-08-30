@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,9 @@ import com.example.opencaching.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.support.DaggerAppCompatDialogFragment;
 
-public abstract class BaseDialog extends AppCompatDialogFragment {
+public abstract class BaseDialog extends DaggerAppCompatDialogFragment {
 
     protected abstract int getChildId();
 

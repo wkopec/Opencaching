@@ -12,15 +12,17 @@ import org.joda.time.DateTime;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Volfram on 16.07.2017.
  */
 
-public class Geocache extends RealmObject implements ClusterItem, Parcelable {
+public class Geocache extends RealmObject implements ClusterItem, Parcelable, Cloneable {
 
     @SerializedName("code")
     @Expose
+    @PrimaryKey
     private String code;                //unique Opencaching code of the geocache
     @SerializedName("name")
     @Expose
@@ -172,6 +174,11 @@ public class Geocache extends RealmObject implements ClusterItem, Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     public String getCode() {

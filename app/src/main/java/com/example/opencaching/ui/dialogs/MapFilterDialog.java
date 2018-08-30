@@ -2,7 +2,6 @@ package com.example.opencaching.ui.dialogs;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -15,14 +14,16 @@ import com.example.opencaching.utils.events.MapFilterChangeEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static android.content.Context.MODE_PRIVATE;
-import static com.example.opencaching.app.prefs.MapFiltersManager.MAP_FILTER_PREF;
 
 public class MapFilterDialog extends BaseDialog {
 
+    @Inject
+    MapFiltersManager mapFiltersManager;
 
     @BindView(R.id.foundFilter)
     AppCompatCheckBox foundFilter;
@@ -64,8 +65,6 @@ public class MapFilterDialog extends BaseDialog {
     @BindView(R.id.webcamFilter)
     AppCompatCheckBox webcamFilter;
 
-    private MapFiltersManager mapFiltersManager;
-
     public static MapFilterDialog newInstance() {
         return new MapFilterDialog();
     }
@@ -78,10 +77,6 @@ public class MapFilterDialog extends BaseDialog {
     @Override
     protected void setupView() {
         setIcon(R.drawable.ic_filter);
-        //FIXME: change to DI
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences(MAP_FILTER_PREF, MODE_PRIVATE);
-        mapFiltersManager = new MapFiltersManager(sharedPreferences);
-
         setFilters();
         setListeners();
     }

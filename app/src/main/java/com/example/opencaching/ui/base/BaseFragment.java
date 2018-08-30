@@ -1,15 +1,16 @@
 package com.example.opencaching.ui.base;
 
-import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.example.opencaching.data.models.Error;
+
+import dagger.android.support.DaggerFragment;
 
 /**
  * Created by Wojtek on 22.10.2017.
  */
 
-public abstract class BaseFragment extends Fragment implements BaseContract.View {
+public abstract class BaseFragment extends DaggerFragment implements BaseContract.View {
 
 
     private BaseContract.Presenter presenter;

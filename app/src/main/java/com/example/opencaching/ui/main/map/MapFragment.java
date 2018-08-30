@@ -60,6 +60,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -125,16 +127,20 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     @BindView(R.id.terrain)
     RatingBar terrain;
 
-    private MapContract.Presenter presenter;
+    @Inject
+    MapContract.Presenter presenter;
+
     private MainActivity activity;
     private GoogleMap mMap;
     private ClusterManager<Geocache> mClusterManager;
     private Marker lastSelectedMarker;
+    private Marker lastKnownLocationMarker;
     private boolean isMapInfoShown;
     private boolean isGeocacheInfoShown;
     private BottomSheetBehavior sheetBehavior;
     private Animation fabOpen, fabClose;
-    private Location deviceLocation;
+    private View locationButton;
+
     Unbinder unbinder;
 
     @Nullable
@@ -143,10 +149,10 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         final View view = inflater.inflate(R.layout.fragment_map, null);
         unbinder = ButterKnife.bind(this, view);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
+        locationButton = ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
         mapFragment.getMapAsync(this);
         activity = (MainActivity) getActivity();
         activity.setActionBarTitle(R.string.app_name);
-        presenter = new MapFragmentPresenter(this, activity);
         setPresenter(presenter);
         setGeocacheBottomSheet();
         setAnimations();
@@ -248,30 +254,39 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     }
 
     private void setupLocationListener() {
-        if( ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            mMap.setMyLocationEnabled(true);
+            if (locationButton != null) {
+                locationButton.setVisibility(View.GONE);
+            }
+
             LocationListener locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-                    deviceLocation = location;
                 }
 
                 @Override
                 public void onStatusChanged(String provider, int status, Bundle extras) {
-
                 }
 
                 @Override
                 public void onProviderEnabled(String provider) {
-
+                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        mMap.setMyLocationEnabled(true);
+                        if (locationButton != null) {
+                            locationButton.setVisibility(View.GONE);
+                        }
+                    }
                 }
 
                 @Override
                 public void onProviderDisabled(String provider) {
+                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        mMap.setMyLocationEnabled(false);
 
+                    }
                 }
             };
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, locationListener);
@@ -280,12 +295,10 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     }
 
     private void setLastSelectedMarkerIcon() {
-        if (lastSelectedMarker != null) {
-            try {
-                lastSelectedMarker.setIcon(BitmapDescriptorFactory.fromResource(getGeocacheIcon(presenter.getGeocache(lastSelectedMarker).getType())));
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
+        try {
+            lastSelectedMarker.setIcon(BitmapDescriptorFactory.fromResource(getGeocacheIcon(presenter.getGeocache(lastSelectedMarker).getType())));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -326,7 +339,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         geocacheSize.setText(getFormatedGeocacheInfoLabel(R.string.info_size, getString(getGeocacheSize(geocache.getSize()))));
         geocacheOwner.setText(getFormatedGeocacheInfoLabel(R.string.info_owner, geocache.getOwner().getUsername()));
         geocacheType.setText(getFormatedGeocacheInfoLabel(R.string.info_type, getString(getGeocacheType(geocache.getType()))));
-        if(geocache.getLastFound() == null) {
+        if (geocache.getLastFound() == null) {
             geocacheLastFound.setText(getFormatedGeocacheInfoLabel(R.string.info_empty, getString(R.string.waiting_for_ftf)));
         } else {
             geocacheLastFound.setText(getFormatedGeocacheInfoLabel(R.string.info_last_found, getDateString(geocache.getLastFound(), getContext())));
@@ -343,7 +356,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     }
 
     private SpannableStringBuilder getFormatedGeocacheInfoLabel(int res, String name) {
-        SpannableStringBuilder spannableString= new SpannableStringBuilder(String.format(getString(res), name));
+        SpannableStringBuilder spannableString = new SpannableStringBuilder(String.format(getString(res), name));
         spannableString.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), spannableString.length() - name.length(), spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableString;
     }
@@ -364,7 +377,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 if (slideOffset < 0) {
-                    if(isGeocacheInfoShown) {
+                    if (isGeocacheInfoShown) {
                         foundButton.startAnimation(fabClose);
                         notFoundButton.startAnimation(fabClose);
                         foundButton.setClickable(false);
@@ -374,7 +387,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
                     navigateButton.setScaleX(slideOffset + 1);
                     navigateButton.setScaleY(slideOffset + 1);
                 } else {
-                    if(!isGeocacheInfoShown) {
+                    if (!isGeocacheInfoShown) {
                         foundButton.startAnimation(fabOpen);
                         notFoundButton.startAnimation(fabOpen);
                         foundButton.setClickable(true);
@@ -407,12 +420,16 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     @OnClick(R.id.myLocationButton)
     public void onMyLocationClick() {
-        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             checkFineLocationPermission();
         } else {
-            if(deviceLocation != null) {
-                moveMapCamera(new LatLng(deviceLocation.getLatitude(), deviceLocation.getLongitude()), mMap.getCameraPosition().zoom, 1000);
+            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                locationButton.callOnClick();
+            }else{
+                // TODO: showGPSDisabledAlertToUser();
             }
+
         }
     }
 
@@ -438,7 +455,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     private void setAnimations() {
         fabOpen = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
-        fabClose = AnimationUtils.loadAnimation(getContext(),R.anim.fab_close);
+        fabClose = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
     }
 
     @Override
@@ -451,7 +468,6 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     public void clearMap() {
         hideGeocacheInfo();
         mClusterManager.clearItems();
-        //mMap.clear();
     }
 
     @Override

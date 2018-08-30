@@ -2,6 +2,8 @@ package com.example.opencaching.app.prefs;
 
 import android.content.SharedPreferences;
 
+import javax.inject.Inject;
+
 public class MapFiltersManager {
 
     public static String MAP_FILTER_PREF = "pref_map_filter";
@@ -29,6 +31,7 @@ public class MapFiltersManager {
 
     private final SharedPreferences prefs;
 
+    @Inject
     public MapFiltersManager(SharedPreferences preferences) {
         this.prefs = preferences;
     }

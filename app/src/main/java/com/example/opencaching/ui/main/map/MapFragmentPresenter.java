@@ -8,6 +8,7 @@ import android.util.Log;
 import com.example.opencaching.R;
 import com.example.opencaching.app.prefs.MapFiltersManager;
 import com.example.opencaching.data.models.okapi.User;
+import com.example.opencaching.data.repository.GeocacheRepository;
 import com.example.opencaching.ui.base.BasePresenter;
 import com.example.opencaching.data.models.CoveredArea;
 import com.example.opencaching.data.models.geocoding.GeocodingResults;
@@ -25,6 +26,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.inject.Inject;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,6 +49,9 @@ import static com.example.opencaching.utils.UserUtils.setUserHomeLocation;
 
 public class MapFragmentPresenter extends BasePresenter implements MapContract.Presenter {
 
+    @Inject
+    GeocacheRepository geocacheRepository;
+
     private static final float DEFAULT_LOCATION_ZOOM = 12;
     private static final int GEOCACHE_REQUEST_LIMIT = 500;      //max 500
     private static final int MINIMUM_REQUEST_RADIUS = 10;      //in km
@@ -57,14 +65,13 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
 
     private MapFiltersManager mapFiltersManager;
 
-    public MapFragmentPresenter(MapContract.View view, Context context) {
+    @Inject
+    public MapFragmentPresenter(MapContract.View view, Context context, MapFiltersManager mapFiltersManager) {
         this.view = view;
         this.context = context;
+        this.mapFiltersManager = mapFiltersManager;
         storedGeocaches = new HashMap<>();
         coveredArea = new CoveredArea();
-        //FIXME: change to DI
-        SharedPreferences sharedPreferences = context.getSharedPreferences(MAP_FILTER_PREF, MODE_PRIVATE);
-        mapFiltersManager = new MapFiltersManager(sharedPreferences);
     }
 
     @Override
@@ -163,6 +170,7 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
             }
             iterator.remove();
         }
+        geocacheRepository.addOrUpdate(newGeocachesArray);
         storedGeocaches.putAll(newGeocaches);
 
         view.addGeocaches(filterGeocaches(newGeocachesArray));
@@ -177,13 +185,10 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
             } else if(!mapFiltersManager.isNotFoundFilter() && !geocache.isFound()) {
                 filteredGeocaches.remove(geocache);
             }
-//            else if(mapFiltersManager.isOwnedFilter() && geocache.o){
-//
-//            }
         }
 
-
         return filteredGeocaches;
+        //return geocacheRepository.loadMapFilteredGeocaches();
     }
 
 

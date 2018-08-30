@@ -15,35 +15,36 @@
         android:layout_height="@dimen/_3sdp"
         android:background="@drawable/shadow" />
 
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/geocacheInfoHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical"
-        android:paddingStart="@dimen/spacing_small"
-        android:paddingEnd="@dimen/spacing_small"
         android:paddingBottom="@dimen/spacing_small"
+        android:paddingEnd="@dimen/spacing_small"
+        android:paddingStart="@dimen/spacing_small"
         android:paddingTop="@dimen/spacing_very_small">
 
         <View
             android:id="@+id/dragger"
             android:layout_width="@dimen/spacing_normal_x1.5"
             android:layout_height="@dimen/_2sdp"
-            android:background="@drawable/background_light_gray_rounded"
             android:layout_marginTop="@dimen/spacing_very_small"
-            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/background_light_gray_rounded"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/geocacheTopLabel"
             style="@style/Text.Primary.VerySmall"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_very_small"
             android:text="OP7243 | N 50° 39.201 E 40° 19.201"
             android:textColor="@color/gray"
-            android:layout_marginTop="@dimen/spacing_very_small"
             app:layout_constraintEnd_toStartOf="@+id/navigateButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dragger" />
@@ -65,16 +66,16 @@
             style="@style/Text.Primary.VerySmall"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/spacing_normal"
             android:layout_marginEnd="@dimen/_6sdp"
             android:paddingTop="@dimen/_12sdp"
-            android:layout_marginBottom="@dimen/spacing_normal"
             android:text="@string/navigate"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/geocacheFound"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="invisible"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
@@ -226,7 +227,5 @@
             app:layout_constraintStart_toStartOf="@id/verticalGuideline"
             app:layout_constraintTop_toBottomOf="@id/geocacheTerrain" />
 
-
     </android.support.constraint.ConstraintLayout>
-
 </LinearLayout>

@@ -32,6 +32,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.opencaching.R;
+import com.example.opencaching.data.models.GeocacheClusterItem;
+import com.example.opencaching.data.repository.GeocacheRepository;
 import com.example.opencaching.ui.base.BaseFragment;
 import com.example.opencaching.ui.dialogs.MapFilterDialog;
 import com.example.opencaching.ui.geocache.GeocacheActivity;
@@ -129,10 +131,12 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     @Inject
     MapContract.Presenter presenter;
+    @Inject
+    GeocacheRepository geocacheRepository;
 
     private MainActivity activity;
     private GoogleMap mMap;
-    private ClusterManager<Geocache> mClusterManager;
+    private ClusterManager<GeocacheClusterItem> mClusterManager;
     private Marker lastSelectedMarker;
     private Marker lastKnownLocationMarker;
     private boolean isMapInfoShown;
@@ -217,8 +221,8 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
                     if (marker.getSnippet() != null) {
                         setLastSelectedMarkerIcon();
                         lastSelectedMarker = marker;
-                        marker.setIcon(BitmapDescriptorFactory.fromResource(getGeocacheSelectedIcon(presenter.getGeocache(marker).getType())));
-                        showGeocahceInfo(presenter.getGeocache(marker));
+                        marker.setIcon(BitmapDescriptorFactory.fromResource(getGeocacheSelectedIcon(geocacheRepository.loadGeocacheByCode(marker.getSnippet()).getType())));
+                        showGeocahceInfo(geocacheRepository.loadGeocacheByCode(marker.getSnippet()));
                         moveMapCamera(marker.getPosition(), mMap.getCameraPosition().zoom, 500);
                     }
                     activity.hideSearchView();
@@ -296,7 +300,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     private void setLastSelectedMarkerIcon() {
         try {
-            lastSelectedMarker.setIcon(BitmapDescriptorFactory.fromResource(getGeocacheIcon(presenter.getGeocache(lastSelectedMarker).getType())));
+            lastSelectedMarker.setIcon(BitmapDescriptorFactory.fromResource(getGeocacheIcon(geocacheRepository.loadGeocacheByCode(lastSelectedMarker.getSnippet()).getType())));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -500,7 +504,11 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     @Override
     public void addGeocaches(ArrayList<Geocache> geocaches) {
-        mClusterManager.addItems(geocaches);
+        ArrayList<GeocacheClusterItem> clusterItems = new ArrayList<>();
+        for(Geocache geocache : geocaches) {
+            clusterItems.add(geocache.getClusterItem());
+        }
+        mClusterManager.addItems(clusterItems);
         mClusterManager.cluster();
     }
 
@@ -563,22 +571,22 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         EventBus.getDefault().removeStickyEvent(event);
     }
 
-    private class CustomClusterRenderer extends DefaultClusterRenderer<Geocache> {
+    private class CustomClusterRenderer extends DefaultClusterRenderer<GeocacheClusterItem> {
 
-        CustomClusterRenderer(Context context, GoogleMap map, ClusterManager<Geocache> clusterManager) {
+        CustomClusterRenderer(Context context, GoogleMap map, ClusterManager<GeocacheClusterItem> clusterManager) {
             super(context, map, clusterManager);
         }
 
         @Override
-        protected void onClusterRendered(Cluster<Geocache> cluster, Marker marker) {
-            if (lastSelectedMarker != null && cluster.getItems().contains(presenter.getGeocache(lastSelectedMarker))) {
+        protected void onClusterRendered(Cluster<GeocacheClusterItem> cluster, Marker marker) {
+            if (lastSelectedMarker != null && cluster.getItems().contains(geocacheRepository.loadGeocacheByCode(lastSelectedMarker.getSnippet()).getClusterItem())) {
                 hideGeocacheInfo();
             }
             super.onClusterRendered(cluster, marker);
         }
 
         @Override
-        protected void onBeforeClusterItemRendered(Geocache geocache, MarkerOptions markerOptions) {
+        protected void onBeforeClusterItemRendered(GeocacheClusterItem geocache, MarkerOptions markerOptions) {
             markerOptions.icon(BitmapDescriptorFactory.fromResource(getGeocacheIcon(geocache.getType())));
             markerOptions.snippet(geocache.getSnippet());
             markerOptions.title(geocache.getTitle());
@@ -588,50 +596,50 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         }
     }
 
-    private class CustomInfoViewAdapter implements GoogleMap.InfoWindowAdapter {
-        @Override
-        public View getInfoWindow(Marker marker) {
-            if (marker.getSnippet() == null)
-                return null;
-            View view = LayoutInflater.from(activity).inflate(R.layout.item_geocache_marker_window, null);
-            Geocache geocache = presenter.getGeocache(marker);
-            TextView nameTextView = view.findViewById(R.id.geocacheName);
-            TextView codeTextView = view.findViewById(R.id.code);
-            TextView sizeTextView = view.findViewById(R.id.geocacheSize);
-            TextView rateTextView = view.findViewById(R.id.geocacheRate);
-            TextView ownerTextView = view.findViewById(R.id.geocacheOwner);
-            TextView foundsTextView = view.findViewById(R.id.geocacheFound);
-            TextView notFoundsTextView = view.findViewById(R.id.geocacheNotFound);
-            TextView recommendationsTextView = view.findViewById(R.id.geocacheRecommendation);
-
-            nameTextView.setText(geocache.getName());
-            codeTextView.setText(geocache.getCode());
-            sizeTextView.setText(activity.getString(R.string.info_size) + " " + activity.getString(getGeocacheSize(geocache.getSize())));
-            ownerTextView.setText(activity.getString(R.string.info_owner) + " " + geocache.getOwner().getUsername());
-            String[] rates = activity.getResources().getStringArray(R.array.geocache_rates);
-            if ((int) geocache.getRating() > 0)
-                rateTextView.setText(activity.getString(R.string.info_rating) + " " + rates[(int) geocache.getRating() - 1]);
-            else
-                rateTextView.setVisibility(View.GONE);
-
-            foundsTextView.setText(geocache.getFounds() + " x " + activity.getString(R.string.found));
-            notFoundsTextView.setText(geocache.getNotFounds() + " x " + activity.getString(R.string.not_found));
-
-            if (geocache.getRecommendations() == 0) {
-                ImageView recommendationImageView = view.findViewById(R.id.recommendationImageView);
-                recommendationImageView.setVisibility(View.GONE);
-                recommendationsTextView.setVisibility(View.GONE);
-            } else {
-                recommendationsTextView.setText(geocache.getRecommendations() + " x " + activity.getString(R.string.recommended));
-            }
-
-            return view;
-        }
-
-        @Override
-        public View getInfoContents(Marker marker) {
-            return null;
-        }
-    }
+//    private class CustomInfoViewAdapter implements GoogleMap.InfoWindowAdapter {
+//        @Override
+//        public View getInfoWindow(Marker marker) {
+//            if (marker.getSnippet() == null)
+//                return null;
+//            View view = LayoutInflater.from(activity).inflate(R.layout.item_geocache_marker_window, null);
+//            Geocache geocache = geocacheRepository.loadGeocacheByCode(marker.getSnippet());
+//            TextView nameTextView = view.findViewById(R.id.geocacheName);
+//            TextView codeTextView = view.findViewById(R.id.code);
+//            TextView sizeTextView = view.findViewById(R.id.geocacheSize);
+//            TextView rateTextView = view.findViewById(R.id.geocacheRate);
+//            TextView ownerTextView = view.findViewById(R.id.geocacheOwner);
+//            TextView foundsTextView = view.findViewById(R.id.geocacheFound);
+//            TextView notFoundsTextView = view.findViewById(R.id.geocacheNotFound);
+//            TextView recommendationsTextView = view.findViewById(R.id.geocacheRecommendation);
+//
+//            nameTextView.setText(geocache.getName());
+//            codeTextView.setText(geocache.getCode());
+//            sizeTextView.setText(activity.getString(R.string.info_size) + " " + activity.getString(getGeocacheSize(geocache.getSize())));
+//            ownerTextView.setText(activity.getString(R.string.info_owner) + " " + geocache.getOwner().getUsername());
+//            String[] rates = activity.getResources().getStringArray(R.array.geocache_rates);
+//            if ((int) geocache.getRating() > 0)
+//                rateTextView.setText(activity.getString(R.string.info_rating) + " " + rates[(int) geocache.getRating() - 1]);
+//            else
+//                rateTextView.setVisibility(View.GONE);
+//
+//            foundsTextView.setText(geocache.getFounds() + " x " + activity.getString(R.string.found));
+//            notFoundsTextView.setText(geocache.getNotFounds() + " x " + activity.getString(R.string.not_found));
+//
+//            if (geocache.getRecommendations() == 0) {
+//                ImageView recommendationImageView = view.findViewById(R.id.recommendationImageView);
+//                recommendationImageView.setVisibility(View.GONE);
+//                recommendationsTextView.setVisibility(View.GONE);
+//            } else {
+//                recommendationsTextView.setText(geocache.getRecommendations() + " x " + activity.getString(R.string.recommended));
+//            }
+//
+//            return view;
+//        }
+//
+//        @Override
+//        public View getInfoContents(Marker marker) {
+//            return null;
+//        }
+//    }
 
 }

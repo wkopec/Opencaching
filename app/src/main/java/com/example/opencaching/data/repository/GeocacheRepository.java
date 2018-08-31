@@ -4,12 +4,10 @@ import com.example.opencaching.app.prefs.MapFiltersManager;
 import com.example.opencaching.data.models.okapi.Geocache;
 import com.example.opencaching.data.repository.base.RealmRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 public class GeocacheRepository extends RealmRepository<Geocache> {
@@ -29,28 +27,62 @@ public class GeocacheRepository extends RealmRepository<Geocache> {
     }
 
     public RealmResults<Geocache> loadMapFilteredGeocaches() {
-        RealmResults<Geocache> results = query(realm -> realm.where(Geocache.class)
+
+        RealmQuery<Geocache> query = realm.where(Geocache.class);
+        query.beginGroup()
                 .equalTo("isFound", mapFiltersManager.isFoundFilter())
-                //.equalTo("isFound", mapFiltersManager.isNotFoundFilter())
-                .findAll());
+                .or()
+                .equalTo("isFound", !mapFiltersManager.isNotFoundFilter())
+                .endGroup();
 
+        if(!mapFiltersManager.isAvailableFilter()) {
+            query.notEqualTo("status", "Available");
+        }
+        if(!mapFiltersManager.isTempUnavailableFilter()) {
+            query.notEqualTo("status", "Temporarily unavailable");
+        }
+        if(!mapFiltersManager.isArchivedFilter()) {
+            query.notEqualTo("status", "Archived");
+        }
+
+        if(!mapFiltersManager.isOwnedFilter()) {
+            query.notEqualTo("owner.uuid", "qweqwe");
+        }
+
+        if(!mapFiltersManager.isIgnoredFilter()) {
+            query.notEqualTo("isIgnored", true);
+        }
+
+        // Geocaches
         if(!mapFiltersManager.isTraditionalFilter()) {
-            results.where().notEqualTo("type", "Traditional").findAll();
+            query.notEqualTo("type", "Traditional");
+        }
+        if(!mapFiltersManager.isMulticacheFilter()) {
+            query.notEqualTo("type", "Multi");
+        }
+        if(!mapFiltersManager.isQuizFilter()) {
+            query.notEqualTo("type", "Quiz");
+        }
+        if(!mapFiltersManager.isUnknownFilter()) {
+            query.notEqualTo("type", "Other");
+        }
+        if(!mapFiltersManager.isVirtualFilter()) {
+            query.notEqualTo("type", "Virtual");
+        }
+        if(!mapFiltersManager.isEventFilter()) {
+            query.notEqualTo("type", "Event");
+        }
+        if(!mapFiltersManager.isOwncacheFilter()) {
+            query.notEqualTo("type", "Own");
+        }
+        if(!mapFiltersManager.isMovingFilter()) {
+            query.notEqualTo("type", "Moving");
+        }
+        if(!mapFiltersManager.isWebcamFilter()) {
+            query.notEqualTo("type", "Webcam");
         }
 
-        //FIXME
-        ArrayList<Geocache> geocaches = new ArrayList<>();
-        for(Geocache geocache : results) {
-            try {
-                geocaches.add((Geocache) geocache.clone());
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        //return new ArrayList<>(results);
-
-        return results;
+        return query.findAll();
 
     }
 }

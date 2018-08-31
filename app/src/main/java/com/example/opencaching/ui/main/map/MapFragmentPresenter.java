@@ -187,8 +187,8 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
             }
         }
 
-        return filteredGeocaches;
-        //return geocacheRepository.loadMapFilteredGeocaches();
+        //return filteredGeocaches;
+        return new ArrayList<>(geocacheRepository.loadMapFilteredGeocaches());
     }
 
 
@@ -248,10 +248,10 @@ public class MapFragmentPresenter extends BasePresenter implements MapContract.P
         });
     }
 
-    @Override
-    public Geocache getGeocache(Marker marker) {
-        return storedGeocaches.get(marker.getSnippet());
-    }
+//    @Override
+//    public Geocache getGeocache(Marker marker) {
+//        return storedGeocaches.get(marker.getSnippet());
+//    }
 
     @Override
     public void filterMap(boolean isAvailabilityChanged) {

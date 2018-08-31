@@ -45,7 +45,7 @@ public class MapContract{
 
         void filterMap(boolean isAvailabilityChanged);
 
-        Geocache getGeocache(Marker marker);
+        //Geocache getGeocache(Marker marker);
 
     }
 

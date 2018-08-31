@@ -3,6 +3,7 @@ package com.example.opencaching.data.models.okapi;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.opencaching.data.models.GeocacheClusterItem;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -18,7 +19,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by Volfram on 16.07.2017.
  */
 
-public class Geocache extends RealmObject implements ClusterItem, Parcelable, Cloneable {
+public class Geocache extends RealmObject implements Parcelable {
 
     @SerializedName("code")
     @Expose
@@ -176,10 +177,6 @@ public class Geocache extends RealmObject implements ClusterItem, Parcelable, Cl
         return 0;
     }
 
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 
     public String getCode() {
         return code;
@@ -345,21 +342,15 @@ public class Geocache extends RealmObject implements ClusterItem, Parcelable, Cl
         return hiddenDate;
     }
 
-    @Override
     public LatLng getPosition() {
         String[] location = getLocation().split("\\|");
         return new LatLng(Double.parseDouble(location[0]), Double.parseDouble(location[1]));
     }
 
-    @Override
-    public String getTitle() {
-        return name;
+    public GeocacheClusterItem getClusterItem() {
+        return new GeocacheClusterItem(name, code, type, getPosition());
     }
 
-    @Override
-    public String getSnippet() {
-        return code;
-    }
 
 
 }

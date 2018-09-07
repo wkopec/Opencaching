@@ -27,6 +27,22 @@ public class GeocacheRepository extends RealmRepository<Geocache> {
     }
 
     public RealmResults<Geocache> loadMapFilteredGeocaches() {
+        return getMapFilteredGeocachesQuerry().findAll();
+    }
+
+    public RealmResults<Geocache> loadMapFilteredGeocachesIncludes(String[] includesCodes) {
+        RealmQuery<Geocache> query = getMapFilteredGeocachesQuerry();
+        query.in("code", includesCodes);
+        return query.findAll();
+    }
+
+    public void clearUnsavedGeocaches() {
+        realm.beginTransaction();
+        realm.where(Geocache.class).equalTo("isSaved", false).findAll().deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
+    private RealmQuery<Geocache> getMapFilteredGeocachesQuerry() {
 
         RealmQuery<Geocache> query = realm.where(Geocache.class);
         query.beginGroup()
@@ -44,14 +60,21 @@ public class GeocacheRepository extends RealmRepository<Geocache> {
         if(!mapFiltersManager.isArchivedFilter()) {
             query.notEqualTo("status", "Archived");
         }
-
         if(!mapFiltersManager.isOwnedFilter()) {
             query.notEqualTo("owner.uuid", "qweqwe");
         }
-
         if(!mapFiltersManager.isIgnoredFilter()) {
             query.notEqualTo("isIgnored", true);
         }
+        if(mapFiltersManager.isFTFFilter()) {
+            query.equalTo("founds", 0);
+        }
+        if(mapFiltersManager.isTrackableFilter()) {
+            query.notEqualTo("trackablesCount", 0);
+        }
+//        if(mapFiltersManager.isPowerTrailFilter()) {
+//            query.equalTo("isPowerTrail", true);
+//        }
 
         // Geocaches
         if(!mapFiltersManager.isTraditionalFilter()) {
@@ -81,8 +104,7 @@ public class GeocacheRepository extends RealmRepository<Geocache> {
         if(!mapFiltersManager.isWebcamFilter()) {
             query.notEqualTo("type", "Webcam");
         }
-
-        return query.findAll();
-
+        return query;
     }
+
 }

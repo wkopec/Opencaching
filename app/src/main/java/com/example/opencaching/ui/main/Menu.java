@@ -4,19 +4,22 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 
 import com.example.opencaching.R;
+import com.example.opencaching.app.prefs.SessionManager;
 import com.example.opencaching.ui.authorization.LoginActivity;
 import com.example.opencaching.ui.main.map.MapFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.opencaching.utils.UserUtils.setOauthTokenSecret;
+import javax.inject.Inject;
+
 
 /**
  * Created by Volfram on 15.07.2017.
  */
 
 public class Menu {
+
 
     public static boolean isAction(int tag){
         if (tag == R.string.nav_logout){
@@ -58,7 +61,9 @@ public class Menu {
     public static void performAction(MainActivity mainActivity, int tag) {
         switch (tag){
             case R.string.nav_logout:
-                setOauthTokenSecret(mainActivity, "");
+                //TODO: use SessionManager
+                //setOauthTokenSecret(mainActivity, "");
+                //sessionManager.saveOauthTokenSecret("");
                 mainActivity.startActivity(new Intent(mainActivity, LoginActivity.class));
                 mainActivity.finish();
                 break;

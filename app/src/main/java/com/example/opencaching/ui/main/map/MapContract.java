@@ -3,9 +3,8 @@ package com.example.opencaching.ui.main.map;
 import com.example.opencaching.data.models.okapi.Geocache;
 import com.example.opencaching.ui.base.BaseContract;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 
-import java.util.ArrayList;
+import io.realm.RealmResults;
 
 /**
  * Created by Volfram on 15.07.2017.
@@ -25,7 +24,9 @@ public class MapContract{
 
         void moveMapCamera(LatLng latLng, float zoom, int duration);
 
-        void addGeocaches(ArrayList<Geocache> geocaches);
+        void addGeocaches(RealmResults<Geocache> geocaches);
+
+        void removeGeocaches(RealmResults<Geocache> geocaches);
 
         void hideGeocacheInfo();
 
@@ -43,7 +44,7 @@ public class MapContract{
 
         void getUserData();
 
-        void filterMap(boolean isAvailabilityChanged);
+        void refreshMap(boolean isAvailabilityChanged);
 
         //Geocache getGeocache(Marker marker);
 

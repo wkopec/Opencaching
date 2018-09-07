@@ -7,11 +7,12 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.opencaching.R;
+import com.example.opencaching.app.prefs.SessionManager;
 import com.example.opencaching.ui.base.BaseActivity;
 import com.example.opencaching.ui.main.MainActivity;
 import com.example.opencaching.ui.authorization.login.LoginFragment;
 
-import static com.example.opencaching.utils.UserUtils.isLoggedIn;
+import javax.inject.Inject;
 
 /**
  * Created by Wojtek on 13.08.2017.
@@ -19,17 +20,21 @@ import static com.example.opencaching.utils.UserUtils.isLoggedIn;
 
 public class LoginActivity extends BaseActivity {
 
+    @Inject
+    SessionManager sessionManager;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         setContentView(R.layout.activity_empty);
-        if (isLoggedIn(this))
+        if (sessionManager.isLoggedIn()) {
             startMainActivity();
-        else
+        } else {
             replaceFragment(new LoginFragment(), false);
+        }
+
     }
 
     public void startMainActivity() {

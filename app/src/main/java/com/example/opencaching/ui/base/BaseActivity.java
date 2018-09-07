@@ -17,18 +17,25 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.opencaching.R;
+import com.example.opencaching.app.prefs.SessionManager;
 import com.example.opencaching.data.models.Error;
 import com.example.opencaching.ui.authorization.LoginActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
-import static com.example.opencaching.utils.UserUtils.setOauthTokenSecret;
+import javax.inject.Inject;
+
+import dagger.android.DaggerActivity;
+import dagger.android.support.DaggerAppCompatActivity;
 
 /**
  * Created by Volfram on 15.07.2017.
  */
 
-public abstract class BaseActivity extends AppCompatActivity implements BaseContract.View{
+public abstract class BaseActivity extends DaggerAppCompatActivity implements BaseContract.View{
+
+    @Inject
+    SessionManager sessionManager;
 
     public static final int REQUEST_LOCATION = 2;
     private AlertDialog dialog;
@@ -66,22 +73,16 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
     }
 
     public void showProgress() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(isResumed)
-                    dialog.show();
-            }
+        runOnUiThread(() -> {
+            if(isResumed)
+                dialog.show();
         });
     }
 
     public void hideProgress() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(isResumed)
-                    dialog.dismiss();
-            }
+        runOnUiThread(() -> {
+            if(isResumed)
+                dialog.dismiss();
         });
     }
 
@@ -116,7 +117,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
     }
 
     public void performSessionEnded (){
-        setOauthTokenSecret(this, "");
+        //setOauthTokenSecret(this, "");
+        sessionManager.saveOauthTokenSecret("");
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
@@ -145,8 +147,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
             EventBus.getDefault().unregister(this);
     }
 
-
-
     public void showToast(String message) {
         if (message.equals(getString(R.string.session_has_ended))){
             performSessionEnded();
@@ -162,9 +162,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
     }
 
     public void hideKeyboard() {
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) getSystemService(
-                        Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         View view = getCurrentFocus();
         if (view == null) {
             view = new View(this);

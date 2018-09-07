@@ -30,8 +30,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.opencaching.R;
+import com.example.opencaching.app.prefs.SessionManager;
 import com.example.opencaching.ui.authorization.LoginActivity;
 import com.example.opencaching.ui.base.BaseFragment;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,32 +47,30 @@ import static com.example.opencaching.utils.StringUtils.getOathVerifier;
  * Created by Wojtek on 13.08.2017.
  */
 
-public class LoginFragment extends BaseFragment implements LoginFragmentContract.View {
+public class LoginFragment extends BaseFragment implements LoginContract.View {
 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
-
     @BindView(R.id.username)
     EditText username;
-
     @BindView(R.id.password)
     EditText password;
-
     @BindView(R.id.loginButton)
     FrameLayout loginButton;
-
     @BindView(R.id.mask)
     View mask;
-
     @BindView(R.id.termsOfService)
     TextView termsOfService;
-
     @BindView(R.id.background)
     ImageView background;
 
     private WebView webView;
     private LoginActivity activity;
-    private LoginFragmentContract.Presenter presenter;
+
+    @Inject
+    LoginContract.Presenter presenter;
+    @Inject
+    SessionManager sessionManager;
 
     @Nullable
     @Override
@@ -77,11 +78,11 @@ public class LoginFragment extends BaseFragment implements LoginFragmentContract
         View view = inflater.inflate(R.layout.fragment_login, null);
         ButterKnife.bind(this, view);
         activity = (LoginActivity) getActivity();
-        presenter = new LoginFragmentPresenter(this, activity);
         setPresenter(presenter);
         setWebView();
         setTermsOfService();
         setOnDoneClickListener();
+        presenter.getRequestToken();
         return view;
     }
 
@@ -135,7 +136,8 @@ public class LoginFragment extends BaseFragment implements LoginFragmentContract
             if (url.contains("/login.php")) {
                 hideProgress();
             } else if (url.contains("oauth_verifier=")) {
-                presenter.getOauthTokenSecret(getOathVerifier(url), getOathToken(url));
+                sessionManager.saveOauthToken(getOathToken(url));
+                presenter.getOauthTokenSecret(getOathVerifier(url));
             }
         }
 

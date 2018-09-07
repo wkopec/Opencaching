@@ -3,11 +3,14 @@ package com.example.opencaching.ui.geocache.info;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.example.opencaching.api.NetworkService;
 import com.example.opencaching.data.models.Error;
 import com.example.opencaching.ui.base.BasePresenter;
 import com.example.opencaching.data.models.okapi.Geocache;
-import com.example.opencaching.api.OpencachingApi;
+
 import com.example.opencaching.utils.ApiUtils;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,6 +24,9 @@ import static com.example.opencaching.utils.Constants.GEOCACHE_INFO_FIELDS;
 
 public class GeocacheInfoPresenter extends BasePresenter implements GeocacheInfoContract.Presenter {
 
+    @Inject
+    NetworkService networkService;
+
     private GeocacheInfoContract.View view;
     private Context context;
 
@@ -31,7 +37,7 @@ public class GeocacheInfoPresenter extends BasePresenter implements GeocacheInfo
 
     public void getGeocacheInfo(String code) {
 
-        Call<Geocache> loginCall = OpencachingApi.service(context).getGeocacheInfo(code, GEOCACHE_INFO_FIELDS);
+        Call<Geocache> loginCall = networkService.getGeocacheInfo(code, GEOCACHE_INFO_FIELDS);
         loginCall.enqueue(new Callback<Geocache>() {
             @Override
             public void onResponse(@NonNull Call<Geocache> call, @NonNull Response<Geocache> response) {

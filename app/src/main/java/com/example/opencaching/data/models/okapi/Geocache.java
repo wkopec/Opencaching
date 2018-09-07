@@ -146,6 +146,10 @@ public class Geocache extends RealmObject implements Parcelable {
     @Expose
     private String hiddenDate;          //date and time when (the geocache was first hidden / the geocache was first published / the event takes place) (ISO 8601)
 
+    private boolean isSaved;            //true if geocache is saved on the device
+
+    private int apiRequestCounter;      //counter when object was downloaded from an API
+
     public Geocache() {
     }
 
@@ -345,6 +349,14 @@ public class Geocache extends RealmObject implements Parcelable {
     public LatLng getPosition() {
         String[] location = getLocation().split("\\|");
         return new LatLng(Double.parseDouble(location[0]), Double.parseDouble(location[1]));
+    }
+
+    public int getApiRequestCounter() {
+        return apiRequestCounter;
+    }
+
+    public void setApiRequestCounter(int apiRequestCounter) {
+        this.apiRequestCounter = apiRequestCounter;
     }
 
     public GeocacheClusterItem getClusterItem() {

@@ -26,12 +26,12 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.opencaching.R;
+import com.example.opencaching.app.prefs.SessionManager;
 import com.example.opencaching.data.models.GeocacheClusterItem;
 import com.example.opencaching.data.repository.GeocacheRepository;
 import com.example.opencaching.ui.base.BaseFragment;
@@ -69,6 +69,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+import io.realm.RealmResults;
 
 import static com.example.opencaching.ui.geocache.GeocacheActivity.GEOCACHE;
 import static com.example.opencaching.utils.IntegerUtils.getDistance;
@@ -78,7 +79,6 @@ import static com.example.opencaching.utils.ResourceUtils.getGeocacheSize;
 import static com.example.opencaching.utils.ResourceUtils.getGeocacheType;
 import static com.example.opencaching.utils.StringUtils.getDateString;
 import static com.example.opencaching.utils.StringUtils.getFormatedCoordinates;
-import static com.example.opencaching.utils.UserUtils.getUserHomeLocation;
 
 /**
  * Created by Volfram on 15.05.2017.
@@ -133,12 +133,13 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     MapContract.Presenter presenter;
     @Inject
     GeocacheRepository geocacheRepository;
+    @Inject
+    SessionManager sessionManager;
 
     private MainActivity activity;
     private GoogleMap mMap;
     private ClusterManager<GeocacheClusterItem> mClusterManager;
     private Marker lastSelectedMarker;
-    private Marker lastKnownLocationMarker;
     private boolean isMapInfoShown;
     private boolean isGeocacheInfoShown;
     private BottomSheetBehavior sheetBehavior;
@@ -190,12 +191,14 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (getUserHomeLocation(activity) != null) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(getUserHomeLocation(activity), 10));
+        //if (getUserHomeLocation(activity) != null) {
+        if (sessionManager.getUserHomeLocation() != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sessionManager.getUserHomeLocation(), 10));
         } else {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(START_MAP_LATITUDE, START_MAP_LONGITUDE), START_MAP_ZOOM));
         }
         configureMap();
+        presenter.refreshMap(false);
     }
 
     private void configureMap() {
@@ -289,7 +292,6 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
                 public void onProviderDisabled(String provider) {
                     if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         mMap.setMyLocationEnabled(false);
-
                     }
                 }
             };
@@ -503,12 +505,24 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     }
 
     @Override
-    public void addGeocaches(ArrayList<Geocache> geocaches) {
+    public void addGeocaches(RealmResults<Geocache> geocaches) {
         ArrayList<GeocacheClusterItem> clusterItems = new ArrayList<>();
         for(Geocache geocache : geocaches) {
             clusterItems.add(geocache.getClusterItem());
         }
         mClusterManager.addItems(clusterItems);
+        mClusterManager.cluster();
+    }
+
+    @Override
+    public void removeGeocaches(RealmResults<Geocache> geocaches) {
+        for(GeocacheClusterItem geocacheClusterItem : mClusterManager.getAlgorithm().getItems()) {
+            for(Geocache geocache : geocaches) {
+                if(geocacheClusterItem.getSnippet().equals(geocache.getCode())){
+                    mClusterManager.removeItem(geocacheClusterItem);
+                }
+            }
+        }
         mClusterManager.cluster();
     }
 
@@ -567,7 +581,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onMapFilter(MapFilterChangeEvent event) {
-        presenter.filterMap(event.isAvailabilityChanged());
+        presenter.refreshMap(event.isAvailabilityChanged());
         EventBus.getDefault().removeStickyEvent(event);
     }
 
@@ -579,8 +593,11 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
         @Override
         protected void onClusterRendered(Cluster<GeocacheClusterItem> cluster, Marker marker) {
-            if (lastSelectedMarker != null && cluster.getItems().contains(geocacheRepository.loadGeocacheByCode(lastSelectedMarker.getSnippet()).getClusterItem())) {
-                hideGeocacheInfo();
+            for(GeocacheClusterItem geocacheClusterItem : cluster.getItems()) {
+                if(lastSelectedMarker != null && geocacheClusterItem.getSnippet().equals(lastSelectedMarker.getSnippet())) {
+                    hideGeocacheInfo();
+                    break;
+                }
             }
             super.onClusterRendered(cluster, marker);
         }

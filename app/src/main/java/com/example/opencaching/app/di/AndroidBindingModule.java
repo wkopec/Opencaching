@@ -1,10 +1,14 @@
 package com.example.opencaching.app.di;
 
+import com.example.opencaching.ui.authorization.LoginActivity;
 import com.example.opencaching.ui.authorization.login.LoginFragment;
+import com.example.opencaching.ui.authorization.login.LoginModule;
+import com.example.opencaching.ui.base.BaseActivity;
 import com.example.opencaching.ui.dialogs.MapFilterDialog;
 import com.example.opencaching.ui.geocache.info.GeocacheInfoFragment;
 import com.example.opencaching.ui.geocache.logs.GeocacheLogsFragment;
 import com.example.opencaching.ui.geocache.logs.GeocacheLogsModule;
+import com.example.opencaching.ui.main.MainActivity;
 import com.example.opencaching.ui.main.map.MapFragment;
 import com.example.opencaching.ui.main.map.MapScreenModule;
 
@@ -25,12 +29,20 @@ public interface AndroidBindingModule {
     @ContributesAndroidInjector(modules = GeocacheLogsModule.class)
     GeocacheLogsFragment geocacheLogsFragment();
 
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector(modules = LoginModule.class)
     LoginFragment loginFragment();
 
     //Dialogs
 
     @ContributesAndroidInjector()
     MapFilterDialog mapFilterDialog();
+
+    //Activities
+
+    @ContributesAndroidInjector()
+    LoginActivity loginActivity();
+
+    @ContributesAndroidInjector()
+    MainActivity mainActivity();
 
 }

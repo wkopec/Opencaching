@@ -6,8 +6,6 @@ import javax.inject.Inject;
 
 public class MapFiltersManager {
 
-    public static String MAP_FILTER_PREF = "pref_map_filter";
-
     private static final String KEY_MAP_FILTER_FOUND = "map_filter_found:";
     private static final String KEY_MAP_FILTER_NOT_FOUND = "map_filter_not_found:";
     private static final String KEY_MAP_FILTER_OWNED = "map_filter_owned:";

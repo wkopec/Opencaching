@@ -6,7 +6,7 @@ import com.example.opencaching.ui.base.BaseContract;
  * Created by Wojtek on 13.08.2017.
  */
 
-public class LoginFragmentContract {
+public class LoginContract {
 
     public interface View extends BaseContract.View {
 
@@ -22,7 +22,9 @@ public class LoginFragmentContract {
 
     public interface Presenter extends BaseContract.Presenter {
 
-        void getOauthTokenSecret(String verifier, String oauthToken);
+        void getOauthTokenSecret(String verifier);
+
+        void getRequestToken();
 
     }
 

@@ -2,6 +2,7 @@ package com.example.opencaching.api;
 
 import android.util.Log;
 
+import com.example.opencaching.app.prefs.SessionManager;
 import com.github.scribejava.core.model.ParameterList;
 import com.github.scribejava.core.services.HMACSha1SignatureService;
 import com.github.scribejava.core.services.TimestampServiceImpl;
@@ -10,10 +11,15 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import javax.inject.Inject;
+
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import static com.example.opencaching.utils.Constants.OPENCACHING_CONSUMER_KEY;
+import static com.example.opencaching.utils.Constants.OPENCACHING_CONSUMER_KEY_SECRET;
 
 /**
  * Created by Wojtek on 14.08.2017.
@@ -31,17 +37,11 @@ public class OAuthInterceptor implements Interceptor {
     private static final String OAUTH_VERSION = "oauth_version";
     private static final String OAUTH_VERSION_VALUE = "1.0";
 
-    private final String consumerKey;
-    private final String consumerSecret;
-    private final String tokenKey;
-    private final String tokenSecret;
+    SessionManager sessionManager;
 
-
-    private OAuthInterceptor(String consumerKey, String consumerSecret, String tokenKey, String tokenSecret) {
-        this.consumerKey = consumerKey;
-        this.consumerSecret = consumerSecret;
-        this.tokenKey = tokenKey;
-        this.tokenSecret = tokenSecret;
+    @Inject
+    OAuthInterceptor(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
     }
 
     @Override
@@ -72,13 +72,13 @@ public class OAuthInterceptor implements Interceptor {
         String generatedBaseString = "";
 
         if (original.url().encodedQuery() != null) {
-            if (tokenKey.equals("")) {
-                generatedBaseString = original.url().encodedQuery() + "&oauth_consumer_key=" + consumerKey + "&oauth_nonce=" + nonce + "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" + timestamp + "&oauth_version=1.0";
+            if (sessionManager.getOauthToken().equals("")) {
+                generatedBaseString = original.url().encodedQuery() + "&oauth_consumer_key=" + OPENCACHING_CONSUMER_KEY + "&oauth_nonce=" + nonce + "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" + timestamp + "&oauth_version=1.0";
             } else {
-                generatedBaseString = original.url().encodedQuery() + "&oauth_consumer_key=" + consumerKey + "&oauth_nonce=" + nonce + "&oauth_token=" + tokenKey + "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" + timestamp + "&oauth_version=1.0";
+                generatedBaseString = original.url().encodedQuery() + "&oauth_consumer_key=" + OPENCACHING_CONSUMER_KEY + "&oauth_nonce=" + nonce + "&oauth_token=" + sessionManager.getOauthToken() + "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" + timestamp + "&oauth_version=1.0";
             }
         } else {
-            generatedBaseString = "oauth_consumer_key=" + consumerKey + "&oauth_nonce=" + nonce + "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" + timestamp + "&oauth_version=1.0";
+            generatedBaseString = "oauth_consumer_key=" + OPENCACHING_CONSUMER_KEY + "&oauth_nonce=" + nonce + "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" + timestamp + "&oauth_version=1.0";
         }
 
         ParameterList result = new ParameterList();
@@ -95,15 +95,15 @@ public class OAuthInterceptor implements Interceptor {
 
         String baseString = firstBaseString + secoundBaseString;
 
-        String signature = new HMACSha1SignatureService().getSignature(baseString, consumerSecret, tokenSecret);
+        String signature = new HMACSha1SignatureService().getSignature(baseString, OPENCACHING_CONSUMER_KEY_SECRET, sessionManager.getOauthTokenSecret());
         Log.d("Signature", signature);
 
         HttpUrl url;
 
-        if (tokenKey.equals("")) {
+        if (sessionManager.getOauthToken().equals("")) {
             url = originalHttpUrl.newBuilder()
                     .addQueryParameter(OAUTH_SIGNATURE_METHOD, OAUTH_SIGNATURE_METHOD_VALUE)
-                    .addQueryParameter(OAUTH_CONSUMER_KEY, consumerKey)
+                    .addQueryParameter(OAUTH_CONSUMER_KEY, OPENCACHING_CONSUMER_KEY)
                     .addQueryParameter(OAUTH_VERSION, OAUTH_VERSION_VALUE)
                     .addQueryParameter(OAUTH_TIMESTAMP, timestamp)
                     .addQueryParameter(OAUTH_NONCE, nonce)
@@ -112,11 +112,11 @@ public class OAuthInterceptor implements Interceptor {
         } else {
             url = originalHttpUrl.newBuilder()
                     .addQueryParameter(OAUTH_SIGNATURE_METHOD, OAUTH_SIGNATURE_METHOD_VALUE)
-                    .addQueryParameter(OAUTH_CONSUMER_KEY, consumerKey)
+                    .addQueryParameter(OAUTH_CONSUMER_KEY, OPENCACHING_CONSUMER_KEY)
                     .addQueryParameter(OAUTH_VERSION, OAUTH_VERSION_VALUE)
                     .addQueryParameter(OAUTH_TIMESTAMP, timestamp)
                     .addQueryParameter(OAUTH_NONCE, nonce)
-                    .addQueryParameter(OAUTH_TOKEN, tokenKey)
+                    .addQueryParameter(OAUTH_TOKEN, sessionManager.getOauthToken())
                     .addQueryParameter(OAUTH_SIGNATURE, signature)
                     .build();
         }
@@ -127,50 +127,6 @@ public class OAuthInterceptor implements Interceptor {
 
         Request request = requestBuilder.build();
         return chain.proceed(request);
-    }
-
-
-    public static final class Builder {
-
-        private String consumerKey;
-        private String consumerSecret;
-        private String tokenKey;
-        private String tokenSecret;
-
-
-        public Builder consumerKey(String consumerKey) {
-            if (consumerKey == null) throw new NullPointerException("consumerKey = null");
-            this.consumerKey = consumerKey;
-            return this;
-        }
-
-        public Builder consumerSecret(String consumerSecret) {
-            if (consumerSecret == null) throw new NullPointerException("consumerSecret = null");
-            this.consumerSecret = consumerSecret;
-            return this;
-        }
-
-        public Builder tokenKey(String tokenKey) {
-            if (tokenKey == null) throw new NullPointerException("tokenSecret = null");
-            this.tokenKey = tokenKey;
-            return this;
-        }
-
-        public Builder tokenSecret(String tokenSecret) {
-            if (tokenSecret == null) throw new NullPointerException("tokenSecret = null");
-            this.tokenSecret = tokenSecret;
-            return this;
-        }
-
-        public OAuthInterceptor build() {
-
-            if (consumerKey == null) throw new IllegalStateException("consumerKey not set");
-            if (consumerSecret == null) throw new IllegalStateException("consumerSecret not set");
-            if (tokenSecret == null) throw new IllegalStateException("tokenSecret not set");
-            if (tokenKey == null) throw new IllegalStateException("tokenKey not set");
-
-            return new OAuthInterceptor(consumerKey, consumerSecret, tokenKey, tokenSecret);
-        }
     }
 
     public String urlEncoded(String url) {

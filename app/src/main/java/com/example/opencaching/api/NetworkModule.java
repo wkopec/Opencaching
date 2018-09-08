@@ -1,8 +1,5 @@
 package com.example.opencaching.api;
 
-import com.example.opencaching.api.GoogleMapsService;
-import com.example.opencaching.api.OkapiService;
-import com.example.opencaching.api.OkapiInterceptor;
 import com.example.opencaching.app.di.ApplicationScope;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;

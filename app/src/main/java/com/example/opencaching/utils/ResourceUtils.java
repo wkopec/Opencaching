@@ -1,14 +1,6 @@
 package com.example.opencaching.utils;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-
 import com.example.opencaching.R;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 /**
  * Created by Wojtek on 22.07.2017.

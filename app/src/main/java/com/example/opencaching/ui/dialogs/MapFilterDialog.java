@@ -19,7 +19,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-
 public class MapFilterDialog extends BaseDialog {
 
     @Inject
@@ -158,12 +157,17 @@ public class MapFilterDialog extends BaseDialog {
         webcamFilter.setOnCheckedChangeListener((buttonView, isChecked) -> animateDrawable(buttonView.getBackground(), isChecked));
 
         foundFilter.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!isChecked && !notFoundFilter.isChecked()) {
+            if (!isChecked && !notFoundFilter.isChecked() && !ownedFilter.isChecked()) {
                 notFoundFilter.setChecked(true);
             }
         });
         notFoundFilter.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!isChecked && !foundFilter.isChecked()) {
+            if (!isChecked && !foundFilter.isChecked() && !ownedFilter.isChecked()) {
+                foundFilter.setChecked(true);
+            }
+        });
+        ownedFilter.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!isChecked && !foundFilter.isChecked() && !notFoundFilter.isChecked()) {
                 foundFilter.setChecked(true);
             }
         });

@@ -33,6 +33,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.opencaching.utils.Constants.GEOCACHES_STANDARD_FIELDS;
+import static com.example.opencaching.utils.Constants.USERNAME_FIELDS;
 import static com.example.opencaching.utils.IntegerUtils.getDistance;
 import static com.example.opencaching.utils.StringUtils.getApiFormatedFields;
 
@@ -214,17 +215,16 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
 
     @Override
     public void getUserData() {
-        Call<User> userCall = okapiService.getLoggedInUserInfo("home_location");
+        Call<User> userCall = okapiService.getLoggedInUserInfo(USERNAME_FIELDS);
         userCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 User user = response.body();
                 LatLng userHomeLocation = sessionManager.getUserHomeLocation();
                 if (user != null && (userHomeLocation == null || !userHomeLocation.equals(user.getHomeLocation()))) {
-                    sessionManager.saveUserHomeLocation(user.getRawHomeLocation());
-                    //setUserHomeLocation(context, user.getRawHomeLocation());
                     view.moveMapCamera(user.getHomeLocation(), 10, 1000);
                 }
+                sessionManager.setLoggedUserData(user);
             }
 
             @Override

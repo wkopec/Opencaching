@@ -13,7 +13,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 
-public interface NetworkService {
+public interface OkapiService {
     //AUTH
     @GET("oauth/request_token")
     Call<String> getRequestToken(@Query("oauth_callback") String oauthCallback);

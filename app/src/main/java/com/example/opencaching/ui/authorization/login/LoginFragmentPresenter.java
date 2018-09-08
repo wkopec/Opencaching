@@ -2,7 +2,7 @@ package com.example.opencaching.ui.authorization.login;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import com.example.opencaching.api.NetworkService;
+import com.example.opencaching.api.OkapiService;
 import com.example.opencaching.app.prefs.SessionManager;
 import com.example.opencaching.ui.base.BasePresenter;
 import com.example.opencaching.utils.ApiUtils;
@@ -25,7 +25,7 @@ public class LoginFragmentPresenter extends BasePresenter implements LoginContra
     @Inject
     SessionManager sessionManager;
     @Inject
-    NetworkService networkService;
+    OkapiService okapiService;
 
     private LoginContract.View view;
     private Context context;
@@ -38,7 +38,7 @@ public class LoginFragmentPresenter extends BasePresenter implements LoginContra
 
     @Override
     public void getRequestToken() {
-        Call<String> requestTokenCall = networkService.getRequestToken("oob");
+        Call<String> requestTokenCall = okapiService.getRequestToken("oob");
         requestTokenCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -70,7 +70,7 @@ public class LoginFragmentPresenter extends BasePresenter implements LoginContra
 
     @Override
     public void getOauthTokenSecret(String verifier) {
-        Call<String> requestTokenCall = networkService.getAccessToken(verifier);
+        Call<String> requestTokenCall = okapiService.getAccessToken(verifier);
         requestTokenCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

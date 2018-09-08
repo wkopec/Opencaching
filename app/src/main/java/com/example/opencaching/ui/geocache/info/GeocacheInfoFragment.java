@@ -10,6 +10,8 @@ import com.example.opencaching.R;
 import com.example.opencaching.ui.base.BaseActivity;
 import com.example.opencaching.ui.base.BaseFragment;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -24,7 +26,9 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     private Unbinder unbinder;
     private View view;
     private BaseActivity activity;
-    private GeocacheInfoContract.Presenter presenter;
+
+    @Inject
+    GeocacheInfoContract.Presenter presenter;
 
     @Nullable
     @Override
@@ -32,7 +36,6 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
         view = inflater.inflate(R.layout.fragment_geocache_info, null);
         unbinder = ButterKnife.bind(this, view);
         activity = (BaseActivity) getActivity();
-        presenter = new GeocacheInfoPresenter(this, activity);
         setPresenter(presenter);
         presenter.getGeocacheInfo(getGeocacheWaypoint());
         return view;

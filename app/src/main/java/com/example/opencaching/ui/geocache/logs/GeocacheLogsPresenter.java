@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.example.opencaching.R;
-import com.example.opencaching.api.NetworkService;
+import com.example.opencaching.api.OkapiService;
 import com.example.opencaching.data.repository.GeocacheRepository;
 import com.example.opencaching.ui.base.BasePresenter;
 import com.example.opencaching.data.models.okapi.GeocacheLog;
@@ -27,7 +27,7 @@ public class GeocacheLogsPresenter extends BasePresenter implements GeocacheLogs
     @Inject
     GeocacheRepository geocacheRepository;
     @Inject
-    NetworkService networkService;
+    OkapiService okapiService;
 
     private final static String LOGS_STANDARD_FIELDS = "uuid|date|user|type|comment|images|was_recommended";
 
@@ -42,7 +42,7 @@ public class GeocacheLogsPresenter extends BasePresenter implements GeocacheLogs
 
     @Override
     public void getGeocacheLogs(String code) {
-        Call<ArrayList<GeocacheLog>> loginCall = networkService.getGeocacheLogs(context.getResources().getString(R.string.opencaching_key), code, LOGS_STANDARD_FIELDS, 0, 100);
+        Call<ArrayList<GeocacheLog>> loginCall = okapiService.getGeocacheLogs(context.getResources().getString(R.string.opencaching_key), code, LOGS_STANDARD_FIELDS, 0, 100);
         loginCall.enqueue(new Callback<ArrayList<GeocacheLog>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<GeocacheLog>> call, @NonNull Response<ArrayList<GeocacheLog>> response) {

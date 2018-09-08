@@ -5,7 +5,9 @@ import com.example.opencaching.ui.authorization.login.LoginFragment;
 import com.example.opencaching.ui.authorization.login.LoginModule;
 import com.example.opencaching.ui.base.BaseActivity;
 import com.example.opencaching.ui.dialogs.MapFilterDialog;
+import com.example.opencaching.ui.geocache.GeocacheActivity;
 import com.example.opencaching.ui.geocache.info.GeocacheInfoFragment;
+import com.example.opencaching.ui.geocache.info.GeocacheInfoModule;
 import com.example.opencaching.ui.geocache.logs.GeocacheLogsFragment;
 import com.example.opencaching.ui.geocache.logs.GeocacheLogsModule;
 import com.example.opencaching.ui.main.MainActivity;
@@ -23,7 +25,7 @@ public interface AndroidBindingModule {
     @ContributesAndroidInjector(modules = MapScreenModule.class)
     MapFragment mapFragment();
 
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector(modules = GeocacheInfoModule.class)
     GeocacheInfoFragment geocacheInfoFragment();
 
     @ContributesAndroidInjector(modules = GeocacheLogsModule.class)
@@ -44,5 +46,8 @@ public interface AndroidBindingModule {
 
     @ContributesAndroidInjector()
     MainActivity mainActivity();
+
+    @ContributesAndroidInjector()
+    GeocacheActivity geocacheActivity();
 
 }

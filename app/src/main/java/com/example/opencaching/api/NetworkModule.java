@@ -1,7 +1,8 @@
-package com.example.opencaching.app.di.modules;
+package com.example.opencaching.api;
 
-import com.example.opencaching.api.NetworkService;
-import com.example.opencaching.api.OAuthInterceptor;
+import com.example.opencaching.api.GoogleMapsService;
+import com.example.opencaching.api.OkapiService;
+import com.example.opencaching.api.OkapiInterceptor;
 import com.example.opencaching.app.di.ApplicationScope;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -23,7 +24,8 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 @Module
 public class NetworkModule {
 
-    private static final String API_BASE_URL = "http://opencaching.pl/okapi/services/";
+    private static final String OKAPI_BASE_URL = "http://opencaching.pl/okapi/services/";
+    private static final String GOOGLE_MAPS_BASE_URL = "https://maps.googleapis.com";
 
     @Provides
     @ApplicationScope
@@ -43,30 +45,35 @@ public class NetworkModule {
 
     @Provides
     @ApplicationScope
-    OkHttpClient provideOkhttpClient(HttpLoggingInterceptor httpLoggingInterceptor, OAuthInterceptor oAuthInterceptor) {
+    OkHttpClient provideOkhttpClient(HttpLoggingInterceptor httpLoggingInterceptor, OkapiInterceptor okapiInterceptor) {
         return new OkHttpClient.Builder()
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(httpLoggingInterceptor)
-                .addInterceptor(oAuthInterceptor)
+                .addInterceptor(okapiInterceptor)
                 .build();
     }
 
     @Provides
     @ApplicationScope
-    Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
-        return new Retrofit.Builder()
-                .baseUrl(API_BASE_URL)
+    OkapiService provideNetworkService(Gson gson, OkHttpClient okHttpClient){
+        return  new Retrofit.Builder()
+                .baseUrl(OKAPI_BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
+                .build().create(OkapiService.class);
     }
 
     @Provides
     @ApplicationScope
-    NetworkService provideNetworkService(Retrofit retrofit){
-        return retrofit.create(NetworkService.class);
+    GoogleMapsService provideGoogleMapsService(Gson gson, OkHttpClient okHttpClient){
+        return new Retrofit.Builder()
+                .baseUrl(GOOGLE_MAPS_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHttpClient)
+                .build().create(GoogleMapsService.class);
     }
+
 }

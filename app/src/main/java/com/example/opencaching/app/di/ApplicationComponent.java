@@ -1,8 +1,8 @@
 package com.example.opencaching.app.di;
 
 import com.example.opencaching.app.App;
-import com.example.opencaching.app.di.modules.ApplicationModule;
-import com.example.opencaching.app.di.modules.NetworkModule;
+import com.example.opencaching.app.ApplicationModule;
+import com.example.opencaching.api.NetworkModule;
 
 import dagger.Component;
 import dagger.android.AndroidInjector;

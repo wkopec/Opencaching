@@ -25,7 +25,7 @@ import static com.example.opencaching.utils.Constants.OPENCACHING_CONSUMER_KEY_S
  * Created by Wojtek on 14.08.2017.
  */
 
-public class OAuthInterceptor implements Interceptor {
+public class OkapiInterceptor implements Interceptor {
 
     private static final String OAUTH_CONSUMER_KEY = "oauth_consumer_key";
     private static final String OAUTH_TOKEN = "oauth_token";
@@ -37,10 +37,10 @@ public class OAuthInterceptor implements Interceptor {
     private static final String OAUTH_VERSION = "oauth_version";
     private static final String OAUTH_VERSION_VALUE = "1.0";
 
-    SessionManager sessionManager;
+    private SessionManager sessionManager;
 
     @Inject
-    OAuthInterceptor(SessionManager sessionManager) {
+    OkapiInterceptor(SessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 

@@ -1,4 +1,4 @@
-package com.example.opencaching.app.di.modules;
+package com.example.opencaching.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;

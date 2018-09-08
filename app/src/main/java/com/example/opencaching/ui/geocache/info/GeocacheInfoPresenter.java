@@ -3,7 +3,7 @@ package com.example.opencaching.ui.geocache.info;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.example.opencaching.api.NetworkService;
+import com.example.opencaching.api.OkapiService;
 import com.example.opencaching.data.models.Error;
 import com.example.opencaching.ui.base.BasePresenter;
 import com.example.opencaching.data.models.okapi.Geocache;
@@ -25,11 +25,12 @@ import static com.example.opencaching.utils.Constants.GEOCACHE_INFO_FIELDS;
 public class GeocacheInfoPresenter extends BasePresenter implements GeocacheInfoContract.Presenter {
 
     @Inject
-    NetworkService networkService;
+    OkapiService okapiService;
 
     private GeocacheInfoContract.View view;
     private Context context;
 
+    @Inject
     public GeocacheInfoPresenter(GeocacheInfoContract.View view, Context context) {
         this.view = view;
         this.context = context;
@@ -37,7 +38,7 @@ public class GeocacheInfoPresenter extends BasePresenter implements GeocacheInfo
 
     public void getGeocacheInfo(String code) {
 
-        Call<Geocache> loginCall = networkService.getGeocacheInfo(code, GEOCACHE_INFO_FIELDS);
+        Call<Geocache> loginCall = okapiService.getGeocacheInfo(code, GEOCACHE_INFO_FIELDS);
         loginCall.enqueue(new Callback<Geocache>() {
             @Override
             public void onResponse(@NonNull Call<Geocache> call, @NonNull Response<Geocache> response) {

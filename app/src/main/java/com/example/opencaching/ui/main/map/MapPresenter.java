@@ -5,7 +5,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.opencaching.R;
-import com.example.opencaching.api.NetworkService;
+import com.example.opencaching.api.GoogleMapsService;
+import com.example.opencaching.api.OkapiService;
 import com.example.opencaching.app.prefs.MapFiltersManager;
 import com.example.opencaching.app.prefs.SessionManager;
 import com.example.opencaching.data.models.okapi.User;
@@ -31,7 +32,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.example.opencaching.api.GoogleMapsApi.service;
 import static com.example.opencaching.utils.Constants.GEOCACHES_STANDARD_FIELDS;
 import static com.example.opencaching.utils.IntegerUtils.getDistance;
 import static com.example.opencaching.utils.StringUtils.getApiFormatedFields;
@@ -47,7 +47,9 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
     @Inject
     SessionManager sessionManager;
     @Inject
-    NetworkService networkService;
+    OkapiService okapiService;
+    @Inject
+    GoogleMapsService googleMapsService;
 
     private static final float DEFAULT_LOCATION_ZOOM = 12;
     private static final int GEOCACHE_REQUEST_LIMIT = 500;      //max 500
@@ -86,7 +88,7 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
         isActive = true;
         this.center = center;
         String centerString = center.latitude + "|" + center.longitude;
-        Call<WaypointResults> loginCall = networkService.getWaypoints(context.getResources().getString(R.string.opencaching_key), centerString, GEOCACHE_REQUEST_LIMIT, radius, getSelectedStatus());
+        Call<WaypointResults> loginCall = okapiService.getWaypoints(context.getResources().getString(R.string.opencaching_key), centerString, GEOCACHE_REQUEST_LIMIT, radius, getSelectedStatus());
         loginCall.enqueue(new Callback<WaypointResults>() {
             @Override
             public void onResponse(@NonNull Call<WaypointResults> call, @NonNull Response<WaypointResults> response) {
@@ -117,7 +119,7 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
     }
 
     private void getGeocaches(String codes, final boolean isMore) {
-        Call<Map<String, Geocache>> loginCall = networkService.getGeocaches(context.getResources().getString(R.string.opencaching_key), codes, GEOCACHES_STANDARD_FIELDS);
+        Call<Map<String, Geocache>> loginCall = okapiService.getGeocaches(context.getResources().getString(R.string.opencaching_key), codes, GEOCACHES_STANDARD_FIELDS);
         loginCall.enqueue(new Callback<Map<String, Geocache>>() {
             @Override
             public void onResponse(@NonNull Call<Map<String, Geocache>> call, @NonNull Response<Map<String, Geocache>> response) {
@@ -180,7 +182,7 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
     @Override
     public void getLocation(String address) {
         view.showProgress();
-        Call<GeocodingResults> call = service().getLoation(address, context.getString(R.string.google_geocoding_key));
+        Call<GeocodingResults> call = googleMapsService.getLoation(address, context.getString(R.string.google_geocoding_key));
         call.enqueue(new Callback<GeocodingResults>() {
             @Override
             public void onResponse(@NonNull Call<GeocodingResults> call, @NonNull Response<GeocodingResults> response) {
@@ -212,7 +214,7 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
 
     @Override
     public void getUserData() {
-        Call<User> userCall = networkService.getLoggedInUserInfo("home_location");
+        Call<User> userCall = okapiService.getLoggedInUserInfo("home_location");
         userCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {

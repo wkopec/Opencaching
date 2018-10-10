@@ -1,9 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_white_label"
+            android:padding="@dimen/spacing_small">
+
+            <TextView
+                android:id="@+id/geocacheTopLabel"
+                style="@style/Text.Primary.VerySmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_very_small"
+                tools:text="OP7243 | N 50° 39.201 E 40° 19.201"
+                android:textColor="@color/gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/geocacheName"
+                style="@style/Text.Primary.Normal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_below="@id/geocacheTopLabel"
+                android:layout_marginTop="@dimen/spacing_very_small"
+                tools:text="Krosno Airporta sda sdas das dasda sdas das a sda sd"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/geocacheTopLabel" />
+
+            <TextView
+                android:id="@+id/geocacheFound"
+                style="@style/Text.Primary.VerySmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_very_small"
+                android:drawableStart="@drawable/ic_found"
+                android:drawablePadding="@dimen/spacing_very_small"
+                android:drawableTint="@color/green"
+                android:gravity="center"
+                tools:text="52"
+                android:textColor="@color/gray"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/geocacheName" />
+
+            <TextView
+                android:id="@+id/geocacheNotFound"
+                style="@style/Text.Primary.VerySmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_marginTop="@dimen/spacing_very_small"
+                android:drawableStart="@drawable/ic_not_found"
+                android:drawablePadding="@dimen/spacing_very_small"
+                android:drawableTint="@color/red"
+                android:gravity="center"
+                tools:text="1"
+                android:textColor="@color/gray"
+                app:layout_constraintStart_toEndOf="@id/geocacheFound"
+                app:layout_constraintTop_toBottomOf="@id/geocacheName" />
+
+            <TextView
+                android:id="@+id/geocacheRecommendation"
+                style="@style/Text.Primary.VerySmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_marginTop="@dimen/spacing_very_small"
+                android:drawableStart="@drawable/ic_star"
+                android:drawablePadding="@dimen/spacing_very_small"
+                android:drawableTint="@color/darkGreen"
+                android:gravity="center"
+                tools:text="3"
+                android:textColor="@color/gray"
+                app:layout_constraintStart_toEndOf="@id/geocacheNotFound"
+                app:layout_constraintTop_toBottomOf="@id/geocacheName" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:background="@drawable/background_white_label"
+            android:paddingTop="@dimen/spacing_small">
+
+            <com.github.lzyzsd.circleprogress.ArcProgress
+                android:id="@+id/difficultyProgress"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_marginBottom="@dimen/spacing_normal"
+                app:arc_angle="270"
+                app:arc_bottom_text_size="@dimen/text_size_tiny"
+                app:arc_finished_color="@color/colorPrimaryDark"
+                tools:arc_progress="400"
+                app:arc_max="500"
+                app:arc_suffix_text_size="0dp"
+                app:arc_text_color="@color/colorPrimary"
+                app:arc_text_size="0dp"
+                app:arc_unfinished_color="@color/light_gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/terrainProgress"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/difficulty"
+                style="@style/Text.Primary.Normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="4"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/text_size_normal"
+                app:layout_constraintBottom_toBottomOf="@+id/difficultyProgress"
+                app:layout_constraintEnd_toEndOf="@+id/difficultyProgress"
+                app:layout_constraintStart_toStartOf="@+id/difficultyProgress"
+                app:layout_constraintTop_toTopOf="@+id/difficultyProgress" />
+
+            <TextView
+                style="@style/Text.Primary.Tiny"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/difficulty"
+                android:textColor="@color/colorPrimaryDark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/difficultyProgress"
+                app:layout_constraintStart_toStartOf="@+id/difficultyProgress"
+                app:layout_constraintTop_toBottomOf="@+id/difficulty" />
+
+            <com.github.lzyzsd.circleprogress.ArcProgress
+                android:id="@+id/terrainProgress"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_marginBottom="@dimen/spacing_normal"
+                app:arc_angle="270"
+                app:arc_finished_color="@color/colorPrimaryDark"
+                tools:arc_progress="150"
+                app:arc_max="500"
+                app:arc_suffix_text_size="0dp"
+                app:arc_text_color="@color/colorPrimary"
+                app:arc_text_size="0dp"
+                app:arc_unfinished_color="@color/light_gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/sizeProgress"
+                app:layout_constraintStart_toEndOf="@+id/difficultyProgress"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/terrain"
+                style="@style/Text.Primary.Normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="1.5"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/text_size_normal"
+                app:layout_constraintBottom_toBottomOf="@+id/terrainProgress"
+                app:layout_constraintEnd_toEndOf="@+id/terrainProgress"
+                app:layout_constraintStart_toStartOf="@+id/terrainProgress"
+                app:layout_constraintTop_toTopOf="@+id/terrainProgress" />
+
+            <TextView
+                style="@style/Text.Primary.Tiny"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/terrain"
+                android:textColor="@color/colorPrimaryDark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/terrainProgress"
+                app:layout_constraintStart_toStartOf="@+id/terrainProgress"
+                app:layout_constraintTop_toBottomOf="@+id/terrain" />
+
+            <com.github.lzyzsd.circleprogress.ArcProgress
+                android:id="@+id/sizeProgress"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_marginBottom="@dimen/spacing_normal"
+                app:arc_angle="270"
+                app:arc_finished_color="@color/colorPrimaryDark"
+                tools:arc_progress="200"
+                app:arc_max="500"
+                app:arc_suffix_text_size="0dp"
+                app:arc_text_color="@color/colorPrimary"
+                app:arc_text_size="0dp"
+                app:arc_unfinished_color="@color/light_gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/terrainProgress"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/size"
+                style="@style/Text.Primary.Normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="M"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/text_size_normal"
+                app:layout_constraintBottom_toBottomOf="@+id/sizeProgress"
+                app:layout_constraintEnd_toEndOf="@+id/sizeProgress"
+                app:layout_constraintStart_toStartOf="@+id/sizeProgress"
+                app:layout_constraintTop_toTopOf="@+id/sizeProgress" />
+
+            <TextView
+                style="@style/Text.Primary.Tiny"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/size"
+                android:textColor="@color/colorPrimaryDark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/sizeProgress"
+                app:layout_constraintStart_toStartOf="@+id/sizeProgress"
+                app:layout_constraintTop_toBottomOf="@+id/size" />
 
 
+        </android.support.constraint.ConstraintLayout>
 
-</LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

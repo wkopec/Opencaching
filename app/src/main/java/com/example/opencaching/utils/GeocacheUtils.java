@@ -6,7 +6,34 @@ import com.example.opencaching.R;
  * Created by Wojtek on 22.07.2017.
  */
 
-public class ResourceUtils {
+public class GeocacheUtils {
+
+    public static float getSizeIntValue(String size) {
+        switch (size) {
+            case "none": return 0;
+            case "nano": return 0.5f;
+            case "micro": return 1;
+            case "small": return 2;
+            case "regular": return 3;
+            case "large": return 4;
+            case "xlarge": return 5;
+            default: return 0;
+        }
+    }
+
+    public static String getGeocacheShortSize(String size) {
+        switch (size) {
+            case "none": return "?";
+            case "nano": return "XXS";
+            case "micro": return "XS";
+            case "small": return "S";
+            case "regular": return "M";
+            case "large": return "L";
+            case "xlarge": return "XL";
+            default: return "?";
+        }
+    }
+
     public static int getGeocacheSize(String size){
         switch (size) {
             case "none": return R.string.size_none;

@@ -123,7 +123,7 @@ public class SessionManager {
         }
         return null;
     }
-    
+
     //User settings
 
 }

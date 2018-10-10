@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.example.opencaching.api.OkapiService;
 import com.example.opencaching.data.models.Error;
+import com.example.opencaching.data.repository.GeocacheRepository;
 import com.example.opencaching.ui.base.BasePresenter;
 import com.example.opencaching.data.models.okapi.Geocache;
 
@@ -26,6 +27,8 @@ public class GeocacheInfoPresenter extends BasePresenter implements GeocacheInfo
 
     @Inject
     OkapiService okapiService;
+    @Inject
+    GeocacheRepository geocacheRepository;
 
     private GeocacheInfoContract.View view;
     private Context context;
@@ -36,32 +39,37 @@ public class GeocacheInfoPresenter extends BasePresenter implements GeocacheInfo
         this.context = context;
     }
 
+    @Override
     public void getGeocacheInfo(String code) {
-
-        Call<Geocache> loginCall = okapiService.getGeocacheInfo(code, GEOCACHE_INFO_FIELDS);
-        loginCall.enqueue(new Callback<Geocache>() {
-            @Override
-            public void onResponse(@NonNull Call<Geocache> call, @NonNull Response<Geocache> response) {
-                if (response.body() != null){
-                    setGeocacheInfo(response.body());
-                } else {
-                    if (response.errorBody() != null){
-                        view.showError(new Error(response.message()));
-                    }
-                }
-                view.hideProgress();
-            }
-            @Override
-            public void onFailure(@NonNull Call<Geocache> call, @NonNull Throwable t) {
-                view.hideProgress();
-                view.showError(ApiUtils.getErrorSingle(t));
-            }
-        });
+        view.setGeocacheData(geocacheRepository.loadGeocacheByCode(code));
     }
 
-    private void setGeocacheInfo(Geocache geocache) {
-        android.util.Log.d("Test", "YEY");
-        android.util.Log.d("Test", geocache.getName());
-    }
+//    public void getGeocacheInfo(String code) {
+//
+//        Call<Geocache> loginCall = okapiService.getGeocacheInfo(code, GEOCACHE_INFO_FIELDS);
+//        loginCall.enqueue(new Callback<Geocache>() {
+//            @Override
+//            public void onResponse(@NonNull Call<Geocache> call, @NonNull Response<Geocache> response) {
+//                if (response.body() != null){
+//                    setGeocacheInfo(response.body());
+//                } else {
+//                    if (response.errorBody() != null){
+//                        view.showError(new Error(response.message()));
+//                    }
+//                }
+//                view.hideProgress();
+//            }
+//            @Override
+//            public void onFailure(@NonNull Call<Geocache> call, @NonNull Throwable t) {
+//                view.hideProgress();
+//                view.showError(ApiUtils.getErrorSingle(t));
+//            }
+//        });
+//    }
+//
+//    private void setGeocacheInfo(Geocache geocache) {
+//        android.util.Log.d("Test", "YEY");
+//        android.util.Log.d("Test", geocache.getName());
+//    }
 
 }

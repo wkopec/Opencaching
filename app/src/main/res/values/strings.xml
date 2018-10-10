@@ -109,6 +109,9 @@
     <string name="compass">Kompas</string>
     <string name="permission_denied_message_fine_location">Ta funkcja wymaga uprawnie do lokalizacji urządzenia.</string>
     <string name="save">zapisz</string>
+    <string name="difficulty">Trudność</string>
+    <string name="terrain">Teren</string>
+    <string name="size">Wielkość</string>
 
 
 </resources>

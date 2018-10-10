@@ -73,10 +73,10 @@ import io.realm.RealmResults;
 
 import static com.example.opencaching.ui.geocache.GeocacheActivity.GEOCACHE;
 import static com.example.opencaching.utils.IntegerUtils.getDistance;
-import static com.example.opencaching.utils.ResourceUtils.getGeocacheIcon;
-import static com.example.opencaching.utils.ResourceUtils.getGeocacheSelectedIcon;
-import static com.example.opencaching.utils.ResourceUtils.getGeocacheSize;
-import static com.example.opencaching.utils.ResourceUtils.getGeocacheType;
+import static com.example.opencaching.utils.GeocacheUtils.getGeocacheIcon;
+import static com.example.opencaching.utils.GeocacheUtils.getGeocacheSelectedIcon;
+import static com.example.opencaching.utils.GeocacheUtils.getGeocacheSize;
+import static com.example.opencaching.utils.GeocacheUtils.getGeocacheType;
 import static com.example.opencaching.utils.StringUtils.getDateString;
 import static com.example.opencaching.utils.StringUtils.getFormatedCoordinates;
 

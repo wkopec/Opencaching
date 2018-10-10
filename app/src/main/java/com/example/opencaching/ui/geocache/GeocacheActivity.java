@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.opencaching.utils.ResourceUtils.getGeocacheIcon;
+import static com.example.opencaching.utils.GeocacheUtils.getGeocacheIcon;
 
 /**
  * Created by Wojtek on 26.07.2017.

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/geocacheBottomSheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -43,7 +44,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_very_small"
-            android:text="OP7243 | N 50° 39.201 E 40° 19.201"
+            tools:text="OP7243 | N 50° 39.201 E 40° 19.201"
             android:textColor="@color/gray"
             app:layout_constraintEnd_toStartOf="@+id/navigateButton"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +57,7 @@
             android:layout_height="match_parent"
             android:layout_below="@id/geocacheTopLabel"
             android:layout_marginTop="@dimen/spacing_very_small"
-            android:text="Krosno Airporta sda sdas das dasda sdas das a sda sd"
+            tools:text="Krosno Airporta sda sdas das dasda sdas das a sda sd"
             app:layout_constraintEnd_toStartOf="@+id/navigateButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/geocacheTopLabel" />
@@ -80,6 +81,8 @@
 
         <TextView
             android:id="@+id/geocacheFound"
+            style="@style/Text.Primary.VerySmall"
+            android:textColor="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_very_small"
@@ -87,12 +90,14 @@
             android:drawableStart="@drawable/ic_found"
             android:drawableTint="@color/green"
             android:gravity="center"
-            android:text="52"
+            tools:text="52"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/geocacheName" />
 
         <TextView
             android:id="@+id/geocacheNotFound"
+            style="@style/Text.Primary.VerySmall"
+            android:textColor="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_small"
@@ -101,12 +106,14 @@
             android:drawableStart="@drawable/ic_not_found"
             android:drawableTint="@color/red"
             android:gravity="center"
-            android:text="1"
+            tools:text="1"
             app:layout_constraintStart_toEndOf="@id/geocacheFound"
             app:layout_constraintTop_toBottomOf="@id/geocacheName" />
 
         <TextView
             android:id="@+id/geocacheRecommendation"
+            style="@style/Text.Primary.VerySmall"
+            android:textColor="@color/gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_small"
@@ -115,7 +122,7 @@
             android:drawableStart="@drawable/ic_star"
             android:drawableTint="@color/darkGreen"
             android:gravity="center"
-            android:text="3"
+            tools:text="3"
             app:layout_constraintStart_toEndOf="@id/geocacheNotFound"
             app:layout_constraintTop_toBottomOf="@id/geocacheName" />
 
@@ -132,7 +139,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_small"
-            android:text="Typ: Tradycyjna"
+            tools:text="Typ: Tradycyjna"
             app:layout_constraintEnd_toEndOf="@id/verticalGuideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/geocacheFound" />
@@ -143,7 +150,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_very_small"
-            android:text="Ocena: Znakomita"
+            tools:text="Ocena: Znakomita"
             app:layout_constraintEnd_toEndOf="@id/verticalGuideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/geocacheType" />
@@ -154,7 +161,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_very_small"
-            android:text="Wielkość: Duża"
+            tools:text="Wielkość: Duża"
             app:layout_constraintEnd_toEndOf="@id/verticalGuideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/geocacheRate" />
@@ -165,7 +172,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_very_small"
-            android:text="Właściciel: Volfram"
+            tools:text="Właściciel: Volfram"
             app:layout_constraintEnd_toEndOf="@+id/verticalGuideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/geocacheSize" />
@@ -176,7 +183,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_small"
-            android:text="Trudność:"
+            tools:text="Trudność:"
             app:layout_constraintStart_toStartOf="@id/verticalGuideline"
             app:layout_constraintTop_toBottomOf="@id/geocacheFound" />
 
@@ -199,7 +206,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_very_small"
-            android:text="Teren:"
+            tools:text="Teren:"
             app:layout_constraintStart_toStartOf="@id/verticalGuideline"
             app:layout_constraintTop_toBottomOf="@id/geocacheDifficulty" />
 
@@ -222,7 +229,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_very_small"
-            android:text="Ostatnio znaleziona: 22.06.2018"
+            tools:text="Ostatnio znaleziona: 22.06.2018"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/verticalGuideline"
             app:layout_constraintTop_toBottomOf="@id/geocacheTerrain" />

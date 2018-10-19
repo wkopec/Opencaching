@@ -183,7 +183,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_small"
-            tools:text="Trudność:"
+            android:text="@string/dificulty_info"
             app:layout_constraintStart_toStartOf="@id/verticalGuideline"
             app:layout_constraintTop_toBottomOf="@id/geocacheFound" />
 
@@ -191,7 +191,7 @@
             android:id="@+id/difficulty"
             style="@style/RectangleRatingBar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="14dp"
             android:layout_marginStart="@dimen/spacing_very_small"
             android:rating="3.5"
             app:layout_constraintBottom_toBottomOf="@id/geocacheDifficulty"
@@ -206,7 +206,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_very_small"
-            tools:text="Teren:"
+            android:text="@string/terrain_info"
             app:layout_constraintStart_toStartOf="@id/verticalGuideline"
             app:layout_constraintTop_toBottomOf="@id/geocacheDifficulty" />
 
@@ -214,7 +214,7 @@
             android:id="@+id/terrain"
             style="@style/RectangleRatingBar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="14dp"
             android:layout_marginStart="@dimen/spacing_very_small"
             android:rating="3.5"
             app:layout_constraintBottom_toBottomOf="@id/geocacheTerrain"

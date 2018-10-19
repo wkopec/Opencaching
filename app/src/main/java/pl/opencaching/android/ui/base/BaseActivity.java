@@ -25,6 +25,7 @@ import org.greenrobot.eventbus.EventBus;
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
+import pl.opencaching.android.ui.dialogs.MessageDialog;
 
 
 /**
@@ -69,6 +70,12 @@ public abstract class BaseActivity extends DaggerAppCompatActivity implements Ba
     @Override
     public void showError(Error error) {
         showToast(error.getMessage());
+    }
+
+    @Override
+    public void showMessage(int icon, int message) {
+        MessageDialog messageDialog = MessageDialog.newInstance(icon, message);
+        messageDialog.show(getSupportFragmentManager(), MessageDialog.class.getName());
     }
 
     public void showProgress() {

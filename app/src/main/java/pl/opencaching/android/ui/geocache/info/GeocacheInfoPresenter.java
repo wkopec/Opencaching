@@ -2,7 +2,9 @@ package pl.opencaching.android.ui.geocache.info;
 
 import android.content.Context;
 
+import pl.opencaching.android.R;
 import pl.opencaching.android.api.OkapiService;
+import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.data.repository.GeocacheRepository;
 import pl.opencaching.android.ui.base.BasePresenter;
 
@@ -21,6 +23,7 @@ public class GeocacheInfoPresenter extends BasePresenter implements GeocacheInfo
     GeocacheRepository geocacheRepository;
 
     private GeocacheInfoContract.View view;
+    private Geocache geocache;
     private Context context;
 
     @Inject
@@ -31,7 +34,17 @@ public class GeocacheInfoPresenter extends BasePresenter implements GeocacheInfo
 
     @Override
     public void getGeocacheInfo(String code) {
-        view.setGeocacheData(geocacheRepository.loadGeocacheByCode(code));
+        geocache = geocacheRepository.loadGeocacheByCode(code);
+        view.setGeocacheData(geocache);
+    }
+
+    @Override
+    public void onHintClick() {
+        if(!geocache.getHint().isEmpty()) {
+            view.showHint();
+        } else {
+            view.showMessage(R.drawable.ic_archive, R.string.geocache_hint_unavailable_message);
+        }
     }
 
 //    public void getGeocacheInfo(String code) {
@@ -57,9 +70,5 @@ public class GeocacheInfoPresenter extends BasePresenter implements GeocacheInfo
 //        });
 //    }
 //
-//    private void setGeocacheInfo(Geocache geocache) {
-//        android.util.Log.d("Test", "YEY");
-//        android.util.Log.d("Test", geocache.getName());
-//    }
 
 }

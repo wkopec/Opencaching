@@ -228,52 +228,44 @@
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/hintLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_small"
-            android:padding="@dimen/spacing_small"
+            android:animateLayoutChanges="true"
             android:background="@drawable/background_white_label">
 
-            <ViewSwitcher
-                android:id="@+id/switcher"
+
+            <TextView
+                android:id="@+id/hintButton"
+                style="@style/Text.Primary.Normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:inAnimation="@animator/fade_in"
-                android:outAnimation="@animator/fade_out"
-                android:measureAllChildren="false"
-                app:layout_constraintTop_toTopOf="parent"
+                android:gravity="center"
+                android:text="@string/hint"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_margin="@dimen/spacing_small"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:textAllCaps="true" />
 
-                <TextView
-                    android:id="@+id/hintButton"
-                    style="@style/Text.Primary.Normal"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:textAllCaps="true"
-                    android:text="@string/hint"
-                    android:layout_gravity="center"/>
-
-                <pl.opencaching.android.utils.views.SecretTextView
-                    android:id="@+id/hint"
-                    style="@style/Text.Primary.Normal"
-                    android:textColor="@color/gray"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/spacing_small"
-                    android:layout_gravity="center"/>
-            </ViewSwitcher>
-
-
-
+            <pl.opencaching.android.utils.views.SecretTextView
+                android:id="@+id/hint"
+                style="@style/Text.Primary.Normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="@dimen/spacing_small"
+                android:textColor="@color/gray"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
-
-
-
 
     </LinearLayout>
 

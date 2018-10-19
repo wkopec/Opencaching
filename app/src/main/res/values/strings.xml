@@ -115,6 +115,8 @@
     <string name="hint">Podpowiedź</string>
     <string name="dificulty_info">Trudność:</string>
     <string name="terrain_info">Teren:</string>
+    <string name="geocache_hint_unavailable_message">Autor nie udostępnił podpowiedzi dla tej skrzynki.</string>
+    <string name="ok">OK</string>
 
 
 </resources>

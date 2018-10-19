@@ -1,11 +1,16 @@
 package pl.opencaching.android.ui.geocache.info;
 
+import android.animation.LayoutTransition;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -58,26 +63,33 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     ArcProgress terrainProgress;
     @BindView(R.id.sizeProgress)
     ArcProgress sizeProgress;
-    @BindView(R.id.switcher)
-    ViewSwitcher switcher;
     @BindView(R.id.hint)
     SecretTextView hint;
     @BindView(R.id.hintButton)
     TextView hintButton;
+    @BindView(R.id.hintLabel)
+    ConstraintLayout hintLabel;
 
     @Inject
     GeocacheInfoContract.Presenter presenter;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_geocache_info, null);
         unbinder = ButterKnife.bind(this, view);
         activity = (BaseActivity) getActivity();
+        setupView();
         setPresenter(presenter);
         // TODO: get waypoint from args using getInstance
         presenter.getGeocacheInfo(getGeocacheWaypoint());
         return view;
+    }
+
+    private void setupView() {
+        hintLabel.getLayoutTransition()
+                .enableTransitionType(LayoutTransition.CHANGING);
+
     }
 
     @Override
@@ -105,9 +117,31 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
 
     }
 
-    @OnClick(R.id.switcher)
+    @OnClick(R.id.hintButton)
     public void onHintClick() {
-        switcher.showNext();
+        presenter.onHintClick();
+    }
+
+    @Override
+    public void showHint() {
+        final Animation fadeOut = new AlphaAnimation(1.0f, 0.0f);
+        fadeOut.setDuration(800);
+        fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                hintButton.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        hintButton.setAnimation(fadeOut);
+        hint.setVisibility(View.VISIBLE);
         hint.show();
     }
 
@@ -118,23 +152,6 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
             arcProgress.setProgress(animatedValue);
         });
         progressAnimator.start();
-    }
-
-
-
-    @Override
-    public void showError(Error error) {
-        activity.showToast(error.getMessage());
-    }
-
-    @Override
-    public void showProgress() {
-        activity.showProgress();
-    }
-
-    @Override
-    public void hideProgress() {
-        activity.hideProgress();
     }
 
 }

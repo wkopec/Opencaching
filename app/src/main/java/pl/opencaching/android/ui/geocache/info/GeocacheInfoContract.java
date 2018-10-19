@@ -11,15 +11,17 @@ public class GeocacheInfoContract {
 
     public interface View extends BaseContract.View{
         void setGeocacheData(Geocache geocache);
-        void showError(Error error);
-        void showProgress();
-        void hideProgress();
+
+        void showHint();
+
 
     }
 
     public interface Presenter extends BaseContract.Presenter{
 
         void getGeocacheInfo(String code);
+
+        void onHintClick();
 
     }
 

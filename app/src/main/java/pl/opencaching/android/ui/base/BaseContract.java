@@ -25,5 +25,8 @@ public abstract class BaseContract {
         void showProgress();
 
         void hideProgress();
+
+        void showMessage(int icon, int message);
+
     }
 }

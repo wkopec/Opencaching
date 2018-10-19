@@ -10,6 +10,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -450,7 +451,9 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     @OnClick(R.id.navigateFloatingButton)
     public void onNavigateClick() {
-
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=" + lastSelectedMarker.getPosition().latitude + "," + lastSelectedMarker.getPosition().longitude));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     private void setAnimations() {

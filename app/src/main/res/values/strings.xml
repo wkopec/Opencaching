@@ -112,6 +112,7 @@
     <string name="difficulty">Trudność</string>
     <string name="terrain">Teren</string>
     <string name="size">Wielkość</string>
+    <string name="hint">Podpowiedź</string>
 
 
 </resources>

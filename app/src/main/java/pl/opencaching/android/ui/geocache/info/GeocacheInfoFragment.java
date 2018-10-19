@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
+
+import butterknife.OnClick;
 import pl.opencaching.android.R;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.ui.base.BaseActivity;
@@ -19,6 +22,7 @@ import butterknife.Unbinder;
 
 import pl.opencaching.android.utils.GeocacheUtils;
 import pl.opencaching.android.utils.StringUtils;
+import pl.opencaching.android.utils.views.SecretTextView;
 
 import static pl.opencaching.android.ui.geocache.GeocacheActivity.getGeocacheWaypoint;
 
@@ -54,6 +58,12 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     ArcProgress terrainProgress;
     @BindView(R.id.sizeProgress)
     ArcProgress sizeProgress;
+    @BindView(R.id.switcher)
+    ViewSwitcher switcher;
+    @BindView(R.id.hint)
+    SecretTextView hint;
+    @BindView(R.id.hintButton)
+    TextView hintButton;
 
     @Inject
     GeocacheInfoContract.Presenter presenter;
@@ -87,6 +97,18 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
         animateArcProgress(terrainProgress, (int) (geocache.getTerrain() * 100));
         animateArcProgress(sizeProgress, (int) (GeocacheUtils.getSizeIntValue(geocache.getSize()) * 100));
 
+        if(!geocache.getHint().isEmpty()) {
+            hint.setText(geocache.getHint());
+        } else {
+            hintButton.setTextColor(getResources().getColor(R.color.gray));
+        }
+
+    }
+
+    @OnClick(R.id.switcher)
+    public void onHintClick() {
+        switcher.showNext();
+        hint.show();
     }
 
     private void animateArcProgress(ArcProgress arcProgress, int value) {
@@ -97,6 +119,8 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
         });
         progressAnimator.start();
     }
+
+
 
     @Override
     public void showError(Error error) {

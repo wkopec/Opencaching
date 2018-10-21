@@ -1,5 +1,8 @@
 package pl.opencaching.android.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import pl.opencaching.android.R;
 
 /**
@@ -62,24 +65,6 @@ public class GeocacheUtils {
         }
     }
 
-    public static int getLogIcon(String type) {
-        switch (type) {
-            case "Found it": return R.drawable.ic_found;
-            case "Didn't find it": return R.drawable.ic_not_found;
-            case "Comment": return R.drawable.ic_comment;
-            case "Ready to search": return R.drawable.ic_power;
-            case "Archived": return R.drawable.ic_archive;
-            case "Temporarily unavailable": return R.drawable.ic_warning;
-            case "Needs maintenance": return R.drawable.ic_need_maintenance;
-            case "Maintenance performed": return R.drawable.ic_maintenance_performed;
-            case "Moved": return R.drawable.ic_moved;
-            case "OC Team comment": return R.drawable.ic_cog;
-            case "Attended": return R.drawable.ic_attended;
-            case "Will attend": return R.drawable.ic_will_attend;
-            default: return 0;
-        }
-    }
-
     public static int getLogIconColor(String type) {
         switch (type) {
             case "Found it": return R.color.green;
@@ -119,5 +104,56 @@ public class GeocacheUtils {
             default: return 0;
         }
     }
+
+    public static int getLogIcon(String type) {
+        switch (type) {
+            case "Found it": return R.drawable.ic_found;
+            case "Didn't find it": return R.drawable.ic_not_found;
+            case "Comment": return R.drawable.ic_comment;
+            case "Ready to search": return R.drawable.ic_power;
+            case "Archived": return R.drawable.ic_archive;
+            case "Temporarily unavailable": return R.drawable.ic_warning;
+            case "Needs maintenance": return R.drawable.ic_need_maintenance;
+            case "Maintenance performed": return R.drawable.ic_maintenance_performed;
+            case "Moved": return R.drawable.ic_moved;
+            case "OC Team comment": return R.drawable.ic_cog;
+            case "Attended": return R.drawable.ic_attended;
+            case "Will attend": return R.drawable.ic_will_attend;
+            default: return 0;
+        }
+    }
+
+    public static int getAttributeIcon(String acode) {
+        switch (acode) {
+            case "A2": return R.drawable.ic_attribute_bike;     //W pobliżu punktu geodezyjnego
+            case "A3": return R.drawable.ic_attribute_bike;     //Wherigo Cache
+            case "A4": return R.drawable.ic_attribute_bike;     //Skrzynka typu Letterbox
+            case "A5": return R.drawable.ic_attribute_bike;     //GeoHotel Cache
+            case "A6": return R.drawable.ic_attribute_bike;     //Przyczepiona magnesem
+            case "A7": return R.drawable.ic_attribute_bike;     //Opis zawiera plik audio
+            case "A8": return R.drawable.ic_attribute_bike;     //Offset cache
+            case "A9": return R.drawable.ic_attribute_bike;     //Beacon - Garmin Chirp
+            case "A10": return R.drawable.ic_attribute_dead_drop;    //Dead Drop USB skrzynka
+            case "A18": return R.drawable.ic_attribute_bike;    //Dostępna dla niepełnosprawnych
+            case "A20": return R.drawable.ic_attribute_bike;    //Dostępna tylko pieszo
+            case "A27": return R.drawable.ic_attribute_bike;    //Dostępna rowerem
+            case "A28": return R.drawable.ic_attribute_bike;    //Umiejscowiona na łonie natury (lasy, góry, itp.)
+            case "A29": return R.drawable.ic_attribute_bike;    //Miejsce historyczne
+            case "A42": return R.drawable.ic_attribute_bike;    //Zalecane szukanie nocą
+            case "A49": return R.drawable.ic_attribute_bike;    //Potrzebny kompas
+            case "A50": return R.drawable.ic_attribute_bike;    //Weź coś do pisania
+            case "A51": return R.drawable.ic_attribute_bike;    //Potrzebna łopatka
+            case "A52": return R.drawable.ic_attribute_bike;    //Potrzebna latarka
+            case "A56": return R.drawable.ic_attribute_bike;    //Wymagany dodatkowy sprzęt
+            case "A57": return R.drawable.ic_attribute_bike;    //Wymaga sprzętu pływającego
+            case "A59": return R.drawable.ic_attribute_bike;    //Skrzynka niebezpieczna
+            case "A68": return R.drawable.ic_attribute_bike;    //Szybka skrzynka
+            case "A70": return R.drawable.ic_attribute_bike;    //Można zabrać dzieci
+            case "A73": return R.drawable.ic_attribute_bike;    //Dostępna w określonych godzinach lub płatna
+            default: return R.drawable.ic_attribute_bike;
+        }
+    }
+
+
 
 }

@@ -73,8 +73,20 @@ public abstract class BaseActivity extends DaggerAppCompatActivity implements Ba
     }
 
     @Override
-    public void showMessage(int icon, int message) {
+    public void showMessage(String message) {
+        MessageDialog messageDialog = MessageDialog.newInstance( message);
+        messageDialog.show(getSupportFragmentManager(), MessageDialog.class.getName());
+    }
+
+    @Override
+    public void showMessage(int icon, String message) {
         MessageDialog messageDialog = MessageDialog.newInstance(icon, message);
+        messageDialog.show(getSupportFragmentManager(), MessageDialog.class.getName());
+    }
+
+    @Override
+    public void showMessage(int icon, String title, String message) {
+        MessageDialog messageDialog = MessageDialog.newInstance(icon, title, message);
         messageDialog.show(getSupportFragmentManager(), MessageDialog.class.getName());
     }
 

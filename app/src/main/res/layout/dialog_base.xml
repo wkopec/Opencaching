@@ -26,6 +26,8 @@
         android:background="@drawable/bg_circle"
         android:padding="@dimen/spacing_small"
         app:layout_constraintEnd_toEndOf="@id/dialogContainer"
-        app:layout_constraintStart_toStartOf="@id/dialogContainer" />
+        app:layout_constraintStart_toStartOf="@id/dialogContainer"
+        android:src="@drawable/ic_info"
+        android:tint="@color/white"/>
 
 </android.support.constraint.ConstraintLayout>

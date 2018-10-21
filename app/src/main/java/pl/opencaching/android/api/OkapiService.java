@@ -3,6 +3,7 @@ package pl.opencaching.android.api;
 import java.util.ArrayList;
 import java.util.Map;
 
+import pl.opencaching.android.data.models.okapi.Attribute;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.data.models.okapi.GeocacheLog;
 import pl.opencaching.android.data.models.okapi.User;
@@ -13,7 +14,9 @@ import retrofit2.http.Query;
 
 
 public interface OkapiService {
+
     //AUTH
+
     @GET("oauth/request_token")
     Call<String> getRequestToken(@Query("oauth_callback") String oauthCallback);
 
@@ -38,4 +41,13 @@ public interface OkapiService {
 
     @GET("caches/geocache")
     Call<Geocache> getGeocacheInfo(@Query("cache_code") String code, @Query("fields") String fields);
+
+
+
+    @GET("attrs/attribute_index")
+    Call<Map<String, Attribute>> getAllAttributes(@Query("fields") String fields, @Query("langpref") String langpref, @Query("only_locally_used") boolean isLocallyUsed);
+
+    @GET("attrs/attributes")
+    Call<Void> getAttributes(@Query("acodes") String code, @Query("fields") String fields, @Query("langpref") String langpref);
+
 }

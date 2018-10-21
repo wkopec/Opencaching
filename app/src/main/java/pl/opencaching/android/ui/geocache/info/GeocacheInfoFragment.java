@@ -6,20 +6,25 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextView;
-import android.widget.ViewSwitcher;
 
 import butterknife.OnClick;
+import io.realm.RealmList;
 import pl.opencaching.android.R;
+import pl.opencaching.android.data.models.okapi.Attribute;
 import pl.opencaching.android.data.models.okapi.Geocache;
+import pl.opencaching.android.data.repository.AttributeRepository;
 import pl.opencaching.android.ui.base.BaseActivity;
 import pl.opencaching.android.ui.base.BaseFragment;
 import com.github.lzyzsd.circleprogress.ArcProgress;
+
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +44,9 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
 
     private Unbinder unbinder;
     private View view;
-    private BaseActivity activity;
+
+    @Inject
+    AttributeRepository attributeRepository;
 
     @BindView(R.id.geocacheTopLabel)
     TextView geocacheTopLabel;
@@ -69,6 +76,8 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     TextView hintButton;
     @BindView(R.id.hintLabel)
     ConstraintLayout hintLabel;
+    @BindView(R.id.attributeList)
+    RecyclerView attributeRecycleView;
 
     @Inject
     GeocacheInfoContract.Presenter presenter;
@@ -78,7 +87,6 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_geocache_info, null);
         unbinder = ButterKnife.bind(this, view);
-        activity = (BaseActivity) getActivity();
         setupView();
         setPresenter(presenter);
         // TODO: get waypoint from args using getInstance
@@ -87,9 +95,9 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     }
 
     private void setupView() {
-        hintLabel.getLayoutTransition()
-                .enableTransitionType(LayoutTransition.CHANGING);
-
+        LayoutTransition layoutTransition = new LayoutTransition();
+        layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
+        hintLabel.setLayoutTransition(layoutTransition);
     }
 
     @Override
@@ -115,6 +123,15 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
             hintButton.setTextColor(getResources().getColor(R.color.gray));
         }
 
+        setAttributeAdapter(geocache.getAttributeCodes());
+
+    }
+
+    private void setAttributeAdapter(RealmList<String> attributeCodes) {
+        AttributesAdapter adapter = new AttributesAdapter(attributeRepository.loadAttributesIncludes(attributeCodes.toArray(new String[]{})), (BaseActivity) getActivity());
+        attributeRecycleView.setLayoutManager(new GridLayoutManager(getActivity(), 6));
+        attributeRecycleView.setAdapter(adapter);
+        //attributeRecycleView.setLayoutManager( new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
     }
 
     @OnClick(R.id.hintButton)

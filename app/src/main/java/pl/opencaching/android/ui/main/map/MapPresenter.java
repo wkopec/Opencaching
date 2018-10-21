@@ -124,19 +124,14 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
             public void onResponse(@NonNull Call<Map<String, Geocache>> call, @NonNull Response<Map<String, Geocache>> response) {
                 if (response.body() != null) {
                     Map<String, Geocache> geocaches = response.body();
-                    if (geocaches != null) {
-                        storeAndShowGeocaches(geocaches);
-                        if (isMore) {
-                            view.showMapInfo(R.string.move_map_to_show_more_geocaches);
-                        } else {
-                            view.hideMapInfo();
-                        }
-                        isActive = false;
-                        view.hideProgress();
+                    storeAndShowGeocaches(geocaches);
+                    if (isMore) {
+                        view.showMapInfo(R.string.move_map_to_show_more_geocaches);
                     } else {
-                        view.hideProgress();
-                        isActive = false;
+                        view.hideMapInfo();
                     }
+                    isActive = false;
+                    view.hideProgress();
                 } else if (response.errorBody() != null) {
                     view.showMapInfo(ApiUtils.getErrorSingle(response.errorBody()).getMessage());
                 }

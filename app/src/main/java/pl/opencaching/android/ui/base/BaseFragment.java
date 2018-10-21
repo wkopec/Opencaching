@@ -44,8 +44,18 @@ public abstract class BaseFragment extends DaggerFragment implements BaseContrac
     }
 
     @Override
-    public void showMessage(int icon, int message) {
+    public void showMessage(String message) {
+        ((BaseActivity)getActivity()).showMessage(message);
+    }
+
+    @Override
+    public void showMessage(int icon, String message) {
         ((BaseActivity)getActivity()).showMessage(icon, message);
+    }
+
+    @Override
+    public void showMessage(int icon, String title, String message) {
+        ((BaseActivity)getActivity()).showMessage(icon, title, message);
     }
 
     @Override

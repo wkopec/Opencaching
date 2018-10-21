@@ -113,7 +113,7 @@ public class Geocache extends RealmObject implements Parcelable {
     private RealmList<Image> images;    //list of dictionaries
     @SerializedName("attr_acodes")
     @Expose
-    private RealmList<String> attributes;   //unordered list of OKAPI geocache-attribute IDs (A-codes) with which the cache was tagged
+    private RealmList<String> attributeCodes;   //unordered list of OKAPI geocache-attribute IDs (A-codes) with which the cache was tagged
     @SerializedName("latest_logs")
     @Expose
     private RealmList<GeocacheLog> latestGeocacheLogs;  //a couple of latest log entries in the cache
@@ -301,8 +301,8 @@ public class Geocache extends RealmObject implements Parcelable {
         return images;
     }
 
-    public RealmList<String> getAttributes() {
-        return attributes;
+    public RealmList<String> getAttributeCodes() {
+        return attributeCodes;
     }
 
     public RealmList<GeocacheLog> getLatestGeocacheLogs() {
@@ -361,7 +361,5 @@ public class Geocache extends RealmObject implements Parcelable {
     public GeocacheClusterItem getClusterItem() {
         return new GeocacheClusterItem(name, code, type, getPosition());
     }
-
-
 
 }

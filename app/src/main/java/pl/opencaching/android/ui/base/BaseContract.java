@@ -26,7 +26,11 @@ public abstract class BaseContract {
 
         void hideProgress();
 
-        void showMessage(int icon, int message);
+        void showMessage(int icon, String title, String message);
+
+        void showMessage(int icon, String message);
+
+        void showMessage(String message);
 
     }
 }

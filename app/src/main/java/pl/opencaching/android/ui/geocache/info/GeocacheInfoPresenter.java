@@ -81,6 +81,7 @@ public class GeocacheInfoPresenter extends BasePresenter implements GeocacheInfo
                         attributeList.add(attribute);
                         iterator.remove();
                     }
+                    attributeList.add(new Attribute("A999", context.getResources().getString(R.string.attribute_title_password), context.getResources().getString(R.string.attribute_title_password_description), R.drawable.ic_attribute_password));
                     attributeRepository.addOrUpdate(attributeList);
                 }
             }

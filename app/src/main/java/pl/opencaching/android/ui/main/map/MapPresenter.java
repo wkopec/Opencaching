@@ -154,6 +154,9 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
         while (iterator.hasNext()) {
             Map.Entry pair = (Map.Entry) iterator.next();
             Geocache geocache = (Geocache) pair.getValue();
+            if(geocache.isPasswordRequired()) {
+                geocache.getAttributeCodes().add("A999");
+            }
             //geocache.setApiRequestCounter();
             downloadedGeocachesArray.add(geocache);
             if (!iterator.hasNext()) {

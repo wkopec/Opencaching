@@ -3,7 +3,7 @@
     android:layout_width="@dimen/item_attribute_height"
     android:layout_height="@dimen/item_attribute_height"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/background_light_gray_rounded"
+    android:background="@drawable/background_accent_gray_rounded"
     android:padding="@dimen/spacing_small"
     android:layout_margin="@dimen/spacing_very_small">
 

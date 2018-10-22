@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -77,12 +78,12 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     SecretTextView hint;
     @BindView(R.id.hintButton)
     TextView hintButton;
+    @BindView(R.id.attributeLabel)
+    ConstraintLayout attributeLabel;
     @BindView(R.id.hintLabel)
     ConstraintLayout hintLabel;
     @BindView(R.id.attributeList)
     RecyclerView attributeRecycleView;
-    @BindView(R.id.infoScrollView)
-    ScrollView infoScrollView;
 
 
     @Inject
@@ -101,11 +102,8 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     }
 
     private void setupView() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            infoScrollView.setNestedScrollingEnabled(true);
-        } else {
-            ViewCompat.setNestedScrollingEnabled(infoScrollView, false);
-        }
+        attributeRecycleView.setFocusable(false);
+        ViewCompat.setNestedScrollingEnabled(attributeRecycleView, false);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         attributeRecycleView.setLayoutManager(layoutManager);
@@ -117,11 +115,12 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
                         int viewWidth = attributeRecycleView.getMeasuredWidth();
                         float cardViewWidth = getActivity().getResources().getDimension(R.dimen.item_attribute_height);
                         int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
-                        layoutManager.setSpanCount(newSpanCount);
-                        layoutManager.requestLayout();
+                        if(newSpanCount > 0) {
+                            layoutManager.setSpanCount(newSpanCount);
+                            layoutManager.requestLayout();
+                        }
                     }
                 });
-
     }
 
     @Override
@@ -146,14 +145,19 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
         } else {
             hintButton.setTextColor(getResources().getColor(R.color.gray));
         }
+        if(geocache.getAttributeCodes().isEmpty()) {
+            attributeLabel.setVisibility(View.GONE);
+        } else {
+            setAttributeAdapter(geocache.getAttributeCodes());
+        }
 
-        setAttributeAdapter(geocache.getAttributeCodes());
 
     }
 
     private void setAttributeAdapter(RealmList<String> attributeCodes) {
         AttributesAdapter adapter = new AttributesAdapter(attributeRepository.loadAttributesIncludes(attributeCodes.toArray(new String[]{})), (BaseActivity) getActivity());
         attributeRecycleView.setAdapter(adapter);
+
         //attributeRecycleView.setLayoutManager( new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
     }
 

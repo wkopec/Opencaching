@@ -126,7 +126,7 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setElevation(0);
-            actionBar.setTitle(geocache.getCode());
+            actionBar.setTitle("");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }

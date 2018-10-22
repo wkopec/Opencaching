@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 
 import pl.opencaching.android.R;
 
+import pl.opencaching.android.app.prefs.SessionManager;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.ui.base.BaseActivity;
 import pl.opencaching.android.ui.base.SectionsPagerAdapter;
@@ -33,6 +34,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.opencaching.android.utils.GeocacheUtils;
@@ -43,6 +46,9 @@ import pl.opencaching.android.utils.GeocacheUtils;
  */
 
 public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSelectedListener, OnMapReadyCallback {
+
+    @Inject
+    SessionManager sessionManager;
 
     public static final String GEOCACHE = "geocache";
     private static final float START_MAP_ZOOM = (float) 15;
@@ -138,7 +144,7 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.getUiSettings().setScrollGesturesEnabled(false);
-        googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        googleMap.setMapType(sessionManager.getMapType());
         LatLng latLng = geocache.getPosition();
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.latitude, latLng.longitude), START_MAP_ZOOM));
 

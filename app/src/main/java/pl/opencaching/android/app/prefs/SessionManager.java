@@ -7,6 +7,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 import javax.inject.Inject;
 
+import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL;
+
 public class SessionManager {
 
     private static final String KEY_USER_OAUTH_TOKEN = "oauth_token:";
@@ -22,6 +24,7 @@ public class SessionManager {
     private static final String KEY_USER_RECOMMENDATIONS_GIVEN = "recommendations_given:";
     private static final String KEY_USER_HOME_LOCATION = "home_location:";
 
+    private static final String KEY_MAP_TYPE = "settings_map_type:";
 
 
     private final SharedPreferences prefs;
@@ -125,5 +128,13 @@ public class SessionManager {
     }
 
     //User settings
+
+    public void saveMapType(int mapType) {
+        getEditor().putInt(KEY_MAP_TYPE, mapType).commit();
+    }
+
+    public int getMapType() {
+        return prefs.getInt(KEY_MAP_TYPE, MAP_TYPE_NORMAL);
+    }
 
 }

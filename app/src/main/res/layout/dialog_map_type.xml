@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/spacing_small"
+    android:paddingStart="@dimen/spacing_small"
+    android:paddingEnd="@dimen/spacing_small">
+
+    <TextView
+        android:id="@+id/mapType"
+        style="@style/Text.Primary.Normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/map_type"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/mapTypeSatelliteIcon"/>
+
+    <View
+        android:id="@+id/mapTypeDefaultBorder"
+        android:layout_width="@dimen/item_map_type_border_height"
+        android:layout_height="@dimen/item_map_type_border_height"
+        android:background="@drawable/background_primary_dark_rounded"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/mapTypeDefaultIcon"
+        app:layout_constraintEnd_toEndOf="@+id/mapTypeDefaultIcon"
+        app:layout_constraintStart_toStartOf="@+id/mapTypeDefaultIcon"
+        app:layout_constraintTop_toTopOf="@+id/mapTypeDefaultIcon" />
+
+    <ImageButton
+        android:id="@+id/mapTypeDefaultIcon"
+        android:layout_width="@dimen/item_map_type_height"
+        android:layout_height="@dimen/item_map_type_height"
+        android:background="@drawable/type_default"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/mapTypeSatelliteIcon"
+        app:layout_constraintEnd_toStartOf="@+id/mapTypeSatelliteIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/mapTypeSatelliteIcon" />
+
+    <TextView
+        android:id="@+id/mapTypeDefault"
+        style="@style/Text.Primary.VerySmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_very_small"
+        android:text="@string/map_type_default"
+        android:textColor="@color/gray"
+        app:layout_constraintEnd_toEndOf="@+id/mapTypeDefaultIcon"
+        app:layout_constraintStart_toStartOf="@+id/mapTypeDefaultIcon"
+        app:layout_constraintTop_toBottomOf="@+id/mapTypeDefaultIcon" />
+
+    <View
+        android:id="@+id/mapTypeSatelliteBorder"
+        android:layout_width="@dimen/item_map_type_border_height"
+        android:layout_height="@dimen/item_map_type_border_height"
+        android:background="@drawable/background_primary_dark_rounded"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/mapTypeSatelliteIcon"
+        app:layout_constraintEnd_toEndOf="@+id/mapTypeSatelliteIcon"
+        app:layout_constraintStart_toStartOf="@+id/mapTypeSatelliteIcon"
+        app:layout_constraintTop_toTopOf="@+id/mapTypeSatelliteIcon" />
+
+    <ImageButton
+        android:id="@+id/mapTypeSatelliteIcon"
+        android:layout_width="@dimen/item_map_type_height"
+        android:layout_height="@dimen/item_map_type_height"
+        android:background="@drawable/type_satellite"
+        android:scaleType="fitCenter"
+        android:layout_margin="@dimen/spacing_normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/mapTypeTerrainIcon"
+        app:layout_constraintStart_toEndOf="@id/mapTypeDefaultIcon"
+        app:layout_constraintTop_toBottomOf="@+id/mapType" />
+
+    <TextView
+        android:id="@+id/mapTypeSatellite"
+        style="@style/Text.Primary.VerySmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_very_small"
+        android:text="@string/map_type_satellite"
+        android:textColor="@color/gray"
+        app:layout_constraintEnd_toEndOf="@+id/mapTypeSatelliteIcon"
+        app:layout_constraintStart_toStartOf="@+id/mapTypeSatelliteIcon"
+        app:layout_constraintTop_toBottomOf="@+id/mapTypeSatelliteIcon" />
+
+    <View
+        android:id="@+id/mapTypeTerrainBorder"
+        android:layout_width="@dimen/item_map_type_border_height"
+        android:layout_height="@dimen/item_map_type_border_height"
+        android:background="@drawable/background_primary_dark_rounded"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/mapTypeTerrainIcon"
+        app:layout_constraintEnd_toEndOf="@+id/mapTypeTerrainIcon"
+        app:layout_constraintStart_toStartOf="@+id/mapTypeTerrainIcon"
+        app:layout_constraintTop_toTopOf="@+id/mapTypeTerrainIcon" />
+
+    <ImageButton
+        android:id="@+id/mapTypeTerrainIcon"
+        android:layout_width="@dimen/item_map_type_height"
+        android:layout_height="@dimen/item_map_type_height"
+        android:background="@drawable/type_terrain"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/mapTypeSatelliteIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/mapTypeSatelliteIcon"
+        app:layout_constraintTop_toTopOf="@+id/mapTypeSatelliteIcon"/>
+
+    <TextView
+        android:id="@+id/mapTypeTerrain"
+        style="@style/Text.Primary.VerySmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_very_small"
+        android:text="@string/map_type_terrain"
+        android:textColor="@color/gray"
+        app:layout_constraintEnd_toEndOf="@+id/mapTypeTerrainIcon"
+        app:layout_constraintStart_toStartOf="@+id/mapTypeTerrainIcon"
+        app:layout_constraintTop_toBottomOf="@+id/mapTypeTerrainIcon" />
+
+
+</android.support.constraint.ConstraintLayout>

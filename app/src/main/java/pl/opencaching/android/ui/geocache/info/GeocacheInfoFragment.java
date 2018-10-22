@@ -151,14 +151,11 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
             setAttributeAdapter(geocache.getAttributeCodes());
         }
 
-
     }
 
     private void setAttributeAdapter(RealmList<String> attributeCodes) {
         AttributesAdapter adapter = new AttributesAdapter(attributeRepository.loadAttributesIncludes(attributeCodes.toArray(new String[]{})), (BaseActivity) getActivity());
         attributeRecycleView.setAdapter(adapter);
-
-        //attributeRecycleView.setLayoutManager( new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
     }
 
     @OnClick(R.id.hintButton)

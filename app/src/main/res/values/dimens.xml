@@ -28,6 +28,8 @@
     <!--Heights-->
     <dimen name="edit_text_height">@dimen/_45sdp</dimen>
     <dimen name="default_button_height">@dimen/_35sdp</dimen>
+    <dimen name="item_map_type_height">@dimen/_48sdp</dimen>
+    <dimen name="item_map_type_border_height">@dimen/_52sdp</dimen>
     <dimen name="item_attribute_height">@dimen/_36sdp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->

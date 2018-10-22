@@ -37,9 +37,11 @@ import pl.opencaching.android.data.models.GeocacheClusterItem;
 import pl.opencaching.android.data.repository.GeocacheRepository;
 import pl.opencaching.android.ui.base.BaseFragment;
 import pl.opencaching.android.ui.dialogs.MapFilterDialog;
+import pl.opencaching.android.ui.dialogs.MapTypeDialog;
 import pl.opencaching.android.ui.geocache.GeocacheActivity;
 import pl.opencaching.android.ui.main.MainActivity;
 import pl.opencaching.android.utils.events.MapFilterChangeEvent;
+import pl.opencaching.android.utils.events.MapTypeChangeEvent;
 import pl.opencaching.android.utils.events.SearchMapEvent;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -74,6 +76,10 @@ import io.realm.RealmResults;
 import pl.opencaching.android.utils.GeocacheUtils;
 import pl.opencaching.android.utils.IntegerUtils;
 import pl.opencaching.android.utils.StringUtils;
+
+import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL;
+import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE;
+import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_TERRAIN;
 
 /**
  * Created by Volfram on 15.05.2017.
@@ -186,7 +192,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        //if (getUserHomeLocation(activity) != null) {
+        mMap.setMapType(sessionManager.getMapType());
         if (sessionManager.getUserHomeLocation() != null) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sessionManager.getUserHomeLocation(), 10));
         } else {
@@ -241,20 +247,6 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         mMap.setOnCameraIdleListener(this::downloadGeocaches);
     }
 
-    @Override
-    public void downloadGeocaches() {
-        mClusterManager.cluster();
-        CameraPosition cameraPosition = mMap.getCameraPosition();
-        hideMapInfo();
-        if (mMap.getCameraPosition().zoom >= MINIMUM_REQUEST_ZOOM) {
-            LatLng center = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
-            int radius = IntegerUtils.getDistance(mMap.getProjection().fromScreenLocation(new Point(0, 0)), center) / 1000;
-            presenter.downloadGeocaches(center, radius);
-        } else {
-            showMapInfo(R.string.zoom_map_to_download);
-        }
-    }
-
     private void setupLocationListener() {
 
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -293,6 +285,20 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, locationListener);
         }
 
+    }
+
+    @Override
+    public void downloadGeocaches() {
+        mClusterManager.cluster();
+        CameraPosition cameraPosition = mMap.getCameraPosition();
+        hideMapInfo();
+        if (mMap.getCameraPosition().zoom >= MINIMUM_REQUEST_ZOOM) {
+            LatLng center = new LatLng(cameraPosition.target.latitude, cameraPosition.target.longitude);
+            int radius = IntegerUtils.getDistance(mMap.getProjection().fromScreenLocation(new Point(0, 0)), center) / 1000;
+            presenter.downloadGeocaches(center, radius);
+        } else {
+            showMapInfo(R.string.zoom_map_to_download);
+        }
     }
 
     private void setLastSelectedMarkerIcon() {
@@ -436,7 +442,8 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     @OnClick(R.id.layersButton)
     public void onLayersClick() {
-
+        MapTypeDialog mapTypeDialog = MapTypeDialog.newInstance();
+        mapTypeDialog.show(activity.getSupportFragmentManager(), MapTypeDialog.class.getName());
     }
 
     @OnClick(R.id.notFoundButton)
@@ -524,12 +531,6 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     }
 
     @Override
-    public void showToast(int message) {
-        showMapInfo(message);
-    }
-
-
-    @Override
     public void showProgress() {
         hideMapInfo();
         progressBar.setVisibility(View.VISIBLE);
@@ -579,6 +580,25 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onMapFilter(MapFilterChangeEvent event) {
         presenter.refreshMap(event.isAvailabilityChanged());
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onMapType(MapTypeChangeEvent event) {
+        switch (event.getMapType()) {
+            case MAP_TYPE_NORMAL:
+                mMap.setMapType(MAP_TYPE_NORMAL);
+                break;
+            case MAP_TYPE_SATELLITE:
+                mMap.setMapType(MAP_TYPE_SATELLITE);
+                break;
+            case MAP_TYPE_TERRAIN:
+                mMap.setMapType(MAP_TYPE_TERRAIN);
+                break;
+
+        }
+
+
         EventBus.getDefault().removeStickyEvent(event);
     }
 

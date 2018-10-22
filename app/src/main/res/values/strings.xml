@@ -118,6 +118,10 @@
     <string name="geocache_hint_unavailable_message">Autor nie udostępnił podpowiedzi dla tej skrzynki.</string>
     <string name="ok">OK</string>
     <string name="attributes">Atrybuty</string>
+    <string name="map_type_default">Domyślny</string>
+    <string name="map_type_satellite">Satelita</string>
+    <string name="map_type_terrain">Teren</string>
+    <string name="map_type">Typ mapy</string>
 
 
 </resources>

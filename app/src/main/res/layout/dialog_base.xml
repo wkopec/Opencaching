@@ -9,7 +9,7 @@
         android:id="@+id/dialogContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_normal_x1.5"
+        android:layout_marginTop="@dimen/spacing_normal_x1_5"
         android:background="@drawable/background_dialog"
         android:gravity="center"
         android:paddingTop="@dimen/spacing_normal_x2"

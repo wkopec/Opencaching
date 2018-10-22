@@ -25,6 +25,10 @@ public class Attribute extends RealmObject {
         this.icon = icon;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getCode() {
         return code;
     }

@@ -108,7 +108,7 @@
             android:layout_width="@dimen/spacing_normal_x2"
             android:layout_height="@dimen/spacing_normal_x2"
             android:layout_gravity="bottom|end"
-            android:layout_marginBottom="@dimen/spacing_normal_x1.5"
+            android:layout_marginBottom="@dimen/spacing_normal_x1_5"
             android:backgroundTint="@color/green"
             android:src="@drawable/ic_found"
             android:tint="@color/white"
@@ -130,8 +130,8 @@
         app:layout_anchorGravity="top|end">
 
         <android.support.design.widget.FloatingActionButton
-            android:layout_width="@dimen/spacing_normal_x2.5"
-            android:layout_height="@dimen/spacing_normal_x2.5"
+            android:layout_width="@dimen/spacing_normal_x2_5"
+            android:layout_height="@dimen/spacing_normal_x2_5"
             android:layout_marginTop="@dimen/spacing_normal"
             android:backgroundTint="@color/colorPrimaryDark"
             android:rotation="10"

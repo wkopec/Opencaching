@@ -30,7 +30,7 @@
 
         <View
             android:id="@+id/dragger"
-            android:layout_width="@dimen/spacing_normal_x1.5"
+            android:layout_width="@dimen/spacing_normal_x1_5"
             android:layout_height="@dimen/_2sdp"
             android:layout_marginTop="@dimen/spacing_very_small"
             android:background="@drawable/background_light_gray_rounded"

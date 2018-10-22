@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextView;
@@ -43,7 +44,6 @@ import static pl.opencaching.android.ui.geocache.GeocacheActivity.getGeocacheWay
 public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoContract.View {
 
     private Unbinder unbinder;
-    private View view;
 
     @Inject
     AttributeRepository attributeRepository;
@@ -85,7 +85,7 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_geocache_info, null);
+        View view = inflater.inflate(R.layout.fragment_geocache_info, null);
         unbinder = ButterKnife.bind(this, view);
         setupView();
         setPresenter(presenter);
@@ -98,6 +98,21 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
         LayoutTransition layoutTransition = new LayoutTransition();
         layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
         hintLabel.setLayoutTransition(layoutTransition);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
+        attributeRecycleView.setLayoutManager(layoutManager);
+        attributeRecycleView.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        attributeRecycleView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        int viewWidth = attributeRecycleView.getMeasuredWidth();
+                        float cardViewWidth = getActivity().getResources().getDimension(R.dimen.item_attribute_height);
+                        int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
+                        layoutManager.setSpanCount(newSpanCount);
+                        layoutManager.requestLayout();
+                    }
+                });
     }
 
     @Override
@@ -129,8 +144,8 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
 
     private void setAttributeAdapter(RealmList<String> attributeCodes) {
         AttributesAdapter adapter = new AttributesAdapter(attributeRepository.loadAttributesIncludes(attributeCodes.toArray(new String[]{})), (BaseActivity) getActivity());
-        attributeRecycleView.setLayoutManager(new GridLayoutManager(getActivity(), 6));
         attributeRecycleView.setAdapter(adapter);
+
         //attributeRecycleView.setLayoutManager( new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
     }
 

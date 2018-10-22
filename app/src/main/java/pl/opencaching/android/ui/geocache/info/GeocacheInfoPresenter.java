@@ -62,7 +62,7 @@ public class GeocacheInfoPresenter extends BasePresenter implements GeocacheInfo
         }
     }
 
-    public void getAllAttributes() {
+    private void getAllAttributes() {
         okapiService.getAllAttributes("acode|name|description", "pl", true).enqueue(new Callback<Map<String, Attribute>>() {
             @Override
             public void onResponse(Call<Map<String, Attribute>> call, Response<Map<String, Attribute>> response) {
@@ -74,6 +74,10 @@ public class GeocacheInfoPresenter extends BasePresenter implements GeocacheInfo
                         Map.Entry pair = (Map.Entry) iterator.next();
                         Attribute attribute = (Attribute) pair.getValue();
                         attribute.setIcon(getAttributeIcon(attribute.getCode()));
+
+                        String[] parts = attribute.getDescription().split("<a");
+                        attribute.setDescription(parts[0]);
+
                         attributeList.add(attribute);
                         iterator.remove();
                     }

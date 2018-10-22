@@ -24,7 +24,7 @@
         android:layout_height="@dimen/spacing_normal_x3"
         android:layout_centerHorizontal="true"
         android:background="@drawable/bg_circle"
-        android:padding="@dimen/spacing_small"
+        android:padding="@dimen/_11sdp"
         app:layout_constraintEnd_toEndOf="@id/dialogContainer"
         app:layout_constraintStart_toStartOf="@id/dialogContainer"
         android:src="@drawable/ic_info"

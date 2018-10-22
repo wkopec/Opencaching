@@ -125,32 +125,32 @@ public class GeocacheUtils {
 
     public static int getAttributeIcon(String acode) {
         switch (acode) {
-            case "A2": return R.drawable.ic_attribute_bike;     //W pobliżu punktu geodezyjnego
-            case "A3": return R.drawable.ic_attribute_bike;     //Wherigo Cache
-            case "A4": return R.drawable.ic_attribute_bike;     //Skrzynka typu Letterbox
-            case "A5": return R.drawable.ic_attribute_bike;     //GeoHotel Cache
-            case "A6": return R.drawable.ic_attribute_bike;     //Przyczepiona magnesem
-            case "A7": return R.drawable.ic_attribute_bike;     //Opis zawiera plik audio
-            case "A8": return R.drawable.ic_attribute_bike;     //Offset cache
-            case "A9": return R.drawable.ic_attribute_bike;     //Beacon - Garmin Chirp
+            case "A2": return R.drawable.ic_attribute_benchmark;     //W pobliżu punktu geodezyjnego
+            case "A3": return R.drawable.ic_attribute_wigo;     //Wherigo Cache
+            case "A4": return R.drawable.ic_attribute_letterbox;     //Skrzynka typu Letterbox
+            case "A5": return R.drawable.ic_attribute_geo_hotel;     //GeoHotel Cache
+            case "A6": return R.drawable.ic_attribute_magnetic;     //Przyczepiona magnesem
+            case "A7": return R.drawable.ic_attribute_audio;     //Opis zawiera plik audio
+            case "A8": return R.drawable.ic_attribute_offset;     //Offset cache
+            case "A9": return R.drawable.ic_attribute_beacon;     //Beacon - Garmin Chirp
             case "A10": return R.drawable.ic_attribute_dead_drop;    //Dead Drop USB skrzynka
-            case "A18": return R.drawable.ic_attribute_bike;    //Dostępna dla niepełnosprawnych
-            case "A20": return R.drawable.ic_attribute_bike;    //Dostępna tylko pieszo
+            case "A18": return R.drawable.ic_attribute_disabled;    //Dostępna dla niepełnosprawnych
+            case "A20": return R.drawable.ic_attribute_trekking;    //Dostępna tylko pieszo
             case "A27": return R.drawable.ic_attribute_bike;    //Dostępna rowerem
-            case "A28": return R.drawable.ic_attribute_bike;    //Umiejscowiona na łonie natury (lasy, góry, itp.)
-            case "A29": return R.drawable.ic_attribute_bike;    //Miejsce historyczne
-            case "A42": return R.drawable.ic_attribute_bike;    //Zalecane szukanie nocą
-            case "A49": return R.drawable.ic_attribute_bike;    //Potrzebny kompas
-            case "A50": return R.drawable.ic_attribute_bike;    //Weź coś do pisania
-            case "A51": return R.drawable.ic_attribute_bike;    //Potrzebna łopatka
-            case "A52": return R.drawable.ic_attribute_bike;    //Potrzebna latarka
-            case "A56": return R.drawable.ic_attribute_bike;    //Wymagany dodatkowy sprzęt
-            case "A57": return R.drawable.ic_attribute_bike;    //Wymaga sprzętu pływającego
-            case "A59": return R.drawable.ic_attribute_bike;    //Skrzynka niebezpieczna
-            case "A68": return R.drawable.ic_attribute_bike;    //Szybka skrzynka
-            case "A70": return R.drawable.ic_attribute_bike;    //Można zabrać dzieci
-            case "A73": return R.drawable.ic_attribute_bike;    //Dostępna w określonych godzinach lub płatna
-            default: return R.drawable.ic_attribute_bike;
+            case "A28": return R.drawable.ic_attribute_nature;    //Umiejscowiona na łonie natury (lasy, góry, itp.)
+            case "A29": return R.drawable.ic_attribute_historical;    //Miejsce historyczne
+            case "A42": return R.drawable.ic_attribute_night;    //Zalecane szukanie nocą
+            case "A49": return R.drawable.ic_attribute_compass;    //Potrzebny kompas
+            case "A50": return R.drawable.ic_attribute_pencil;    //Weź coś do pisania
+            case "A51": return R.drawable.ic_attribute_spade;    //Potrzebna łopatka
+            case "A52": return R.drawable.ic_attribute_lighter;    //Potrzebna latarka
+            case "A56": return R.drawable.ic_attribute_tool;    //Wymagany dodatkowy sprzęt
+            case "A57": return R.drawable.ic_attribute_boat;    //Wymaga sprzętu pływającego
+            case "A59": return R.drawable.ic_attribute_danger;    //Skrzynka niebezpieczna
+            case "A68": return R.drawable.ic_attribute_hourglass;    //Szybka skrzynka
+            case "A70": return R.drawable.ic_attribute_kids;    //Można zabrać dzieci
+            case "A73": return R.drawable.ic_attribute_clock;    //Dostępna w określonych godzinach lub płatna
+            default: return R.drawable.ic_attribute_unknown;
         }
     }
 

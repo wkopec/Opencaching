@@ -2,10 +2,12 @@ package pl.opencaching.android.ui.geocache.info;
 
 import android.animation.LayoutTransition;
 import android.animation.ValueAnimator;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import butterknife.OnClick;
@@ -78,6 +81,9 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     ConstraintLayout hintLabel;
     @BindView(R.id.attributeList)
     RecyclerView attributeRecycleView;
+    @BindView(R.id.infoScrollView)
+    ScrollView infoScrollView;
+
 
     @Inject
     GeocacheInfoContract.Presenter presenter;
@@ -95,9 +101,11 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     }
 
     private void setupView() {
-        LayoutTransition layoutTransition = new LayoutTransition();
-        layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
-        hintLabel.setLayoutTransition(layoutTransition);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            infoScrollView.setNestedScrollingEnabled(true);
+        } else {
+            ViewCompat.setNestedScrollingEnabled(infoScrollView, false);
+        }
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         attributeRecycleView.setLayoutManager(layoutManager);
@@ -113,6 +121,7 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
                         layoutManager.requestLayout();
                     }
                 });
+
     }
 
     @Override
@@ -145,7 +154,6 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     private void setAttributeAdapter(RealmList<String> attributeCodes) {
         AttributesAdapter adapter = new AttributesAdapter(attributeRepository.loadAttributesIncludes(attributeCodes.toArray(new String[]{})), (BaseActivity) getActivity());
         attributeRecycleView.setAdapter(adapter);
-
         //attributeRecycleView.setLayoutManager( new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
     }
 
@@ -156,6 +164,10 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
 
     @Override
     public void showHint() {
+        LayoutTransition layoutTransition = new LayoutTransition();
+        layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
+        hintLabel.setLayoutTransition(layoutTransition);
+
         final Animation fadeOut = new AlphaAnimation(1.0f, 0.0f);
         fadeOut.setDuration(800);
         fadeOut.setAnimationListener(new Animation.AnimationListener() {
@@ -173,6 +185,7 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
             }
         });
         hintButton.setAnimation(fadeOut);
+        hintButton.setEnabled(false);
         hint.setVisibility(View.VISIBLE);
         hint.show();
     }

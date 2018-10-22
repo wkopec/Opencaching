@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/infoScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -10,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/spacing_normal_x2">
+        android:paddingBottom="@dimen/spacing_normal_x6">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -257,7 +258,6 @@
 
             </android.support.v7.widget.RecyclerView>
         </android.support.constraint.ConstraintLayout>
-
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/hintLabel"

@@ -32,4 +32,28 @@ public class Image extends RealmObject {
 
     public Image() {
     }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getThumbImageUrl() {
+        return thumbImageUrl;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public String getUniqueCaption() {
+        return uniqueCaption;
+    }
+
+    public boolean isSpoiler() {
+        return isSpoiler;
+    }
 }

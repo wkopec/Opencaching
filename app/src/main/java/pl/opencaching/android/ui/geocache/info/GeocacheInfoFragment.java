@@ -2,14 +2,13 @@ package pl.opencaching.android.ui.geocache.info;
 
 import android.animation.LayoutTransition;
 import android.animation.ValueAnimator;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +16,13 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import butterknife.OnClick;
 import io.realm.RealmList;
 import pl.opencaching.android.R;
-import pl.opencaching.android.data.models.okapi.Attribute;
 import pl.opencaching.android.data.models.okapi.Geocache;
+import pl.opencaching.android.data.models.okapi.Image;
 import pl.opencaching.android.data.repository.AttributeRepository;
 import pl.opencaching.android.ui.base.BaseActivity;
 import pl.opencaching.android.ui.base.BaseFragment;
@@ -84,7 +82,10 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     ConstraintLayout hintLabel;
     @BindView(R.id.attributeList)
     RecyclerView attributeRecycleView;
-
+    @BindView(R.id.galleryLabel)
+    ConstraintLayout galleryLabel;
+    @BindView(R.id.photoList)
+    RecyclerView photoRecycleView;
 
     @Inject
     GeocacheInfoContract.Presenter presenter;
@@ -121,6 +122,10 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
                         }
                     }
                 });
+
+        photoRecycleView.setFocusable(false);
+        ViewCompat.setNestedScrollingEnabled(photoRecycleView, false);
+        photoRecycleView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
     }
 
     @Override
@@ -145,10 +150,17 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
         } else {
             hintButton.setTextColor(getResources().getColor(R.color.gray));
         }
+
         if(geocache.getAttributeCodes().isEmpty()) {
             attributeLabel.setVisibility(View.GONE);
         } else {
             setAttributeAdapter(geocache.getAttributeCodes());
+        }
+
+        if(geocache.getImages().isEmpty()) {
+            galleryLabel.setVisibility(View.GONE);
+        } else {
+            setImageAdapter(geocache.getImages());
         }
 
     }
@@ -156,6 +168,12 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     private void setAttributeAdapter(RealmList<String> attributeCodes) {
         AttributesAdapter adapter = new AttributesAdapter(attributeRepository.loadAttributesIncludes(attributeCodes.toArray(new String[]{})), (BaseActivity) getActivity());
         attributeRecycleView.setAdapter(adapter);
+
+    }
+
+    private void setImageAdapter(RealmList<Image> images) {
+        PhotosAdapter adapter = new PhotosAdapter(images, getActivity());
+        photoRecycleView.setAdapter(adapter);
     }
 
     @OnClick(R.id.hintButton)

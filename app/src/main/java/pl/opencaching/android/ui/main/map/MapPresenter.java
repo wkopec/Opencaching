@@ -216,11 +216,13 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 User user = response.body();
-                LatLng userHomeLocation = sessionManager.getUserHomeLocation();
-                if (user != null && (userHomeLocation == null || !userHomeLocation.equals(user.getHomeLocation()))) {
-                    view.moveMapCamera(user.getHomeLocation(), 10, 1000);
+                if(user != null) {
+                    LatLng userHomeLocation = sessionManager.getUserHomeLocation();
+                    if ((userHomeLocation == null || !userHomeLocation.equals(user.getHomeLocation()))) {
+                        view.moveMapCamera(user.getHomeLocation(), 10, 1000);
+                    }
+                    sessionManager.setLoggedUserData(user);
                 }
-                sessionManager.setLoggedUserData(user);
             }
 
             @Override

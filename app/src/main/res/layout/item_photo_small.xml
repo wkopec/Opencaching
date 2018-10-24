@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/_100sdp"
+    android:layout_width="@dimen/_90sdp"
     android:layout_height="wrap_content"
     android:paddingStart="@dimen/spacing_small"
     android:paddingEnd="@dimen/spacing_small">
@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/photo"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_70sdp"
+        android:layout_height="@dimen/_60sdp"
         tools:src="@drawable/login_background"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"

@@ -1,7 +1,12 @@
 package pl.opencaching.android.data.models.okapi;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 
 import io.realm.RealmObject;
 
@@ -9,7 +14,7 @@ import io.realm.RealmObject;
  * Created by Volfram on 16.07.2017.
  */
 
-public class Image extends RealmObject {
+public class Image extends RealmObject implements Parcelable {
 
     @SerializedName("uuid")
     @Expose
@@ -32,6 +37,34 @@ public class Image extends RealmObject {
 
     public Image() {
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.imageUrl);
+        dest.writeString(this.caption);
+        dest.writeString(this.uniqueCaption);
+    }
+
+    private Image (Parcel in) {
+        this.imageUrl = in.readString();
+        this.caption = in.readString();
+        this.uniqueCaption = in.readString();
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Image createFromParcel(Parcel in) {
+            return new Image(in);
+        }
+
+        public Geocache[] newArray(int size) {
+            return new Geocache[size];
+        }
+    };
 
     public String getUuid() {
         return uuid;
@@ -56,4 +89,6 @@ public class Image extends RealmObject {
     public boolean isSpoiler() {
         return isSpoiler;
     }
+
+
 }

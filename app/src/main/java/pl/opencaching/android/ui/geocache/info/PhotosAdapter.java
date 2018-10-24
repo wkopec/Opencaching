@@ -1,7 +1,11 @@
 package pl.opencaching.android.ui.geocache.info;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,13 +20,16 @@ import butterknife.ButterKnife;
 import io.realm.RealmList;
 import pl.opencaching.android.R;
 import pl.opencaching.android.data.models.okapi.Image;
+import pl.opencaching.android.ui.gallery.GalleryActivity;
+
+import static pl.opencaching.android.ui.gallery.GalleryActivity.KEY_IMAGE_ITEM;
 
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {
 
     private RealmList<Image> images;
-    private Context context;
+    private Activity context;
 
-    public PhotosAdapter(RealmList<Image> images, Context context) {
+    public PhotosAdapter(RealmList<Image> images, Activity context) {
         this.images = images;
         this.context = context;
     }
@@ -40,9 +47,27 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         if (image != null) {
             Picasso.with(context)
                     .load(image.getImageUrl())
-                    .placeholder(context.getResources().getDrawable(R.drawable.ic_archive))
+                    .placeholder(context.getResources().getDrawable(R.drawable.ic_image_placeholder))
                     .into(holder.photo);
             holder.photoDescription.setText(image.getCaption());
+
+            ViewCompat.setTransitionName(holder.photo, image.getUniqueCaption());
+
+            holder.itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, GalleryActivity.class);
+                intent.putExtra(KEY_IMAGE_ITEM, image);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            context,
+                            holder.photo,
+                            image.getUniqueCaption());
+                    context.startActivity(intent, options.toBundle());
+                } else {
+                    context.startActivity(intent);
+                }
+
+            });
         }
 
     }

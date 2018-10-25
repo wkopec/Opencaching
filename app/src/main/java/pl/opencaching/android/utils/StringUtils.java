@@ -65,6 +65,10 @@ public class StringUtils {
         return verifier;
     }
 
+    public static String getFormatedHtmlString(String httpString) {
+        return httpString.replaceAll("<img", "<img style=\"max-width:100%; height: auto; width: auto;\"");
+    }
+
     public static String getFormatedCoordinates(LatLng coordinates) {
 
         StringBuilder builder = new StringBuilder();

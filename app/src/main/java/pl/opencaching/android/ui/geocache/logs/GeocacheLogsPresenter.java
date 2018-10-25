@@ -42,7 +42,7 @@ public class GeocacheLogsPresenter extends BasePresenter implements GeocacheLogs
 
     @Override
     public void getGeocacheLogs(String code) {
-        Call<ArrayList<GeocacheLog>> loginCall = okapiService.getGeocacheLogs(context.getResources().getString(R.string.opencaching_key), code, LOGS_STANDARD_FIELDS, 0, 100);
+        Call<ArrayList<GeocacheLog>> loginCall = okapiService.getGeocacheLogs(context.getResources().getString(R.string.opencaching_key), code, LOGS_STANDARD_FIELDS, 0, 500);
         loginCall.enqueue(new Callback<ArrayList<GeocacheLog>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<GeocacheLog>> call, @NonNull Response<ArrayList<GeocacheLog>> response) {

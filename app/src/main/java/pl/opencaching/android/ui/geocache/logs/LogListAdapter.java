@@ -1,5 +1,6 @@
 package pl.opencaching.android.ui.geocache.logs;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +33,13 @@ import pl.opencaching.android.data.models.okapi.GeocacheLog;
 import pl.opencaching.android.utils.GeocacheUtils;
 import pl.opencaching.android.utils.StringUtils;
 
+import static pl.opencaching.android.utils.StringUtils.getFormatedHtmlString;
+
 /**
  * Created by Wojtek on 27.07.2017.
  */
 
+@SuppressLint("SetJavaScriptEnabled")
 public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHolder> {
 
     private List<GeocacheLog> geocacheLogs;
@@ -42,6 +47,13 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHold
 
     LogListAdapter(List<GeocacheLog> geocacheLogs, Context context) {
         this.geocacheLogs = geocacheLogs;
+
+        for(GeocacheLog log : geocacheLogs) {
+            if(log.getUser().getUsername().equals("Nati.")) {
+                Log.d("Test", "tes");
+            }
+        }
+
         this.context = context;
     }
 
@@ -65,9 +77,14 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHold
 //
 //        holder.logCommentTextView.setText(html);
 
+
+
         holder.logCommentTextView.getSettings().setJavaScriptEnabled(true);
-        holder.logCommentTextView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        holder.logCommentTextView.loadDataWithBaseURL(null, geocacheLogs.get(position).getComment(), "text/html", "UTF-8", null);
+        //holder.logCommentTextView.getSettings().setDomStorageEnabled(true);
+        //holder.logCommentTextView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+
+        String description = getFormatedHtmlString(geocacheLogs.get(position).getComment());
+        holder.logCommentTextView.loadDataWithBaseURL(null, description, "text/html", "UTF-8", null);
 
 //        User user = geocacheLogs.get(position).getUser();
 //        holder.logAuthorTextView.setText(user.getUsername() + " (" + user.getFoundCaches() + ")");
@@ -78,10 +95,9 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHold
         holder.logTimeTextView.setText(logDate.getHourOfDay() + ":" + logDate.getMinuteOfHour());
         holder.logTypeImageView.setImageResource(GeocacheUtils.getLogIcon(geocacheLogs.get(position).getType()));
         holder.logTypeImageView.setColorFilter(ContextCompat.getColor(context, GeocacheUtils.getLogIconColor(geocacheLogs.get(position).getType())));
-        if(geocacheLogs.get(position).isRecommended())
-            holder.recommendationImageView.setVisibility(View.VISIBLE);
-        else
-            holder.recommendationImageView.setVisibility(View.GONE);
+
+        holder.recommendationImageView.setVisibility(geocacheLogs.get(position).isRecommended() ? View.VISIBLE : View.GONE);
+
     }
 
     @Override

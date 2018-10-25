@@ -20,6 +20,7 @@
     <color name="green">#3EC300</color>
     <color name="darkGreen">#287D00</color>
     <color name="low_transparent">#35000000</color>
+    <color name="halt_transparent">#c1000000</color>
     <color name="transparent">#00000000</color>
 
 

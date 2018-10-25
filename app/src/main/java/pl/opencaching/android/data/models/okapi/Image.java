@@ -1,5 +1,6 @@
 package pl.opencaching.android.data.models.okapi;
 
+import android.content.pm.ApplicationInfo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -7,6 +8,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import io.realm.RealmObject;
 
@@ -61,8 +63,8 @@ public class Image extends RealmObject implements Parcelable {
             return new Image(in);
         }
 
-        public Geocache[] newArray(int size) {
-            return new Geocache[size];
+        public Image[] newArray(int size) {
+            return new Image[size];
         }
     };
 

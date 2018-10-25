@@ -52,6 +52,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.3.1'
     implementation 'me.grantland:autofittextview:0.2.1'
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'
+    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
     //  Utils
     implementation 'net.danlew:android.joda:2.9.9'
     implementation 'com.github.scribejava:scribejava-apis:3.2.0'

@@ -50,12 +50,14 @@ public class Image extends RealmObject implements Parcelable {
         dest.writeString(this.imageUrl);
         dest.writeString(this.caption);
         dest.writeString(this.uniqueCaption);
+        dest.writeString(this.uuid);
     }
 
     private Image (Parcel in) {
         this.imageUrl = in.readString();
         this.caption = in.readString();
         this.uniqueCaption = in.readString();
+        this.uuid = in.readString();
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

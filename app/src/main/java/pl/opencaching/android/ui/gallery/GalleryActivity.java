@@ -31,6 +31,7 @@ import pl.opencaching.android.ui.gallery.image.ImageFragment;
 public class GalleryActivity extends BaseActivity {
 
     public static String KEY_IMAGE_ITEM = "key_image_item:";
+    public static String KEY_IMAGE_POSITION = "key_image_position:";
     public static String KEY_IMAGE_ITEMS = "key_image_items:";
 
     @BindView(R.id.container)
@@ -44,8 +45,7 @@ public class GalleryActivity extends BaseActivity {
 
     private Context context;
 
-
-    public static void launchGallery(Activity context, View photoView, Image transitionImage, ArrayList<Image> images) {
+    public static void launchGallery(Activity context, View photoView, Image transitionImage, int imagePosition, ArrayList<Image> images) {
         Intent intent = new Intent(context, GalleryActivity.class);
         intent.putExtra(KEY_IMAGE_ITEM, transitionImage);
 
@@ -53,9 +53,10 @@ public class GalleryActivity extends BaseActivity {
             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     context,
                     photoView,
-                    transitionImage.getUniqueCaption());
+                    transitionImage.getUuid());
 
             intent.putParcelableArrayListExtra(KEY_IMAGE_ITEMS, new ArrayList<>(images));
+            intent.putExtra(KEY_IMAGE_POSITION, imagePosition);
             context.startActivity(intent, options.toBundle());
         } else {
             context.startActivity(intent);
@@ -72,14 +73,16 @@ public class GalleryActivity extends BaseActivity {
         context = this;
         Intent intent = getIntent();
 
+        intent.setExtrasClassLoader(Image.class.getClassLoader());
+        Image image = intent.getParcelableExtra(KEY_IMAGE_ITEM);
+
+        description.setText(image.getCaption());
+
         ArrayList<Image> images = intent.getParcelableArrayListExtra(KEY_IMAGE_ITEMS);
         configureViewPager(images);
 
-        intent.setExtrasClassLoader(Image.class.getClassLoader());
-        Image image = intent.getParcelableExtra(KEY_IMAGE_ITEM);
-        galleryViewPager.setCurrentItem(Integer.parseInt(image.getUniqueCaption()) - 1);
-
-        description.setText(image.getCaption());
+        int imagePosition = intent.getIntExtra(KEY_IMAGE_POSITION, 0);
+        galleryViewPager.setCurrentItem(imagePosition);
 
         galleryViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -99,7 +102,7 @@ public class GalleryActivity extends BaseActivity {
         });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            galleryViewPager.setTransitionName(image.getUniqueCaption());
+            galleryViewPager.setTransitionName(image.getUuid());
             getWindow().getSharedElementEnterTransition().addListener(new Transition.TransitionListener() {
                 @Override
                 public void onTransitionStart(Transition transition) {
@@ -133,8 +136,6 @@ public class GalleryActivity extends BaseActivity {
                 }
             });
         }
-
-
 
     }
 

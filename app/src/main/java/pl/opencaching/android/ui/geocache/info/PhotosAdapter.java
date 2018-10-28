@@ -22,9 +22,7 @@ import butterknife.ButterKnife;
 import io.realm.RealmList;
 import pl.opencaching.android.R;
 import pl.opencaching.android.data.models.okapi.Image;
-import pl.opencaching.android.ui.gallery.GalleryActivity;
 
-import static pl.opencaching.android.ui.gallery.GalleryActivity.KEY_IMAGE_ITEM;
 import static pl.opencaching.android.ui.gallery.GalleryActivity.launchGallery;
 
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {
@@ -32,7 +30,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     private RealmList<Image> images;
     private Activity context;
 
-    PhotosAdapter(RealmList<Image> images, Activity context) {
+    public PhotosAdapter(RealmList<Image> images, Activity context) {
         this.images = images;
         this.context = context;
     }
@@ -54,9 +52,9 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
                     .into(holder.photo);
             holder.photoDescription.setText(image.getCaption());
 
-            ViewCompat.setTransitionName(holder.itemView, image.getUniqueCaption());
+            ViewCompat.setTransitionName(holder.itemView, image.getUuid());
 
-            holder.itemView.setOnClickListener(v -> launchGallery(context, holder.photo, image, new ArrayList<>(images)));
+            holder.itemView.setOnClickListener(v -> launchGallery(context, holder.photo, image, position, new ArrayList<>(images)));
         }
 
     }

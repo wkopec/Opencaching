@@ -11,6 +11,8 @@ import android.graphics.drawable.LevelListDrawable;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import io.realm.RealmList;
 import pl.opencaching.android.R;
 import com.squareup.picasso.Picasso;
 
@@ -29,7 +32,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.data.models.okapi.GeocacheLog;
+import pl.opencaching.android.data.models.okapi.Image;
+import pl.opencaching.android.ui.geocache.info.PhotosAdapter;
 import pl.opencaching.android.utils.GeocacheUtils;
 import pl.opencaching.android.utils.StringUtils;
 
@@ -43,9 +49,9 @@ import static pl.opencaching.android.utils.StringUtils.getFormatedHtmlString;
 public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHolder> {
 
     private List<GeocacheLog> geocacheLogs;
-    private Context context;
+    private Activity context;
 
-    LogListAdapter(List<GeocacheLog> geocacheLogs, Context context) {
+    LogListAdapter(List<GeocacheLog> geocacheLogs, Activity context) {
         this.geocacheLogs = geocacheLogs;
 
         for(GeocacheLog log : geocacheLogs) {
@@ -67,6 +73,8 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
+        GeocacheLog geocacheLog = geocacheLogs.get(position);
+
 //        URLImageParser imageGetter = new URLImageParser(holder.logCommentTextView, context);
 //        Spannable html;
 //        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
@@ -78,25 +86,34 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHold
 //        holder.logCommentTextView.setText(html);
 
 
-
         holder.logCommentTextView.getSettings().setJavaScriptEnabled(true);
-        //holder.logCommentTextView.getSettings().setDomStorageEnabled(true);
-        //holder.logCommentTextView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
-        String description = getFormatedHtmlString(geocacheLogs.get(position).getComment());
+        String description = getFormatedHtmlString(geocacheLog.getComment());
         holder.logCommentTextView.loadDataWithBaseURL(null, description, "text/html", "UTF-8", null);
 
 //        User user = geocacheLogs.get(position).getUser();
 //        holder.logAuthorTextView.setText(user.getUsername() + " (" + user.getFoundCaches() + ")");
 
-        holder.logAuthorTextView.setText(geocacheLogs.get(position).getUser().getUsername());
-        DateTime logDate = geocacheLogs.get(position).getDate();
-        holder.logDateTextView.setText(StringUtils.getDateString(geocacheLogs.get(position).getDate(), context));
+        holder.logAuthorTextView.setText(geocacheLog.getUser().getUsername());
+        DateTime logDate = geocacheLog.getDate();
+        holder.logDateTextView.setText(StringUtils.getDateString(geocacheLog.getDate(), context));
         holder.logTimeTextView.setText(logDate.getHourOfDay() + ":" + logDate.getMinuteOfHour());
-        holder.logTypeImageView.setImageResource(GeocacheUtils.getLogIcon(geocacheLogs.get(position).getType()));
-        holder.logTypeImageView.setColorFilter(ContextCompat.getColor(context, GeocacheUtils.getLogIconColor(geocacheLogs.get(position).getType())));
+        holder.logTypeImageView.setImageResource(GeocacheUtils.getLogIcon(geocacheLog.getType()));
+        holder.logTypeImageView.setColorFilter(ContextCompat.getColor(context, GeocacheUtils.getLogIconColor(geocacheLog.getType())));
 
-        holder.recommendationImageView.setVisibility(geocacheLogs.get(position).isRecommended() ? View.VISIBLE : View.GONE);
+        holder.recommendationImageView.setVisibility(geocacheLog.isRecommended() ? View.VISIBLE : View.GONE);
+
+
+        if(geocacheLog.getImages().size() > 0) {
+            holder.photoRecycleView.setFocusable(false);
+            ViewCompat.setNestedScrollingEnabled(holder.photoRecycleView, false);
+            holder.photoRecycleView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            PhotosAdapter adapter = new PhotosAdapter(geocacheLog.getImages(), context);
+            holder.photoRecycleView.setAdapter(adapter);
+            holder.photoRecycleView.setVisibility(View.VISIBLE);
+        } else {
+            holder.photoRecycleView.setVisibility(View.GONE);
+        }
 
     }
 
@@ -119,57 +136,12 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHold
         TextView logTimeTextView;
         @BindView(R.id.logCommentTextView)
         WebView logCommentTextView;
+        @BindView(R.id.photoList)
+        RecyclerView photoRecycleView;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
     }
-
-
-    class ImageGetterAsyncTask extends AsyncTask<TextView, Void, Bitmap> {
-
-
-        private LevelListDrawable levelListDrawable;
-        private Context context;
-        private String source;
-        private TextView t;
-
-        public ImageGetterAsyncTask(Context context, String source, LevelListDrawable levelListDrawable) {
-            this.context = context;
-            this.source = source;
-            this.levelListDrawable = levelListDrawable;
-        }
-
-        @Override
-        protected Bitmap doInBackground(TextView... params) {
-            t = params[0];
-            try {
-                //GeocacheLog.d(LOG_CAT, "Downloading the image from: " + source);
-                return Picasso.with(context).load(source).get();
-            } catch (Exception e) {
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final Bitmap bitmap) {
-            try {
-                Drawable d = new BitmapDrawable(context.getResources(), bitmap);
-                Point size = new Point();
-                ((Activity) context).getWindowManager().getDefaultDisplay().getSize(size);
-                // Lets calculate the ratio according to the screen width in px
-                int multiplier = size.x / bitmap.getWidth();
-                //GeocacheLog.d(LOG_CAT, "multiplier: " + multiplier);
-                levelListDrawable.addLevel(1, 1, d);
-                // Set bounds width  and height according to the bitmap resized size
-                levelListDrawable.setBounds(0, 0, bitmap.getWidth() * multiplier, bitmap.getHeight() * multiplier);
-                levelListDrawable.setLevel(1);
-                t.setText(t.getText()); // invalidate() doesn't work correctly...
-            } catch (Exception e) { /* Like a null bitmap, etc. */ }
-        }
-    }
-
-
-
 }

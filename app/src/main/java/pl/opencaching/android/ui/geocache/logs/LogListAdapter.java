@@ -86,10 +86,11 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHold
 //        holder.logCommentTextView.setText(html);
 
 
-        holder.logCommentTextView.getSettings().setJavaScriptEnabled(true);
+
 
         String description = getFormatedHtmlString(geocacheLog.getComment());
-        holder.logCommentTextView.loadDataWithBaseURL(null, description, "text/html", "UTF-8", null);
+        holder.logCommentWebView.getSettings().setJavaScriptEnabled(true);
+        holder.logCommentWebView.loadDataWithBaseURL(null, description, "text/html", "UTF-8", null);
 
 //        User user = geocacheLogs.get(position).getUser();
 //        holder.logAuthorTextView.setText(user.getUsername() + " (" + user.getFoundCaches() + ")");
@@ -134,8 +135,8 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHold
         TextView logDateTextView;
         @BindView(R.id.logTimeTextView)
         TextView logTimeTextView;
-        @BindView(R.id.logCommentTextView)
-        WebView logCommentTextView;
+        @BindView(R.id.logCommentWebView)
+        WebView logCommentWebView;
         @BindView(R.id.photoList)
         RecyclerView photoRecycleView;
 

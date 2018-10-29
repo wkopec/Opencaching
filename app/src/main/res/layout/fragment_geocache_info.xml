@@ -332,6 +332,38 @@
             </android.support.v7.widget.RecyclerView>
         </android.support.constraint.ConstraintLayout>
 
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/descriptionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:animateLayoutChanges="true"
+            android:paddingBottom="@dimen/spacing_small"
+            android:background="@drawable/background_white_label">
+
+            <TextView
+                android:id="@+id/description"
+                style="@style/Text.Primary.VerySmall"
+                android:padding="@dimen/spacing_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/description"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <WebView
+                android:id="@+id/descriptionWebView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/description"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            </WebView>
+        </android.support.constraint.ConstraintLayout>
+
     </LinearLayout>
 
 

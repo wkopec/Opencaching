@@ -125,6 +125,7 @@
     <string name="attribute_title_password">Wymagane hasło</string>
     <string name="attribute_title_password_description">Aby wpisać się w logu internetowym wymagane jest hasło, które zazwyczaj jest dostępne w miejscu ukrycia skrzynki</string>
     <string name="gallery">Galeria</string>
+    <string name="description">Opis</string>
 
 
 </resources>

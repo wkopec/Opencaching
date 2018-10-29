@@ -2,6 +2,7 @@ package pl.opencaching.android.ui.geocache.info;
 
 import android.animation.LayoutTransition;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import butterknife.OnClick;
@@ -38,11 +40,13 @@ import pl.opencaching.android.utils.StringUtils;
 import pl.opencaching.android.utils.views.SecretTextView;
 
 import static pl.opencaching.android.ui.geocache.GeocacheActivity.getGeocacheWaypoint;
+import static pl.opencaching.android.utils.StringUtils.getFormatedHtmlString;
 
 /**
  * Created by Wojtek on 27.07.2017.
  */
 
+@SuppressLint("SetJavaScriptEnabled")
 public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoContract.View {
 
     private Unbinder unbinder;
@@ -86,6 +90,8 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     ConstraintLayout galleryLabel;
     @BindView(R.id.photoList)
     RecyclerView photoRecycleView;
+    @BindView(R.id.descriptionWebView)
+    WebView descriptionWebView;
 
     @Inject
     GeocacheInfoContract.Presenter presenter;
@@ -126,6 +132,9 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
         photoRecycleView.setFocusable(false);
         ViewCompat.setNestedScrollingEnabled(photoRecycleView, false);
         photoRecycleView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+
+        descriptionWebView.setFocusable(false);
+        descriptionWebView.getSettings().setJavaScriptEnabled(true);
     }
 
     @Override
@@ -163,6 +172,8 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
             setImageAdapter(geocache.getImages());
         }
 
+        String description = getFormatedHtmlString(geocache.getDescription());
+        descriptionWebView.loadDataWithBaseURL(null, description, "text/html", "UTF-8", null);
     }
 
     private void setAttributeAdapter(RealmList<String> attributeCodes) {

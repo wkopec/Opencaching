@@ -241,7 +241,7 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
     public void refreshMap(boolean isClearGeocaches) {
         if (isClearGeocaches) {
             clearStoredGeocaches();
-            view.downloadGeocaches();
+            view.refreshRegion();
         } else {
             view.clearMap();
             RealmResults<Geocache> geocaches = geocacheRepository.loadMapFilteredGeocaches();

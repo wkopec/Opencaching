@@ -53,6 +53,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.VisibleRegion;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
@@ -244,7 +245,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         //mMap.setInfoWindowAdapter(new CustomInfoViewAdapter());
         //mMap.setOnInfoWindowClickListener(marker -> startGeocacheActivity(marker.getSnippet()));
 
-        mMap.setOnCameraIdleListener(this::downloadGeocaches);
+        mMap.setOnCameraIdleListener(this::refreshRegion);
     }
 
     private void setupLocationListener() {
@@ -288,7 +289,10 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     }
 
     @Override
-    public void downloadGeocaches() {
+    public void refreshRegion() {
+        if(lastSelectedMarker != null && !isVisibleOnMap(lastSelectedMarker.getPosition())) {
+            hideGeocacheInfo();
+        }
         mClusterManager.cluster();
         CameraPosition cameraPosition = mMap.getCameraPosition();
         hideMapInfo();
@@ -299,6 +303,11 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         } else {
             showMapInfo(R.string.zoom_map_to_download);
         }
+    }
+
+    private boolean isVisibleOnMap(LatLng latLng) {
+        VisibleRegion vr = mMap.getProjection().getVisibleRegion();
+        return vr.latLngBounds.contains(latLng);
     }
 
     private void setLastSelectedMarkerIcon() {

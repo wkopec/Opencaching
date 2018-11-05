@@ -32,7 +32,7 @@ public class MapContract{
 
         void clearMap();
 
-        void downloadGeocaches();
+        void refreshRegion();
 
     }
 

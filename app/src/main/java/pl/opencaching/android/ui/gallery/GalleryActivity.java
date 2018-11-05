@@ -1,7 +1,5 @@
 package pl.opencaching.android.ui.gallery;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -27,6 +25,7 @@ import pl.opencaching.android.data.models.okapi.Image;
 import pl.opencaching.android.ui.base.BaseActivity;
 import pl.opencaching.android.ui.base.SectionsPagerAdapter;
 import pl.opencaching.android.ui.gallery.image.ImageFragment;
+import pl.opencaching.android.utils.views.GalleryViewPager;
 
 public class GalleryActivity extends BaseActivity {
 
@@ -37,7 +36,7 @@ public class GalleryActivity extends BaseActivity {
     @BindView(R.id.container)
     ConstraintLayout container;
     @BindView(R.id.galleryViewPager)
-    ViewPager galleryViewPager;
+    GalleryViewPager galleryViewPager;
     @BindView(R.id.description)
     TextView description;
     @BindView(R.id.shadow)
@@ -115,9 +114,6 @@ public class GalleryActivity extends BaseActivity {
                     shadow.setVisibility(View.VISIBLE);
                     ObjectAnimator.ofFloat(description, View.ALPHA, 0.0f, 1.0f).setDuration(500).start();
                     ObjectAnimator.ofFloat(shadow, View.ALPHA, 0.0f, 1.0f).setDuration(500).start();
-//                    AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(context, R.animator.fade_in);
-//                    set.setTarget(description);
-//                    set.start();
                 }
 
                 @Override
@@ -136,7 +132,6 @@ public class GalleryActivity extends BaseActivity {
                 }
             });
         }
-
     }
 
     private void configureViewPager(ArrayList<Image> images) {

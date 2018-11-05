@@ -1,8 +1,11 @@
 package pl.opencaching.android.data.repository;
 
+import io.realm.RealmList;
+import pl.opencaching.android.api.OkapiService;
 import pl.opencaching.android.app.prefs.MapFiltersManager;
 import pl.opencaching.android.app.prefs.SessionManager;
 import pl.opencaching.android.data.models.okapi.Geocache;
+import pl.opencaching.android.data.models.okapi.GeocacheLog;
 import pl.opencaching.android.data.repository.base.RealmRepository;
 
 import javax.inject.Inject;
@@ -15,12 +18,14 @@ public class GeocacheRepository extends RealmRepository<Geocache> {
 
     private MapFiltersManager mapFiltersManager;
     private SessionManager sessionManager;
+    private OkapiService okapiService;
 
     @Inject
-    public GeocacheRepository(Realm realm, MapFiltersManager mapFiltersManager, SessionManager sessionManager) {
+    public GeocacheRepository(Realm realm, MapFiltersManager mapFiltersManager, SessionManager sessionManager, OkapiService okapiService) {
         super(realm);
         this.mapFiltersManager = mapFiltersManager;
         this.sessionManager = sessionManager;
+        this.okapiService = okapiService;
     }
 
     public Geocache loadGeocacheByCode(String code) {
@@ -114,6 +119,14 @@ public class GeocacheRepository extends RealmRepository<Geocache> {
             query.notEqualTo("type", "Webcam");
         }
         return query;
+    }
+
+    // Geocache logs
+
+    public RealmList<GeocacheLog> loadLogsByCode(String code) {
+        return realm.where(Geocache.class)
+                .equalTo("code", code)
+                .findFirst().getLatestGeocacheLogs();
     }
 
 }

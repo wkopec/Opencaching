@@ -18,6 +18,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static pl.opencaching.android.utils.Constants.LOGS_STANDARD_FIELDS;
+
 /**
  * Created by Wojtek on 27.07.2017.
  */
@@ -28,8 +30,6 @@ public class GeocacheLogsPresenter extends BasePresenter implements GeocacheLogs
     GeocacheRepository geocacheRepository;
     @Inject
     OkapiService okapiService;
-
-    private final static String LOGS_STANDARD_FIELDS = "uuid|date|user|type|comment|images|was_recommended";
 
     private GeocacheLogsContract.View view;
     private Context context;
@@ -42,7 +42,10 @@ public class GeocacheLogsPresenter extends BasePresenter implements GeocacheLogs
 
     @Override
     public void getGeocacheLogs(String code) {
-        Call<ArrayList<GeocacheLog>> loginCall = okapiService.getGeocacheLogs(context.getResources().getString(R.string.opencaching_key), code, LOGS_STANDARD_FIELDS, 0, 500);
+
+        view.setLogs(new ArrayList<>(geocacheRepository.loadLogsByCode(code)));
+
+        Call<ArrayList<GeocacheLog>> loginCall = okapiService.getGeocacheLogs(code, LOGS_STANDARD_FIELDS, 0, 500);
         loginCall.enqueue(new Callback<ArrayList<GeocacheLog>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<GeocacheLog>> call, @NonNull Response<ArrayList<GeocacheLog>> response) {

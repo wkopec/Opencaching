@@ -31,17 +31,16 @@ public interface OkapiService {
     //GEOCACHE
 
     @GET("caches/search/nearest")
-    Call<WaypointResults> getWaypoints(@Query("consumer_key") String consumerKey, @Query("center") String center, @Query("limit") int limit, @Query("radius") int radius, @Query("status") String status);
+    Call<WaypointResults> getWaypoints(@Query("center") String center, @Query("limit") int limit, @Query("radius") int radius, @Query("status") String status);
 
     @GET("caches/geocaches")
-    Call<Map<String, Geocache>> getGeocaches(@Query("consumer_key") String consumerKey, @Query("cache_codes") String codes, @Query("fields") String fields);
+    Call<Map<String, Geocache>> getGeocaches(@Query("cache_codes") String codes, @Query("fields") String fields, @Query("log_fields") String logFields);
 
     @GET("logs/logs")
-    Call<ArrayList<GeocacheLog>> getGeocacheLogs(@Query("consumer_key") String consumerKey, @Query("cache_code") String code, @Query("fields") String fields, @Query("offset") int offset, @Query("limit") int limit);
+    Call<ArrayList<GeocacheLog>> getGeocacheLogs(@Query("cache_code") String code, @Query("fields") String fields, @Query("offset") int offset, @Query("limit") int limit);
 
     @GET("caches/geocache")
     Call<Geocache> getGeocacheInfo(@Query("cache_code") String code, @Query("fields") String fields);
-
 
 
     @GET("attrs/attribute_index")

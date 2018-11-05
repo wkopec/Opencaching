@@ -35,6 +35,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static pl.opencaching.android.utils.Constants.GEOCACHES_STANDARD_FIELDS;
+import static pl.opencaching.android.utils.Constants.LOGS_STANDARD_FIELDS;
+
 /**
  * Created by Volfram on 15.07.2017.
  */
@@ -87,7 +90,7 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
         isActive = true;
         this.center = center;
         String centerString = center.latitude + "|" + center.longitude;
-        Call<WaypointResults> loginCall = okapiService.getWaypoints(context.getResources().getString(R.string.opencaching_key), centerString, GEOCACHE_REQUEST_LIMIT, radius, getSelectedStatus());
+        Call<WaypointResults> loginCall = okapiService.getWaypoints(centerString, GEOCACHE_REQUEST_LIMIT, radius, getSelectedStatus());
         loginCall.enqueue(new Callback<WaypointResults>() {
             @Override
             public void onResponse(@NonNull Call<WaypointResults> call, @NonNull Response<WaypointResults> response) {
@@ -118,7 +121,7 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
     }
 
     private void getGeocaches(String codes, final boolean isMore) {
-        Call<Map<String, Geocache>> loginCall = okapiService.getGeocaches(context.getResources().getString(R.string.opencaching_key), codes, Constants.GEOCACHES_STANDARD_FIELDS);
+        Call<Map<String, Geocache>> loginCall = okapiService.getGeocaches(codes, GEOCACHES_STANDARD_FIELDS, LOGS_STANDARD_FIELDS);
         loginCall.enqueue(new Callback<Map<String, Geocache>>() {
             @Override
             public void onResponse(@NonNull Call<Map<String, Geocache>> call, @NonNull Response<Map<String, Geocache>> response) {

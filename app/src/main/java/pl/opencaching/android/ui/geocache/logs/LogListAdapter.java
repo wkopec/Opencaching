@@ -2,13 +2,6 @@ package pl.opencaching.android.ui.geocache.logs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LevelListDrawable;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
@@ -22,9 +15,7 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import io.realm.RealmList;
 import pl.opencaching.android.R;
-import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
 
@@ -32,10 +23,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.data.models.okapi.GeocacheLog;
-import pl.opencaching.android.data.models.okapi.Image;
-import pl.opencaching.android.ui.geocache.info.PhotosAdapter;
+import pl.opencaching.android.ui.gallery.PhotosAdapter;
 import pl.opencaching.android.utils.GeocacheUtils;
 import pl.opencaching.android.utils.StringUtils;
 

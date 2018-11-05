@@ -1,10 +1,7 @@
-package pl.opencaching.android.ui.geocache.info;
+package pl.opencaching.android.ui.gallery;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -46,10 +43,16 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Image image = images.get(position);
         if (image != null) {
-            Picasso.with(context)
-                    .load(image.getImageUrl())
-                    .placeholder(context.getResources().getDrawable(R.drawable.ic_image_placeholder))
-                    .into(holder.photo);
+            if(image.isSpoiler()) {
+                //TODO: change spoiler drawable
+                holder.photo.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_attribute_password));
+            } else {
+                Picasso.with(context)
+                        .load(image.getImageUrl())
+                        .placeholder(context.getResources().getDrawable(R.drawable.ic_image_placeholder))
+                        .into(holder.photo);
+            }
+
             holder.photoDescription.setText(image.getCaption());
 
             ViewCompat.setTransitionName(holder.itemView, image.getUuid());

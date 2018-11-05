@@ -39,6 +39,8 @@ public class GalleryActivity extends BaseActivity {
     GalleryViewPager galleryViewPager;
     @BindView(R.id.description)
     TextView description;
+    @BindView(R.id.galleryIndicator)
+    TextView galleryIndicator;
     @BindView(R.id.shadow)
     View shadow;
 
@@ -75,30 +77,13 @@ public class GalleryActivity extends BaseActivity {
         intent.setExtrasClassLoader(Image.class.getClassLoader());
         Image image = intent.getParcelableExtra(KEY_IMAGE_ITEM);
 
-        description.setText(image.getCaption());
-
         ArrayList<Image> images = intent.getParcelableArrayListExtra(KEY_IMAGE_ITEMS);
-        configureViewPager(images);
-
         int imagePosition = intent.getIntExtra(KEY_IMAGE_POSITION, 0);
-        galleryViewPager.setCurrentItem(imagePosition);
 
-        galleryViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        description.setText(image.getCaption());
+        galleryIndicator.setText(String.format(getString(R.string.separated_indicators), imagePosition, images.size()));
 
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                description.setText(images.get(position).getCaption());
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+        configureViewPager(images, imagePosition);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             galleryViewPager.setTransitionName(image.getUuid());
@@ -110,8 +95,10 @@ public class GalleryActivity extends BaseActivity {
 
                 @Override
                 public void onTransitionEnd(Transition transition) {
+                    galleryIndicator.setVisibility(View.VISIBLE);
                     description.setVisibility(View.VISIBLE);
                     shadow.setVisibility(View.VISIBLE);
+                    ObjectAnimator.ofFloat(galleryIndicator, View.ALPHA, 0.0f, 1.0f).setDuration(500).start();
                     ObjectAnimator.ofFloat(description, View.ALPHA, 0.0f, 1.0f).setDuration(500).start();
                     ObjectAnimator.ofFloat(shadow, View.ALPHA, 0.0f, 1.0f).setDuration(500).start();
                 }
@@ -134,7 +121,7 @@ public class GalleryActivity extends BaseActivity {
         }
     }
 
-    private void configureViewPager(ArrayList<Image> images) {
+    private void configureViewPager(ArrayList<Image> images, int position) {
         ArrayList<SectionsPagerAdapter.Item> items = new ArrayList<>();
         for(Image image : images) {
             Bundle bundle = new Bundle();
@@ -146,6 +133,33 @@ public class GalleryActivity extends BaseActivity {
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), items);
         galleryViewPager.setAdapter(sectionsPagerAdapter);
+
+        galleryViewPager.setCurrentItem(position);
+
+        galleryViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if(positionOffset < 0.5) {
+                    description.setText(images.get(position).getCaption());
+                    galleryIndicator.setText(String.format(getString(R.string.separated_indicators), position + 1, images.size()));
+                } else {
+                    description.setText(images.get(position + 1).getCaption());
+                    galleryIndicator.setText(String.format(getString(R.string.separated_indicators), position + 2, images.size()));
+                }
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
     }
 
     @Override

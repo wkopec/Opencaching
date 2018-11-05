@@ -35,6 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import pl.opencaching.android.ui.gallery.PhotosAdapter;
 import pl.opencaching.android.utils.GeocacheUtils;
 import pl.opencaching.android.utils.StringUtils;
 import pl.opencaching.android.utils.views.SecretTextView;

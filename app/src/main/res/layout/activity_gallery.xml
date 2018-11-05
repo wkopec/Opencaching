@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/black">
 
     <pl.opencaching.android.utils.views.GalleryViewPager
@@ -13,34 +12,53 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <TextView
+        android:id="@+id/galleryIndicator"
+        style="@style/Text.Primary.Normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_normal"
+        android:background="@drawable/background_half_transparent_rounded"
+        android:paddingStart="@dimen/spacing_small"
+        android:paddingTop="@dimen/spacing_very_small"
+        android:paddingEnd="@dimen/spacing_small"
+        android:paddingBottom="@dimen/spacing_very_small"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2/4"
+        tools:visibility="visible" />
+
     <View
         android:id="@+id/shadow"
         android:layout_width="match_parent"
         android:layout_height="@dimen/spacing_normal"
         android:background="@drawable/gradient_half_ransparent"
         android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/description"/>
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/description"
         style="@style/Text.Primary.Normal"
-        android:textColor="@color/white"
-        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:alpha="1"
         android:background="@color/halt_transparent"
         android:paddingStart="@dimen/spacing_small"
+        android:paddingTop="@dimen/spacing_normal"
         android:paddingEnd="@dimen/spacing_small"
         android:paddingBottom="@dimen/spacing_normal"
-        android:paddingTop="@dimen/spacing_normal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="This is sample description"
+        android:textColor="@color/white"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="This is sample description"
+        tools:visibility="visible" />
 
 
 </android.support.constraint.ConstraintLayout>

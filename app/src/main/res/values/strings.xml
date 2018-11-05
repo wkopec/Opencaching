@@ -99,7 +99,7 @@
     <string name="info_found">%d x znaleziona</string>
     <string name="info_not_found">%d x nieznaleziona</string>
     <string name="info_recommended">%d x rekomendowana</string>
-    <string name="separated_strings" formatted="false">%s | %s</string>
+    <string name="separated_strings" formatted="false" translatable="false">%s | %s</string>
     <string name="navigate">Prowadź</string>
     <string name="waiting_for_ftf">Czeka na FTF!</string>
     <string name="filter">Filtruj</string>
@@ -126,6 +126,7 @@
     <string name="attribute_title_password_description">Aby wpisać się w logu internetowym wymagane jest hasło, które zazwyczaj jest dostępne w miejscu ukrycia skrzynki</string>
     <string name="gallery">Galeria</string>
     <string name="description">Opis</string>
+    <string name="separated_indicators" translatable="false" >%d/%d</string>
 
 
 </resources>

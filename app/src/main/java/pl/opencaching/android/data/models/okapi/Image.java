@@ -48,16 +48,20 @@ public class Image extends RealmObject implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.imageUrl);
+        dest.writeString(this.thumbImageUrl);
         dest.writeString(this.caption);
         dest.writeString(this.uniqueCaption);
         dest.writeString(this.uuid);
+        dest.writeByte((byte) (isSpoiler ? 1 : 0));
     }
 
     private Image (Parcel in) {
         this.imageUrl = in.readString();
+        this.thumbImageUrl = in.readString();
         this.caption = in.readString();
         this.uniqueCaption = in.readString();
         this.uuid = in.readString();
+        this.isSpoiler = in.readByte() != 0;
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

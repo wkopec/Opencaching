@@ -3,8 +3,6 @@ package pl.opencaching.android.ui.geocache.logs;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import pl.opencaching.android.R;
-
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -32,31 +30,23 @@ public class GeocacheLogsPresenter extends BasePresenter implements GeocacheLogs
     OkapiService okapiService;
 
     private GeocacheLogsContract.View view;
-    private Context context;
 
     @Inject
-    public GeocacheLogsPresenter(GeocacheLogsContract.View view, Context context) {
+    public GeocacheLogsPresenter(GeocacheLogsContract.View view) {
         this.view = view;
-        this.context = context;
     }
 
     @Override
     public void getGeocacheLogs(String code) {
-
         view.setLogs(new ArrayList<>(geocacheRepository.loadLogsByCode(code)));
 
         Call<ArrayList<GeocacheLog>> loginCall = okapiService.getGeocacheLogs(code, LOGS_STANDARD_FIELDS, 0, 500);
         loginCall.enqueue(new Callback<ArrayList<GeocacheLog>>() {
             @Override
             public void onResponse(@NonNull Call<ArrayList<GeocacheLog>> call, @NonNull Response<ArrayList<GeocacheLog>> response) {
-
                 if (response.body() != null) {
                     ArrayList<GeocacheLog> geocacheLogs = response.body();
-                    if (geocacheLogs != null)
-                        view.setLogs(geocacheLogs);
-                    else {
-                        view.hideProgress();
-                    }
+                    view.setLogs(geocacheLogs);
                 } else {
                     if (response.errorBody() != null) {
                         view.showError(ApiUtils.getErrorSingle(response.errorBody()));

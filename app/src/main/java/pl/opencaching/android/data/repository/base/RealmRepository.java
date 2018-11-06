@@ -23,9 +23,16 @@ public class RealmRepository<T extends RealmObject> implements Repository<T, Rea
 
     @Override
     public void addOrUpdate(List<T> items) {
-        realm.executeTransaction(realm1 -> {
+        realm.executeTransactionAsync(realm1 -> {
             realm1.copyToRealmOrUpdate(items);
         });
+    }
+
+    @Override
+    public void addOrUpdate(List<T> items, Realm.Transaction.OnSuccess callback) {
+        realm.executeTransactionAsync(realm1 -> {
+            realm1.copyToRealmOrUpdate(items);
+        }, callback);
     }
 
     @Override

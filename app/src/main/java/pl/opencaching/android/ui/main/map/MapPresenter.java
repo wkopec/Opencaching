@@ -4,6 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import io.reactivex.Completable;
+import io.reactivex.functions.Action;
+import io.realm.Realm;
 import pl.opencaching.android.R;
 import pl.opencaching.android.api.GoogleMapsService;
 import pl.opencaching.android.api.OkapiService;
@@ -127,14 +130,15 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
             public void onResponse(@NonNull Call<Map<String, Geocache>> call, @NonNull Response<Map<String, Geocache>> response) {
                 if (response.body() != null) {
                     Map<String, Geocache> geocaches = response.body();
-                    storeAndShowGeocaches(geocaches);
-                    if (isMore) {
-                        view.showMapInfo(R.string.move_map_to_show_more_geocaches);
-                    } else {
-                        view.hideMapInfo();
-                    }
+                    storeAndShowGeocaches(geocaches, Completable.fromAction(() -> {
+                        if (isMore) {
+                            view.showMapInfo(R.string.move_map_to_show_more_geocaches);
+                        } else {
+                            view.hideMapInfo();
+                        }
+                        view.hideProgress();
+                    }));
                     isActive = false;
-                    view.hideProgress();
                 } else if (response.errorBody() != null) {
                     view.showMapInfo(ApiUtils.getErrorSingle(response.errorBody()).getMessage());
                 }
@@ -149,7 +153,7 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
         });
     }
 
-    private void storeAndShowGeocaches(Map<String, Geocache> geocaches) {
+    private void storeAndShowGeocaches(Map<String, Geocache> geocaches, Completable completable) {
         ArrayList<Geocache> downloadedGeocachesArray = new ArrayList<>();
         ArrayList<String> newGeocachesCodes = new ArrayList<>();
 
@@ -172,11 +176,11 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
 
             iterator.remove();
         }
-        geocacheRepository.addOrUpdate(downloadedGeocachesArray);
-        showedGeocachesCodes.addAll(newGeocachesCodes);
-
-        view.addGeocaches(geocacheRepository.loadMapFilteredGeocachesIncludes(newGeocachesCodes.toArray(new String[]{})));
-
+        geocacheRepository.addOrUpdate(downloadedGeocachesArray, () -> {
+            showedGeocachesCodes.addAll(newGeocachesCodes);
+            view.addGeocaches(geocacheRepository.loadMapFilteredGeocachesIncludes(newGeocachesCodes.toArray(new String[]{})));
+            completable.subscribe();
+        });
     }
 
     @Override

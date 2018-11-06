@@ -127,6 +127,7 @@
     <string name="gallery">Galeria</string>
     <string name="description">Opis</string>
     <string name="separated_indicators" translatable="false" >%d/%d</string>
+    <string name="new_log">Nowy wpis</string>
 
 
 </resources>

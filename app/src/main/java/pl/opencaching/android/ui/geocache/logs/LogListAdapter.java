@@ -64,19 +64,6 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHold
 
         GeocacheLog geocacheLog = geocacheLogs.get(position);
 
-//        URLImageParser imageGetter = new URLImageParser(holder.logCommentTextView, context);
-//        Spannable html;
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-//            html = (Spannable) Html.fromHtml(geocacheLogs.get(position).getComment(), Html.FROM_HTML_MODE_LEGACY, imageGetter, null);
-//        } else {
-//            html = (Spannable) Html.fromHtml(geocacheLogs.get(position).getComment(), imageGetter, null);
-//        }
-//
-//        holder.logCommentTextView.setText(html);
-
-
-
-
         String description = getFormatedHtmlString(geocacheLog.getComment());
         holder.logCommentWebView.getSettings().setJavaScriptEnabled(true);
         holder.logCommentWebView.loadDataWithBaseURL(null, description, "text/html", "UTF-8", null);

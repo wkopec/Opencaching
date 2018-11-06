@@ -7,7 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import butterknife.OnClick;
 import pl.opencaching.android.R;
 import pl.opencaching.android.ui.base.BaseActivity;
 import pl.opencaching.android.data.models.okapi.GeocacheLog;
@@ -60,6 +62,11 @@ public class GeocacheLogsFragment extends BaseFragment implements GeocacheLogsCo
         adapter = new LogListAdapter(geocacheLogs, activity);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+    }
+
+    @OnClick(R.id.newLogButton)
+    public void onNewLogClick() {
+
     }
 
     @Override

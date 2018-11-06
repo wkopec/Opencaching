@@ -82,6 +82,16 @@
         <item name="android:background">@drawable/button_white_rounded</item>
     </style>
 
+    <style name="Button.PrimaryDark">
+        <item name="android:background">@drawable/background_primary_dark_rounded</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Button.Accent">
+        <item name="android:background">@drawable/background_accent_rounded</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <!--Edit texts-->
 
     <style name="EditText">

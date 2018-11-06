@@ -73,7 +73,7 @@
 
     <FrameLayout
         android:id="@+id/loginButton"
-        android:background="@drawable/backgroud_accent_rounded"
+        android:background="@drawable/background_accent_rounded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_normal_x2"

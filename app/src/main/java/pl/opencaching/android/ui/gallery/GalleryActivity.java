@@ -2,7 +2,6 @@ package pl.opencaching.android.ui.gallery;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,8 +43,6 @@ public class GalleryActivity extends BaseActivity {
     @BindView(R.id.shadow)
     View shadow;
 
-    private Context context;
-
     public static void launchGallery(Activity context, View photoView, Image transitionImage, int imagePosition, ArrayList<Image> images) {
         Intent intent = new Intent(context, GalleryActivity.class);
         intent.putExtra(KEY_IMAGE_ITEM, transitionImage);
@@ -71,7 +68,6 @@ public class GalleryActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_gallery);
         ButterKnife.bind(this);
-        context = this;
         Intent intent = getIntent();
 
         intent.setExtrasClassLoader(Image.class.getClassLoader());

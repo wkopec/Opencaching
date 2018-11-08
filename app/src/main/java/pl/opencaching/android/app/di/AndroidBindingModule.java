@@ -12,6 +12,8 @@ import pl.opencaching.android.ui.geocache.info.GeocacheInfoFragment;
 import pl.opencaching.android.ui.geocache.info.GeocacheInfoModule;
 import pl.opencaching.android.ui.geocache.logs.GeocacheLogsFragment;
 import pl.opencaching.android.ui.geocache.logs.GeocacheLogsModule;
+import pl.opencaching.android.ui.geocache.new_log.NewLogFragment;
+import pl.opencaching.android.ui.geocache.new_log.NewLogModule;
 import pl.opencaching.android.ui.main.MainActivity;
 import pl.opencaching.android.ui.main.map.MapFragment;
 import pl.opencaching.android.ui.main.map.MapScreenModule;
@@ -32,6 +34,9 @@ public interface AndroidBindingModule {
 
     @ContributesAndroidInjector(modules = GeocacheLogsModule.class)
     GeocacheLogsFragment geocacheLogsFragment();
+
+    @ContributesAndroidInjector(modules = NewLogModule.class)
+    NewLogFragment newLogFragment();
 
     @ContributesAndroidInjector(modules = LoginModule.class)
     LoginFragment loginFragment();

@@ -1,6 +1,5 @@
 package pl.opencaching.android.ui.geocache.logs;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;

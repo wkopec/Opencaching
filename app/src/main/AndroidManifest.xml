@@ -33,7 +33,7 @@
 
         <activity
             android:name="pl.opencaching.android.ui.geocache.GeocacheActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.TranslucentStatusBar"
             android:screenOrientation="portrait"/>
 
         <activity

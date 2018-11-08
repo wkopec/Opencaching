@@ -12,5 +12,4 @@ import javax.inject.Scope;
 public @interface ApplicationScope {
 
 
-
 }

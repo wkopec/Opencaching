@@ -101,7 +101,7 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_geocache_info, null);
-        unbinder = ButterKnife.bind(this, view);
+        ButterKnife.bind(this, view);
         setupView();
         setPresenter(presenter);
         // TODO: get waypoint from args using getInstance

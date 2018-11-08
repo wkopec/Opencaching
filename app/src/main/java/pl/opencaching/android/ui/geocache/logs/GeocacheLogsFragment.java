@@ -35,7 +35,6 @@ public class GeocacheLogsFragment extends BaseFragment implements GeocacheLogsCo
     RecyclerView recyclerView;
 
     private Unbinder unbinder;
-    private View view;
     private LogListAdapter adapter;
     private BaseActivity activity;
 
@@ -45,7 +44,7 @@ public class GeocacheLogsFragment extends BaseFragment implements GeocacheLogsCo
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_geocache_logs, null);
+        View view = inflater.inflate(R.layout.fragment_geocache_logs, null);
         unbinder = ButterKnife.bind(this, view);
         activity = (BaseActivity) getActivity();
         setPresenter(presenter);
@@ -62,11 +61,6 @@ public class GeocacheLogsFragment extends BaseFragment implements GeocacheLogsCo
         adapter = new LogListAdapter(geocacheLogs, activity);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-    }
-
-    @OnClick(R.id.newLogButton)
-    public void onNewLogClick() {
-
     }
 
     @Override

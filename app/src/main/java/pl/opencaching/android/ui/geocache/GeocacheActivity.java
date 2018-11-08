@@ -13,8 +13,11 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.ViewSwitcher;
 
+import butterknife.OnClick;
 import pl.opencaching.android.R;
 
 import pl.opencaching.android.app.prefs.SessionManager;
@@ -53,6 +56,8 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
     public static final String GEOCACHE = "geocache";
     private static final float START_MAP_ZOOM = (float) 15;
 
+    @BindView(R.id.viewSwitcher)
+    ViewSwitcher viewSwitcher;
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
     @BindView(R.id.viewPager)
@@ -75,6 +80,7 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
         setupActionBar();
         setTranslucentStatusBar(getWindow());
         setupCollapsingToolbar();
+        setupViewSwitcher();
         SupportMapFragment mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
@@ -114,7 +120,6 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
         return result;
     }
 
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static void setTranslucentStatusBarLollipop(Window window) {
         window.setStatusBarColor(
@@ -135,6 +140,11 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
             actionBar.setTitle("");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    private void setupViewSwitcher() {
+        viewSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_up));
+        viewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_down));
     }
 
     public static String getGeocacheWaypoint() {
@@ -162,9 +172,18 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
         return true;
     }
 
+    @OnClick(R.id.newLogButton)
+    public void onNewLogClick() {
+        viewSwitcher.setDisplayedChild(1);
+    }
+
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (viewSwitcher.getDisplayedChild() == 1) {
+            viewSwitcher.showPrevious();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override

@@ -3,7 +3,6 @@ package pl.opencaching.android.ui.base;
 import android.util.Log;
 import dagger.android.support.DaggerFragment;
 import pl.opencaching.android.data.models.Error;
-import pl.opencaching.android.ui.dialogs.MessageDialog;
 
 /**
  * Created by Wojtek on 22.10.2017.

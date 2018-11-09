@@ -20,11 +20,11 @@
 
     <!-- Ratings of a geocache from 1 to 5 -->
     <string-array name="geocache_rates">
-        <item>Słaba</item>
-        <item>Poniżej przeciętnej</item>
-        <item>Normalna</item>
-        <item>Dobra</item>
-        <item>Znakomita</item>
+        <item>@string/rate_bad</item>
+        <item>@string/rate_below_average</item>
+        <item>@string/rate_normal</item>
+        <item>@string/rate_good</item>
+        <item>@string/rate_perfect</item>
     </string-array>
 
     <!-- Months of year -->

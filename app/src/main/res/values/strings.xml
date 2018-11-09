@@ -52,7 +52,7 @@
     <string name="size_large">Duża</string>
     <string name="size_xlarge">Bardzo duża</string>
 
-    <!--Type of geocache-->
+    <!--Types of geocache-->
     <string name="type_traditional">Tradycyjna</string>
     <string name="type_multi">Multicache</string>
     <string name="type_quiz">Quiz</string>
@@ -62,6 +62,14 @@
     <string name="type_own">Own</string>
     <string name="type_unknown">Nietypowa</string>
     <string name="type_webcam">Webcam</string>
+
+    <!--Rates of found geocache log-->
+    <string name="rate_perfect">Znakomita</string>
+    <string name="rate_good">Dobra</string>
+    <string name="rate_normal">Normalna</string>
+    <string name="rate_below_average">Poniżej przeciętnej</string>
+    <string name="rate_below_average_two_lines">Poniżej\nprzeciętnej</string>
+    <string name="rate_bad">Słaba</string>
 
     <!--Map Filter-->
     <string name="filter_geocaches">Filtruj skrzynki</string>
@@ -128,6 +136,7 @@
     <string name="description">Opis</string>
     <string name="separated_indicators" translatable="false" >%d/%d</string>
     <string name="new_log">Nowy wpis</string>
+    <string name="submit_log">Dodaj wpis</string>
 
 
 </resources>

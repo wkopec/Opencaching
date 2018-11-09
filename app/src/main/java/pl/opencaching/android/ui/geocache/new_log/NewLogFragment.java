@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.hsalf.smilerating.BaseRating;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -18,6 +20,7 @@ import pl.opencaching.android.R;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.ui.base.BaseActivity;
 import pl.opencaching.android.ui.base.BaseFragment;
+import pl.opencaching.android.utils.views.CustomSmileRating;
 
 import static pl.opencaching.android.ui.geocache.GeocacheActivity.GEOCACHE_CODE;
 
@@ -35,6 +38,8 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
 
     @BindView(R.id.geocacheName)
     TextView geocacheName;
+    @BindView(R.id.smileRating)
+    CustomSmileRating smileRating;
 
     @Nullable
     @Override
@@ -42,6 +47,7 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
         View view = inflater.inflate(R.layout.fragment_new_log, null);
         unbinder = ButterKnife.bind(this, view);
         setupActionBar();
+        setupSmileRating();
         setPresenter(presenter);
         presenter.start(getArguments().getString(GEOCACHE_CODE));
         return view;
@@ -58,5 +64,13 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     @Override
     public void setupView(Geocache geocache) {
         geocacheName.setText(geocache.getName());
+    }
+
+    private void setupSmileRating() {
+        smileRating.setNameForSmile(BaseRating.GREAT, R.string.rate_perfect);
+        smileRating.setNameForSmile(BaseRating.GOOD, R.string.rate_good);
+        smileRating.setNameForSmile(BaseRating.OKAY, R.string.rate_normal);
+        smileRating.setNameForSmile(BaseRating.BAD, R.string.rate_below_average_two_lines);
+        smileRating.setNameForSmile(BaseRating.TERRIBLE, R.string.rate_bad);
     }
 }

@@ -53,6 +53,7 @@ dependencies {
     implementation 'me.grantland:autofittextview:0.2.1'
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
+    implementation 'com.github.sujithkanna:smileyrating:1.6.8'
     //  Utils
     implementation 'net.danlew:android.joda:2.9.9'
     implementation 'com.github.scribejava:scribejava-apis:3.2.0'

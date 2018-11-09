@@ -43,6 +43,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.opencaching.android.utils.GeocacheUtils;
 
+import static pl.opencaching.android.ui.base.BaseFragmentActivity.NEW_LOG_FRAGMENT;
+import static pl.opencaching.android.ui.base.BaseFragmentActivity.launchFragmentActivity;
+import static pl.opencaching.android.ui.geocache.new_log.NewLogFragment.NEW_LOG_TYPE;
+import static pl.opencaching.android.ui.geocache.new_log.NewLogFragment.TYPE_FOUND;
+
 
 /**
  * Created by Wojtek on 26.07.2017.
@@ -54,10 +59,9 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
     SessionManager sessionManager;
 
     public static final String GEOCACHE = "geocache";
+    public static final String GEOCACHE_CODE = "code";
     private static final float START_MAP_ZOOM = (float) 15;
 
-    @BindView(R.id.viewSwitcher)
-    ViewSwitcher viewSwitcher;
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
     @BindView(R.id.viewPager)
@@ -80,7 +84,6 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
         setupActionBar();
         setTranslucentStatusBar(getWindow());
         setupCollapsingToolbar();
-        setupViewSwitcher();
         SupportMapFragment mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
@@ -142,11 +145,6 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
         }
     }
 
-    private void setupViewSwitcher() {
-        viewSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_up));
-        viewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_down));
-    }
-
     public static String getGeocacheWaypoint() {
         return geocache.getCode();
     }
@@ -174,24 +172,28 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
 
     @OnClick(R.id.newLogButton)
     public void onNewLogClick() {
-        viewSwitcher.setDisplayedChild(1);
+        //TODO: add log type dialog
+        startNewLogActivity();
+    }
+
+    private void startNewLogActivity() {
+        Bundle bundle = new Bundle();
+        bundle.putString(GEOCACHE_CODE, geocache.getCode());
+        bundle.putInt(NEW_LOG_TYPE, TYPE_FOUND);
+        launchFragmentActivity(this, NEW_LOG_FRAGMENT, bundle);
     }
 
     @Override
     public void onBackPressed() {
-        if (viewSwitcher.getDisplayedChild() == 1) {
-            viewSwitcher.showPrevious();
-        } else {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-        }
+//        if (id == android.R.id.home) {
+//            finish();
+//        }
         return super.onOptionsItemSelected(item);
     }
 

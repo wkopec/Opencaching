@@ -27,6 +27,10 @@
         </activity>
 
         <activity
+            android:name="pl.opencaching.android.ui.base.BaseFragmentActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name="pl.opencaching.android.ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>

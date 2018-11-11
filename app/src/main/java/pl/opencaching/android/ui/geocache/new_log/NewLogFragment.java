@@ -28,7 +28,7 @@ import pl.opencaching.android.ui.base.BaseFragment;
 import pl.opencaching.android.utils.GeocacheUtils;
 import pl.opencaching.android.utils.views.CustomSmileRating;
 
-import static pl.opencaching.android.ui.geocache.GeocacheActivity.GEOCACHE_CODE;
+import static pl.opencaching.android.ui.dialogs.NewLogTypeDialog.GEOCACHE_CODE;
 import static pl.opencaching.android.utils.GeocacheUtils.getLogType;
 
 public class NewLogFragment extends BaseFragment implements NewLogContract.View {
@@ -39,7 +39,6 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     public static final int TYPE_NOT_FOUND = 2;
 
     private Unbinder unbinder;
-
 
     @Inject
     Context context;

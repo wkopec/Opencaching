@@ -7,6 +7,7 @@ import pl.opencaching.android.ui.base.BaseFragmentActivity;
 import pl.opencaching.android.ui.dialogs.MapFilterDialog;
 import pl.opencaching.android.ui.dialogs.MapTypeDialog;
 import pl.opencaching.android.ui.dialogs.MessageDialog;
+import pl.opencaching.android.ui.dialogs.NewLogTypeDialog;
 import pl.opencaching.android.ui.gallery.GalleryActivity;
 import pl.opencaching.android.ui.geocache.GeocacheActivity;
 import pl.opencaching.android.ui.geocache.info.GeocacheInfoFragment;
@@ -52,6 +53,9 @@ public interface AndroidBindingModule {
 
     @ContributesAndroidInjector()
     MapTypeDialog mapTypeDialog();
+
+    @ContributesAndroidInjector()
+    NewLogTypeDialog newLogTypeDialog();
 
     //Activities
 

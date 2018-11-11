@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/spacing_very_small"
                     tools:src="@drawable/ic_found"
-                    android:tint="@color/green"
+                    tools:tint="@color/green"
                     app:layout_constraintBottom_toBottomOf="@id/logType"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/logType"
@@ -157,7 +157,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/spacing_small"
                     android:layout_marginTop="@dimen/spacing_small"
-                    android:text="@string/log_comment"
+                    android:text="@string/comment"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

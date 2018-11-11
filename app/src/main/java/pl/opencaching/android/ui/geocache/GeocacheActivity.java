@@ -24,6 +24,7 @@ import pl.opencaching.android.app.prefs.SessionManager;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.ui.base.BaseActivity;
 import pl.opencaching.android.ui.base.SectionsPagerAdapter;
+import pl.opencaching.android.ui.dialogs.NewLogTypeDialog;
 import pl.opencaching.android.ui.geocache.info.GeocacheInfoFragment;
 import pl.opencaching.android.ui.geocache.logs.GeocacheLogsFragment;
 
@@ -59,7 +60,6 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
     SessionManager sessionManager;
 
     public static final String GEOCACHE = "geocache";
-    public static final String GEOCACHE_CODE = "code";
     private static final float START_MAP_ZOOM = (float) 15;
 
     @BindView(R.id.tabLayout)
@@ -172,15 +172,8 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
 
     @OnClick(R.id.newLogButton)
     public void onNewLogClick() {
-        //TODO: add log type dialog
-        startNewLogActivity();
-    }
-
-    private void startNewLogActivity() {
-        Bundle bundle = new Bundle();
-        bundle.putString(GEOCACHE_CODE, geocache.getCode());
-        bundle.putInt(NEW_LOG_TYPE, TYPE_FOUND);
-        launchFragmentActivity(this, NEW_LOG_FRAGMENT, bundle);
+        NewLogTypeDialog messageDialog = NewLogTypeDialog.newInstance(geocache.getCode());
+        messageDialog.show(getSupportFragmentManager(), NewLogTypeDialog.class.getName());
     }
 
     @Override

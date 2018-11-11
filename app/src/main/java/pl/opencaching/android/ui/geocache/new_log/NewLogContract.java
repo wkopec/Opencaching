@@ -7,7 +7,7 @@ public class NewLogContract {
 
     public interface View extends BaseContract.View {
 
-        void setupView(Geocache geocache);
+        void setupGeocache(Geocache geocache);
 
     }
 

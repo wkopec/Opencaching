@@ -42,13 +42,6 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHold
 
     LogListAdapter(List<GeocacheLog> geocacheLogs, Activity context) {
         this.geocacheLogs = geocacheLogs;
-
-        for(GeocacheLog log : geocacheLogs) {
-            if(log.getUser().getUsername().equals("Nati.")) {
-                Log.d("Test", "tes");
-            }
-        }
-
         this.context = context;
     }
 

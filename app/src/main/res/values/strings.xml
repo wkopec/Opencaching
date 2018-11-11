@@ -137,6 +137,20 @@
     <string name="separated_indicators" translatable="false" >%d/%d</string>
     <string name="new_log">Nowy wpis</string>
     <string name="submit_log">Dodaj wpis</string>
+    <string name="log_type">Rodzaj wpisu</string>
+    <string name="date">Data</string>
+    <string name="rate">Ocena</string>
+    <string name="log_comment">Treść wpisu</string>
+    <string name="new_log_comment_hint">Podziel się swoimi wrażeniami z immymi!</string>
+
+    <!--Geocache log type-->
+    <string name="log_found_it">Znaleziona</string>
+    <string name="log_not_found">Nieznaleziona</string>
+    <string name="log_available">Gotowa do szukania</string>
+    <string name="log_archived">Zarchiwizowana</string>
+    <string name="log_temporarily_unavailable">Tymczasowo niedostępna</string>
+    <string name="log_attended">Uczestniczył</string>
+    <string name="log_will_attend">Zameirza uczestniczyć</string>
 
 
 </resources>

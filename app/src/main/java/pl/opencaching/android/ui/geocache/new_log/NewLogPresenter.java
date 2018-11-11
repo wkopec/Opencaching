@@ -23,7 +23,7 @@ public class NewLogPresenter extends BasePresenter implements NewLogContract.Pre
     public void start(String geocacheCode) {
         geocache = geocacheRepository.loadGeocacheByCode(geocacheCode);
 
-        view.setupView(geocache);
+        view.setupGeocache(geocache);
     }
 
 }

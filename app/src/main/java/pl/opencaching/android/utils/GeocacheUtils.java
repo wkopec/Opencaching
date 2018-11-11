@@ -70,6 +70,7 @@ public class GeocacheUtils {
             case "Found it": return R.color.green;
             case "Didn't find it": return R.color.red;
             case "Ready to search": return R.color.colorPrimaryDark;
+            case "Available": return R.color.colorPrimaryDark;
             case "Temporarily unavailable": return R.color.colorAccent;
             default: return R.color.black;
         }
@@ -105,12 +106,31 @@ public class GeocacheUtils {
         }
     }
 
+    public static int getLogType(String type) {
+        switch (type) {
+            case "Found it": return R.string.log_found_it;
+            case "Didn't find it": return R.string.log_not_found;
+            case "Comment": return R.string.log_comment;
+            case "Available": return R.string.log_available;
+            case "Archived": return R.string.log_archived;
+            case "Temporarily unavailable": return R.string.log_temporarily_unavailable;
+            //case "Needs maintenance": return R.drawable.ic_need_maintenance;
+            //case "Maintenance performed": return R.drawable.ic_maintenance_performed;
+            //case "Moved": return R.drawable.ic_moved;
+            //case "OC Team comment": return R.drawable.ic_cog;
+            case "Attended": return R.string.log_attended;
+            case "Will attend": return R.string.log_will_attend;
+            default: return 0;
+        }
+    }
+
     public static int getLogIcon(String type) {
         switch (type) {
             case "Found it": return R.drawable.ic_found;
             case "Didn't find it": return R.drawable.ic_not_found;
             case "Comment": return R.drawable.ic_comment;
             case "Ready to search": return R.drawable.ic_power;
+            case "Available": return R.drawable.ic_power;
             case "Archived": return R.drawable.ic_archive;
             case "Temporarily unavailable": return R.drawable.ic_warning;
             case "Needs maintenance": return R.drawable.ic_need_maintenance;

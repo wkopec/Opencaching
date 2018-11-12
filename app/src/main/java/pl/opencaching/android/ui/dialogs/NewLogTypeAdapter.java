@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.opencaching.android.R;
 import pl.opencaching.android.utils.GeocacheUtils;
+import pl.opencaching.android.utils.listeners.OnNewLogTypeClickListener;
 
 import static pl.opencaching.android.utils.GeocacheUtils.getLogType;
 
@@ -23,9 +24,9 @@ public class NewLogTypeAdapter extends RecyclerView.Adapter<NewLogTypeAdapter.Vi
 
     Context context;
     private ArrayList<String> logTypes;
-    private View.OnClickListener listener;
+    private OnNewLogTypeClickListener listener;
 
-    public NewLogTypeAdapter(ArrayList<String> logTypes, Context context, View.OnClickListener listener) {
+    public NewLogTypeAdapter(ArrayList<String> logTypes, Context context, OnNewLogTypeClickListener listener) {
         this.logTypes = logTypes;
         this.context = context;
         this.listener = listener;
@@ -43,7 +44,7 @@ public class NewLogTypeAdapter extends RecyclerView.Adapter<NewLogTypeAdapter.Vi
         holder.logType.setText(getLogType(logTypes.get(position)));
         holder.logTypeIcon.setImageResource(GeocacheUtils.getLogIcon(logTypes.get(position)));
         holder.logTypeIcon.setColorFilter(ContextCompat.getColor(context, GeocacheUtils.getLogIconColor(logTypes.get(position))));
-        holder.itemView.setOnClickListener(listener);
+        holder.itemView.setOnClickListener(v -> listener.OnNewLogTypeClick(logTypes.get(position)));
     }
 
     @Override

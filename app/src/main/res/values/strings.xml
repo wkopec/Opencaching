@@ -6,9 +6,6 @@
     <string name="opencaching_key">eSLCuVzRJJsYUUfUs6Su</string>
     <string name="opencaching_secret_key">nGdfx64ksCvwk7XDSnmsVCgGpnsFh9ZwG4B5Yweg</string>
 
-    <string name="openDrawer">open_drawer</string>
-    <string name="closeDrawer">close_drawer</string>
-
     <!-- Navigation Drawer menu labels -->
     <string name="main_menu">Menu główne</string>
     <string name="user_menu">Menu użytkownika</string>
@@ -96,12 +93,12 @@
     <string name="something_went_wrong">Ops… Coś poszło nie tak.</string>
     <string name="session_has_ended">Sesja została zakończona, zaloguj się ponownie</string>
     <string name="single_back_press_message">Wciśnij ponownie Wstecz aby wyjść</string>
+    <string name="couldn_connect_to_server">Nie udało się połączyć z serwerem</string>
 
     <string name="info">Info</string>
     <string name="logs">Logi</string>
     <string name="today">Dzisiaj</string>
     <string name="yesterday">Wczoraj</string>
-    <string name="couldn_connect_to_server">Nie udało się połączyć z serwerem</string>
     <string name="agree_terms_of_service">Korzystając z aplikacji akceptujesz %1$s.</string>
     <string name="terms_of_service">regulamin serwisu</string>
     <string name="info_found">%d x znaleziona</string>
@@ -130,11 +127,15 @@
     <string name="map_type_satellite">Satelita</string>
     <string name="map_type_terrain">Teren</string>
     <string name="map_type">Typ mapy</string>
-    <string name="attribute_title_password">Wymagane hasło</string>
-    <string name="attribute_title_password_description">Aby wpisać się w logu internetowym wymagane jest hasło, które zazwyczaj jest dostępne w miejscu ukrycia skrzynki</string>
     <string name="gallery">Galeria</string>
     <string name="description">Opis</string>
     <string name="separated_indicators" translatable="false" >%d/%d</string>
+
+    <!--Attributes-->
+    <string name="attribute_title_password">Wymagane hasło</string>
+    <string name="attribute_title_password_description">Aby wpisać się w logu internetowym wymagane jest hasło, które zazwyczaj jest dostępne w miejscu ukrycia skrzynki</string>
+
+    <!--New Log-->
     <string name="new_log">Nowy wpis</string>
     <string name="submit_log">Dodaj wpis</string>
     <string name="log_type">Rodzaj wpisu</string>

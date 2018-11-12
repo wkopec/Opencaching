@@ -13,9 +13,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.ViewSwitcher;
 
 import butterknife.OnClick;
 import pl.opencaching.android.R;
@@ -44,12 +42,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.opencaching.android.utils.GeocacheUtils;
 
-import static pl.opencaching.android.ui.base.BaseFragmentActivity.NEW_LOG_FRAGMENT;
-import static pl.opencaching.android.ui.base.BaseFragmentActivity.launchFragmentActivity;
-import static pl.opencaching.android.ui.geocache.new_log.NewLogFragment.NEW_LOG_TYPE;
-import static pl.opencaching.android.ui.geocache.new_log.NewLogFragment.TYPE_FOUND;
-
-
 /**
  * Created by Wojtek on 26.07.2017.
  */
@@ -60,6 +52,8 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
     SessionManager sessionManager;
 
     public static final String GEOCACHE = "geocache";
+    public static final String GEOCACHE_CODE = "geocache_code:";
+
     private static final float START_MAP_ZOOM = (float) 15;
 
     @BindView(R.id.tabLayout)
@@ -172,7 +166,7 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
 
     @OnClick(R.id.newLogButton)
     public void onNewLogClick() {
-        NewLogTypeDialog messageDialog = NewLogTypeDialog.newInstance(geocache.getCode());
+        NewLogTypeDialog messageDialog = NewLogTypeDialog.newInstance(geocache.getCode(), NewLogTypeDialog.NEW_LOG);
         messageDialog.show(getSupportFragmentManager(), NewLogTypeDialog.class.getName());
     }
 

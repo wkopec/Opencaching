@@ -74,7 +74,7 @@ public class ImageFragment extends Fragment {
                     });
 
                 }
-                Picasso.with(getActivity())
+                Picasso.with(requireActivity())
                         .load(image.getImageUrl())
                         .placeholder(getResources().getDrawable(R.drawable.ic_image_placeholder))
                         .into(photo);

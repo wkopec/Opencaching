@@ -158,7 +158,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         locationButton = ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
         mapFragment.getMapAsync(this);
-        activity = (MainActivity) getActivity();
+        activity = (MainActivity) requireActivity();
         activity.setActionBarTitle(R.string.app_name);
         setPresenter(presenter);
         setGeocacheBottomSheet();
@@ -250,8 +250,8 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     private void setupLocationListener() {
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationManager locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
             mMap.setMyLocationEnabled(true);
             if (locationButton != null) {
                 locationButton.setVisibility(View.GONE);
@@ -268,7 +268,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
                 @Override
                 public void onProviderEnabled(String provider) {
-                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         mMap.setMyLocationEnabled(true);
                         if (locationButton != null) {
                             locationButton.setVisibility(View.GONE);
@@ -278,7 +278,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
                 @Override
                 public void onProviderDisabled(String provider) {
-                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         mMap.setMyLocationEnabled(false);
                     }
                 }
@@ -417,7 +417,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     }
 
     private void checkFineLocationPermission() {
-        new TedPermission(getActivity())
+        new TedPermission(requireActivity())
                 .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
                 .setDeniedMessage(R.string.permission_denied_message_fine_location)
                 .setPermissionListener(new PermissionListener() {
@@ -436,10 +436,10 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     @OnClick(R.id.myLocationButton)
     public void onMyLocationClick() {
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             checkFineLocationPermission();
         } else {
-            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            LocationManager locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                 locationButton.callOnClick();
             }else{
@@ -493,7 +493,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     public void showMapInfo(int message) {
         mapInfoMessage.setText(activity.getString(message));
         if (!isMapInfoShown) {
-            AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_in_up);
+            AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(requireActivity(), R.animator.slide_in_up);
             set.setTarget(mapInfoMessage);
             set.start();
         }
@@ -502,7 +502,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     @Override
     public void hideMapInfo() {
-        AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_out_up);
+        AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(requireActivity(), R.animator.slide_out_up);
         set.setTarget(mapInfoMessage);
         set.start();
         isMapInfoShown = false;

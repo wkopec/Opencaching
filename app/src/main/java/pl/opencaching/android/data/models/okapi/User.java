@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Volfram on 16.07.2017.
@@ -14,6 +15,7 @@ public class User extends RealmObject {
 
     @SerializedName("uuid")
     @Expose
+    @PrimaryKey
     private String uuid;                //geocache owner's user ID
     @SerializedName("username")
     @Expose

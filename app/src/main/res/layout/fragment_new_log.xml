@@ -16,10 +16,10 @@
 
         <LinearLayout
             android:id="@+id/content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="vertical">
 
             <android.support.constraint.ConstraintLayout
@@ -77,12 +77,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/spacing_very_small"
-                    tools:src="@drawable/ic_found"
-                    tools:tint="@color/green"
                     app:layout_constraintBottom_toBottomOf="@id/logType"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/logType"
-                    app:layout_constraintTop_toTopOf="@id/logType" />
+                    app:layout_constraintTop_toTopOf="@id/logType"
+                    tools:src="@drawable/ic_found"
+                    tools:tint="@color/green" />
 
                 <TextView
                     android:id="@+id/logType"
@@ -90,26 +90,42 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/spacing_very_small"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintBottom_toBottomOf="@+id/logTypeTv"
                     app:layout_constraintEnd_toStartOf="@+id/logTypeIcon"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toEndOf="@+id/guideline"
                     app:layout_constraintTop_toTopOf="@+id/logTypeTv"
                     tools:text="Znaleziona" />
 
+
                 <TextView
-                    android:id="@+id/logDate"
+                    android:id="@+id/logDateTextView"
                     style="@style/Text.Primary.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/spacing_very_small"
                     app:layout_constraintBottom_toBottomOf="@+id/logDateTv"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/logTimeTextView"
                     app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toEndOf="@+id/guideline"
                     app:layout_constraintTop_toTopOf="@+id/logDateTv"
-                    tools:text="20/11/2018 21:12" />
+                    tools:text="2017-06-12" />
+
+                <TextView
+                    android:id="@+id/logTimeTextView"
+                    style="@style/Text.Secondary.VerySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:padding="@dimen/spacing_very_small"
+                    app:layout_constraintBottom_toBottomOf="@+id/logDateTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/logDateTextView"
+                    app:layout_constraintTop_toTopOf="@+id/logDateTextView"
+                    app:layout_constraintVertical_bias="0.9"
+                    tools:text="16:28" />
 
             </android.support.constraint.ConstraintLayout>
 
@@ -167,16 +183,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/spacing_small"
-                    android:gravity="top"
-                    android:inputType="textMultiLine"
-                    android:hint="@string/new_log_comment_hint"
-                    android:minHeight="@dimen/spacing_normal_x6"
                     android:background="@drawable/background_multiline_edit_text"
-                    tools:text="jkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsn"
+                    android:gravity="top"
+                    android:hint="@string/new_log_comment_hint"
+                    android:inputType="textMultiLine"
+                    android:minHeight="@dimen/spacing_normal_x6"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/commentTv" />
+                    app:layout_constraintTop_toBottomOf="@+id/commentTv"
+                    tools:text="jkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsnjkalsdn asnd kajsnd kjasdk jasndja sndka jsdnkjas ndkajs ndkasj ndkas ndkas ndkajs ndkajs ndaksj ndkajsndkajsn" />
 
             </android.support.constraint.ConstraintLayout>
 
@@ -191,9 +207,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/spacing_small"
         android:text="@string/submit_log"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView" />
 
 </android.support.constraint.ConstraintLayout>

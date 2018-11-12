@@ -75,7 +75,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, null);
         ButterKnife.bind(this, view);
-        activity = (LoginActivity) getActivity();
+        activity = (LoginActivity) requireActivity();
         setPresenter(presenter);
         setWebView();
         setTermsOfService();

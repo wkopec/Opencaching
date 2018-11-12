@@ -1,6 +1,8 @@
 package pl.opencaching.android.ui.geocache.new_log;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +23,7 @@ import com.hsalf.smilerating.BaseRating;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 
@@ -30,10 +33,12 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import pl.opencaching.android.R;
 import pl.opencaching.android.data.models.okapi.Geocache;
+import pl.opencaching.android.data.models.okapi.NewGeocacheLog;
 import pl.opencaching.android.ui.base.BaseActivity;
 import pl.opencaching.android.ui.base.BaseFragment;
 import pl.opencaching.android.ui.dialogs.NewLogTypeDialog;
 import pl.opencaching.android.utils.GeocacheUtils;
+import pl.opencaching.android.utils.StringUtils;
 import pl.opencaching.android.utils.events.ChangeLogTypeEvent;
 import pl.opencaching.android.utils.views.CustomSmileRating;
 
@@ -60,8 +65,10 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     TextView logTypeTv;
     @BindView(R.id.logTypeIcon)
     ImageView logTypeIcon;
-    @BindView(R.id.logDate)
-    TextView logDate;
+    @BindView(R.id.logDateTextView)
+    TextView logDateTextView;
+    @BindView(R.id.logTimeTextView)
+    TextView logTimeTextView;
     @BindView(R.id.rateLabel)
     ConstraintLayout rateLabel;
     @BindView(R.id.smileRating)
@@ -69,19 +76,19 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     @BindView(R.id.comment)
     EditText comment;
 
-    private String logType;
-    private String geocacheCode;
+    private NewGeocacheLog newGeocacheLog;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_log, null);
         unbinder = ButterKnife.bind(this, view);
-        logType = getArguments().getString(NEW_LOG_TYPE);
-        geocacheCode = getArguments().getString(GEOCACHE_CODE);
-        setupView(logType);
+        newGeocacheLog = new NewGeocacheLog(getArguments().getString(GEOCACHE_CODE));
+        newGeocacheLog.setLogType(getArguments().getString(NEW_LOG_TYPE));
+
+        setupView();
         setPresenter(presenter);
-        presenter.start(geocacheCode);
+        presenter.start(newGeocacheLog.getGeocacheCode());
         return view;
     }
 
@@ -90,15 +97,15 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
         geocacheName.setText(geocache.getName());
     }
 
-    private void setupView(String logType) {
+    private void setupView() {
         setupActionBar();
         setupSmileRating();
-        setupLogType(logType);
-        logDate.setText("21/11/2018 21:21");
+        setupLogType(newGeocacheLog.getLogType());
+        setupLogDate(newGeocacheLog.getLogDate());
     }
 
     private void setupActionBar() {
-        BaseActivity activity = (BaseActivity) getActivity();
+        BaseActivity activity = (BaseActivity) requireActivity();
         ActionBar actionBar = activity.getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(getResources().getString(R.string.new_log));
@@ -113,29 +120,63 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
         smileRating.setNameForSmile(BaseRating.TERRIBLE, R.string.rate_bad);
     }
 
+    private void setupLogDate(DateTime logDate) {
+        logDateTextView.setText(StringUtils.getDateString(logDate, context));
+        logTimeTextView.setText(String.format(context.getString(R.string.separated_time), logDate.getHourOfDay(), logDate.getMinuteOfHour()));
+    }
+
     private void setupLogType(String newLogType) {
         logTypeTv.setText(getLogType(newLogType));
         logTypeIcon.setImageResource(GeocacheUtils.getLogIcon(newLogType));
         logTypeIcon.setColorFilter(ContextCompat.getColor(context, GeocacheUtils.getLogIconColor(newLogType)));
-        if(newLogType.equals(LOG_TYPE_FOUND)) {
+        if (newLogType.equals(LOG_TYPE_FOUND)) {
             rateLabel.setVisibility(View.VISIBLE);
         } else {
             rateLabel.setVisibility(View.GONE);
         }
     }
 
+    @OnClick(R.id.submitButton)
+    public void onNewLogClick() {
+        newGeocacheLog.setComment(comment.getText().toString());
+        presenter.submitNewLog(newGeocacheLog);
+    }
+
     @OnClick({R.id.logType, R.id.logTypeIcon})
     public void onChangeLogTypeClick() {
-        Activity activity = getActivity();
-        if(activity != null) {
-            NewLogTypeDialog messageDialog = NewLogTypeDialog.newInstance(geocacheCode, NewLogTypeDialog.CHANGE_LOG_TYPE);
-            messageDialog.show(getActivity().getSupportFragmentManager(), NewLogTypeDialog.class.getName());
-        }
+        NewLogTypeDialog messageDialog = NewLogTypeDialog.newInstance(newGeocacheLog.getGeocacheCode(), NewLogTypeDialog.CHANGE_LOG_TYPE);
+        messageDialog.show(requireActivity().getSupportFragmentManager(), NewLogTypeDialog.class.getName());
+    }
+
+    @OnClick({R.id.logDateTextView, R.id.logTimeTextView})
+    public void onChangeDateClick() {
+        DateTime date = newGeocacheLog.getLogDate();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(),
+                (view, year, monthOfYear, dayOfMonth) -> {
+                    newGeocacheLog.setLogDate(newGeocacheLog.getLogDate()
+                            .withYear(year)
+                            .withMonthOfYear(monthOfYear)
+                            .withDayOfMonth(dayOfMonth).toDate());
+                    setupLogDate(newGeocacheLog.getLogDate());
+
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(requireActivity(),
+                            (view1, hourOfDay, minute) -> {
+                                newGeocacheLog.setLogDate(newGeocacheLog.getLogDate()
+                                        .withHourOfDay(hourOfDay)
+                                        .withMinuteOfHour(minute).toDate());
+                                setupLogDate(newGeocacheLog.getLogDate());
+                            }, date.getHourOfDay(), date.getMinuteOfHour(), true);
+                    timePickerDialog.show();
+
+                }, date.getYear(), date.getMonthOfYear(), date.getDayOfMonth());
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        datePickerDialog.show();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onChangeLogType(ChangeLogTypeEvent event) {
-        setupLogType(event.getLogType());
+        newGeocacheLog.setLogType(event.getLogType());
+        setupLogType(newGeocacheLog.getLogType());
         EventBus.getDefault().removeStickyEvent(event);
     }
 

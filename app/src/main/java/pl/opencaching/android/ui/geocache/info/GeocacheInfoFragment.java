@@ -113,7 +113,7 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
         attributeRecycleView.setFocusable(false);
         ViewCompat.setNestedScrollingEnabled(attributeRecycleView, false);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
+        GridLayoutManager layoutManager = new GridLayoutManager(requireActivity(), 2);
         attributeRecycleView.setLayoutManager(layoutManager);
         attributeRecycleView.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -121,7 +121,7 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
                     public void onGlobalLayout() {
                         attributeRecycleView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         int viewWidth = attributeRecycleView.getMeasuredWidth();
-                        float cardViewWidth = getActivity().getResources().getDimension(R.dimen.item_attribute_height);
+                        float cardViewWidth = requireActivity().getResources().getDimension(R.dimen.item_attribute_height);
                         int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
                         if(newSpanCount > 0) {
                             layoutManager.setSpanCount(newSpanCount);
@@ -132,7 +132,7 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
 
         photoRecycleView.setFocusable(false);
         ViewCompat.setNestedScrollingEnabled(photoRecycleView, false);
-        photoRecycleView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        photoRecycleView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
 
         descriptionWebView.setFocusable(false);
         descriptionWebView.getSettings().setJavaScriptEnabled(true);
@@ -178,13 +178,13 @@ public class GeocacheInfoFragment extends BaseFragment implements GeocacheInfoCo
     }
 
     private void setAttributeAdapter(RealmList<String> attributeCodes) {
-        AttributesAdapter adapter = new AttributesAdapter(attributeRepository.loadAttributesIncludes(attributeCodes.toArray(new String[]{})), (BaseActivity) getActivity());
+        AttributesAdapter adapter = new AttributesAdapter(attributeRepository.loadAttributesIncludes(attributeCodes.toArray(new String[]{})), (BaseActivity) requireActivity());
         attributeRecycleView.setAdapter(adapter);
 
     }
 
     private void setImageAdapter(RealmList<Image> images) {
-        PhotosAdapter adapter = new PhotosAdapter(images, getActivity());
+        PhotosAdapter adapter = new PhotosAdapter(images, requireActivity());
         photoRecycleView.setAdapter(adapter);
     }
 

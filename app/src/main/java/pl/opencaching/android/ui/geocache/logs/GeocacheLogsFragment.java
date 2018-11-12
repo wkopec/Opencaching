@@ -46,7 +46,7 @@ public class GeocacheLogsFragment extends BaseFragment implements GeocacheLogsCo
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_geocache_logs, null);
         unbinder = ButterKnife.bind(this, view);
-        activity = (BaseActivity) getActivity();
+        activity = (BaseActivity) requireActivity();
         setPresenter(presenter);
         presenter.getGeocacheLogs(getGeocacheWaypoint());
         return view;

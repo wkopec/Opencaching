@@ -130,6 +130,7 @@
     <string name="gallery">Galeria</string>
     <string name="description">Opis</string>
     <string name="separated_indicators" translatable="false" >%d/%d</string>
+    <string name="separated_time" translatable="false" >%d:%d</string>
 
     <!--Attributes-->
     <string name="attribute_title_password">Wymagane hasło</string>

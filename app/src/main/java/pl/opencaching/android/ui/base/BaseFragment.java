@@ -19,42 +19,42 @@ public abstract class BaseFragment extends DaggerFragment implements BaseContrac
 
     @Override
     public void showToast(int message) {
-        ((BaseActivity)getActivity()).showToast(message);
+        ((BaseActivity)requireActivity()).showToast(message);
     }
 
     @Override
     public void showToast(String message) {
-        ((BaseActivity)getActivity()).showToast(message);
+        ((BaseActivity)requireActivity()).showToast(message);
     }
 
     @Override
     public void showError(Error error) {
-        ((BaseActivity)getActivity()).showError(error);
+        ((BaseActivity)requireActivity()).showError(error);
     }
 
     @Override
     public void showProgress() {
-        ((BaseActivity)getActivity()).showProgress();
+        ((BaseActivity)requireActivity()).showProgress();
     }
 
     @Override
     public void hideProgress() {
-        ((BaseActivity)getActivity()).hideProgress();
+        ((BaseActivity)requireActivity()).hideProgress();
     }
 
     @Override
     public void showMessage(String message) {
-        ((BaseActivity)getActivity()).showMessage(message);
+        ((BaseActivity)requireActivity()).showMessage(message);
     }
 
     @Override
     public void showMessage(int icon, String message) {
-        ((BaseActivity)getActivity()).showMessage(icon, message);
+        ((BaseActivity)requireActivity()).showMessage(icon, message);
     }
 
     @Override
     public void showMessage(int icon, String title, String message) {
-        ((BaseActivity)getActivity()).showMessage(icon, title, message);
+        ((BaseActivity)requireActivity()).showMessage(icon, title, message);
     }
 
     @Override

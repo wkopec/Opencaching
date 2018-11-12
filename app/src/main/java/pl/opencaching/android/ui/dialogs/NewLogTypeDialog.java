@@ -85,7 +85,7 @@ public class NewLogTypeDialog extends BaseDialog implements OnNewLogTypeClickLis
         Bundle bundle = new Bundle();
         bundle.putString(GEOCACHE_CODE, geocacheCode);
         bundle.putString(NEW_LOG_TYPE, logType);
-        launchFragmentActivity(getActivity(), NEW_LOG_FRAGMENT, bundle);
+        launchFragmentActivity(requireActivity(), NEW_LOG_FRAGMENT, bundle);
     }
 
     private ArrayList<String> getAvailableLogTypes(String geocacheCode) {

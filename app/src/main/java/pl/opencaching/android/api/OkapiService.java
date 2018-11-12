@@ -6,10 +6,13 @@ import java.util.Map;
 import pl.opencaching.android.data.models.okapi.Attribute;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.data.models.okapi.GeocacheLog;
+import pl.opencaching.android.data.models.okapi.NewGeocacheLog;
 import pl.opencaching.android.data.models.okapi.User;
 import pl.opencaching.android.data.models.okapi.WaypointResults;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 
@@ -22,6 +25,14 @@ public interface OkapiService {
 
     @GET("oauth/access_token")
     Call<String> getAccessToken(@Query("oauth_verifier") String oauthVerifier);
+
+    //Atreibutes
+
+    @GET("attrs/attribute_index")
+    Call<Map<String, Attribute>> getAllAttributes(@Query("fields") String fields, @Query("langpref") String langpref, @Query("only_locally_used") boolean isLocallyUsed);
+
+    @GET("attrs/attributes")
+    Call<Void> getAttributes(@Query("acodes") String code, @Query("fields") String fields, @Query("langpref") String langpref);
 
     //USER
 
@@ -42,11 +53,11 @@ public interface OkapiService {
     @GET("caches/geocache")
     Call<Geocache> getGeocacheInfo(@Query("cache_code") String code, @Query("fields") String fields);
 
+    @POST("logs/submit")
+    Call<String> submitNewGeocacheLog(@Body NewGeocacheLog newGeocacheLog);
 
-    @GET("attrs/attribute_index")
-    Call<Map<String, Attribute>> getAllAttributes(@Query("fields") String fields, @Query("langpref") String langpref, @Query("only_locally_used") boolean isLocallyUsed);
+    @POST("logs/submit")
+    Call<String> submitNewGeocacheLog(@Query("cache_code") String code, @Query("logtype") String logType, @Query("comment") String comment);
 
-    @GET("attrs/attributes")
-    Call<Void> getAttributes(@Query("acodes") String code, @Query("fields") String fields, @Query("langpref") String langpref);
 
 }

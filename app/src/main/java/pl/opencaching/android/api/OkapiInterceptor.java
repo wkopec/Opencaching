@@ -130,13 +130,10 @@ public class OkapiInterceptor implements Interceptor {
     public String urlEncoded(String url) {
         String encodedurl = "";
         try {
-
             encodedurl = URLEncoder.encode(url, "UTF-8");
-            Log.d("TEST", encodedurl);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
         return encodedurl;
     }
 }

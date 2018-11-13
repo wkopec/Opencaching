@@ -154,6 +154,7 @@
     <string name="log_attended">Uczestniczył</string>
     <string name="log_will_attend">Zameirza uczestniczyć</string>
     <string name="log_comment">Komentarz</string>
+    <string name="geocache_submited">Wpis dodany</string>
 
 
 </resources>

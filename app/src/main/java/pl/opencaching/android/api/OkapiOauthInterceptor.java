@@ -23,7 +23,7 @@ import pl.opencaching.android.utils.Constants;
  * Created by Wojtek on 14.08.2017.
  */
 
-public class OkapiInterceptor implements Interceptor {
+public class OkapiOauthInterceptor implements Interceptor {
 
     private static final String OAUTH_CONSUMER_KEY = "oauth_consumer_key";
     private static final String OAUTH_TOKEN = "oauth_token";
@@ -38,7 +38,7 @@ public class OkapiInterceptor implements Interceptor {
     private SessionManager sessionManager;
 
     @Inject
-    OkapiInterceptor(SessionManager sessionManager) {
+    OkapiOauthInterceptor(SessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 

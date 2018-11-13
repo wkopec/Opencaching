@@ -1,5 +1,6 @@
 package pl.opencaching.android.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 
@@ -8,8 +9,11 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.joda.time.DateTime;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Volfram on 16.07.2017.
@@ -17,7 +21,7 @@ import java.util.ArrayList;
 
 public class StringUtils {
 
-    public static String REQUET_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+    public static String OKAPI_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm";
 
     public static String getApiFormatedFields(ArrayList<String> fields) {
         StringBuilder apiFormatedWaypoints = new StringBuilder(fields.get(0));
@@ -27,6 +31,12 @@ public class StringUtils {
             }
         }
         return apiFormatedWaypoints.toString();
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String getApiFormatedDate(Date date) {
+         DateFormat dateformat = new SimpleDateFormat(OKAPI_DATE_FORMAT);
+        return dateformat.format(date);
     }
 
     public static String getDateString(DateTime date, Context context) {

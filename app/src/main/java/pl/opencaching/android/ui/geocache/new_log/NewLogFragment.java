@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hsalf.smilerating.BaseRating;
 
@@ -75,7 +76,12 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     CustomSmileRating smileRating;
     @BindView(R.id.comment)
     EditText comment;
+    @BindView(R.id.passwordLabel)
+    ConstraintLayout passwordLabel;
+    @BindView(R.id.password)
+    EditText password;
 
+    private Geocache geocache;
     private NewGeocacheLog newGeocacheLog;
 
     @Nullable
@@ -83,8 +89,10 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_log, null);
         unbinder = ButterKnife.bind(this, view);
+        //newGeocacheLog = new NewGeocacheLog("OP28F9");    //geocache created for test purposes
         newGeocacheLog = new NewGeocacheLog(getArguments().getString(GEOCACHE_CODE));
         newGeocacheLog.setLogType(getArguments().getString(NEW_LOG_TYPE));
+
 
         setupView();
         setPresenter(presenter);
@@ -94,7 +102,15 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
 
     @Override
     public void setupGeocache(Geocache geocache) {
+        this.geocache = geocache;
         geocacheName.setText(geocache.getName());
+        setupPasswordLabel(geocache.isPasswordRequired());
+    }
+
+    @Override
+    public void onGeocacheSubmited() {
+        Toast.makeText(requireActivity(), R.string.geocache_submited, Toast.LENGTH_SHORT).show();
+        requireActivity().finish();
     }
 
     private void setupView() {
@@ -136,9 +152,16 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
         }
     }
 
+    private void setupPasswordLabel(boolean isPasswordRequires) {
+        passwordLabel.setVisibility(isPasswordRequires && newGeocacheLog.getLogType().equals(LOG_TYPE_FOUND) ? View.VISIBLE : View.GONE);
+    }
+
     @OnClick(R.id.submitButton)
     public void onNewLogClick() {
         newGeocacheLog.setComment(comment.getText().toString());
+        if (geocache.isPasswordRequired()) {
+            newGeocacheLog.setPassword(password.getText().toString());
+        }
         presenter.submitNewLog(newGeocacheLog);
     }
 
@@ -177,6 +200,7 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     public void onChangeLogType(ChangeLogTypeEvent event) {
         newGeocacheLog.setLogType(event.getLogType());
         setupLogType(newGeocacheLog.getLogType());
+        setupPasswordLabel(geocache.isPasswordRequired());
         EventBus.getDefault().removeStickyEvent(event);
     }
 

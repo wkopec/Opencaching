@@ -10,8 +10,10 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
+import pl.opencaching.android.data.models.okapi.NewGeocacheLog;
 
 /**
  * Created by Volfram on 16.07.2017.
@@ -53,5 +55,11 @@ public class ApiUtils {
             return Error.DEFAULT;
         }
     }
+
+//    public static Map<String, String> getNewLogFieldsMap(NewGeocacheLog newGeocacheLog) {
+//        StringBuilder builder = new StringBuilder();
+//        builder.append("cache_code&")
+//        return builder.toString();
+//    }
 
 }

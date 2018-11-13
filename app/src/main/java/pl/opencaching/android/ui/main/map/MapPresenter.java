@@ -138,6 +138,7 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
                         }
                         view.hideProgress();
                     }));
+                    //view.moveMapCamera(new LatLng(0, 0), DEFAULT_LOCATION_ZOOM, 1000);
                     isActive = false;
                 } else if (response.errorBody() != null) {
                     view.showMapInfo(ApiUtils.getErrorSingle(response.errorBody()).getMessage());

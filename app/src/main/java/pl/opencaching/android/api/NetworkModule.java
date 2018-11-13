@@ -42,13 +42,14 @@ public class NetworkModule {
 
     @Provides
     @ApplicationScope
-    OkHttpClient provideOkhttpClient(HttpLoggingInterceptor httpLoggingInterceptor, OkapiInterceptor okapiInterceptor) {
+    OkHttpClient provideOkhttpClient(HttpLoggingInterceptor httpLoggingInterceptor, OkapiOauthInterceptor okapiOauthInterceptor, OkapiMethodInterceptor okapiMethodInterceptor) {
         return new OkHttpClient.Builder()
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(httpLoggingInterceptor)
-                .addInterceptor(okapiInterceptor)
+                .addInterceptor(okapiMethodInterceptor)
+                .addInterceptor(okapiOauthInterceptor)
                 .build();
     }
 

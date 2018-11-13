@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import pl.opencaching.android.api.OkapiService;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.data.models.okapi.NewGeocacheLog;
+import pl.opencaching.android.data.models.okapi.NewGeocacheLogResponse;
 import pl.opencaching.android.data.repository.GeocacheRepository;
 import pl.opencaching.android.ui.base.BasePresenter;
 import retrofit2.Call;
@@ -37,19 +38,23 @@ public class NewLogPresenter extends BasePresenter implements NewLogContract.Pre
 
     @Override
     public void submitNewLog(NewGeocacheLog newGeocacheLog) {
-        okapiService.submitNewGeocacheLog(newGeocacheLog.getGeocacheCode(), newGeocacheLog.getLogType(), newGeocacheLog.getComment()).enqueue(new Callback<String>() {
-        //okapiService.submitNewGeocacheLog(newGeocacheLog).enqueue(new Callback<String>() {
+        okapiService.submitNewGeocacheLog(newGeocacheLog.getMap()).enqueue(new Callback<NewGeocacheLogResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if(response.isSuccessful()) {
-                    Log.d("Test", "yey " + response.body());
+            public void onResponse(Call<NewGeocacheLogResponse> call, Response<NewGeocacheLogResponse> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    NewGeocacheLogResponse newLogResponse = response.body();
+                    if(newLogResponse.isSuccess()) {
+                        view.onGeocacheSubmited();
+                    } else if(!newLogResponse.isSuccess() && newLogResponse.getMessage() != null) {
+                        view.showMessage(newLogResponse.getMessage());
+                    }
                 } else {
                     Log.d("Test", "yey " + response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<NewGeocacheLogResponse> call, Throwable t) {
                 Log.d("Test", "not yey " + t.getMessage());
             }
         });

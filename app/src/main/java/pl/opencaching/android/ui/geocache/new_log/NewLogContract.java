@@ -10,6 +10,8 @@ public class NewLogContract {
 
         void setupGeocache(Geocache geocache);
 
+        void onGeocacheSubmited();
+
     }
 
     public interface Presenter extends BaseContract.Presenter {

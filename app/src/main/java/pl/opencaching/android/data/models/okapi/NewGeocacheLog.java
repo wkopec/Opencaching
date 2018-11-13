@@ -1,6 +1,5 @@
 package pl.opencaching.android.data.models.okapi;
 
-import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -8,12 +7,15 @@ import com.google.gson.annotations.SerializedName;
 import org.joda.time.DateTime;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 import static dagger.internal.Preconditions.checkNotNull;
+import static pl.opencaching.android.utils.StringUtils.getApiFormatedDate;
 
 public class NewGeocacheLog  extends RealmObject {
 
@@ -53,7 +55,7 @@ public class NewGeocacheLog  extends RealmObject {
     private boolean isRecommend;    //recommendation for "Found it" or "Attended" logs
     @SerializedName("needs_maintenance2")
     @Expose
-    private boolean isNeedMaintenance;  //indicate if the cache needs some special attention of its owner
+    private Boolean isNeedMaintenance;  //indicate if the cache needs some special attention of its owner
 
     public NewGeocacheLog() {
     }
@@ -63,6 +65,28 @@ public class NewGeocacheLog  extends RealmObject {
         this.uuid = UUID.randomUUID().toString();
         this.logDate = new DateTime().toDate();
         this.commentFormat = "plaintext";
+    }
+
+    public Map<String, String> getMap() {
+        Map<String, String> map = new HashMap<>();
+        map.put("cache_code", geocacheCode);
+        map.put("logtype", logType);
+        map.put("comment", comment);
+        map.put("when", getApiFormatedDate(logDate));
+        map.put("isRecommend", String.valueOf(isRecommend));
+        if(password != null) {
+            map.put("password", password);
+        }
+        if(rate > 0 && rate < 6) {
+            map.put("rating", String.valueOf(rate));
+        }
+        if(isNeedMaintenance != null) {
+            map.put("needs_maintenance2", String.valueOf(isNeedMaintenance));
+        }
+        map.put("comment_format", "plaintext");
+        map.put("langpref", "pl|en");
+        map.put("on_duplicate", "user_error");
+        return map;
     }
 
     public String getUuid() {

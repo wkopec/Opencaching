@@ -6,11 +6,12 @@ import java.util.Map;
 import pl.opencaching.android.data.models.okapi.Attribute;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.data.models.okapi.GeocacheLog;
-import pl.opencaching.android.data.models.okapi.NewGeocacheLog;
+import pl.opencaching.android.data.models.okapi.NewGeocacheLogResponse;
 import pl.opencaching.android.data.models.okapi.User;
 import pl.opencaching.android.data.models.okapi.WaypointResults;
 import retrofit2.Call;
-import retrofit2.http.Body;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -26,7 +27,7 @@ public interface OkapiService {
     @GET("oauth/access_token")
     Call<String> getAccessToken(@Query("oauth_verifier") String oauthVerifier);
 
-    //Atreibutes
+    //ATTRIBUTES
 
     @GET("attrs/attribute_index")
     Call<Map<String, Attribute>> getAllAttributes(@Query("fields") String fields, @Query("langpref") String langpref, @Query("only_locally_used") boolean isLocallyUsed);
@@ -47,17 +48,16 @@ public interface OkapiService {
     @GET("caches/geocaches")
     Call<Map<String, Geocache>> getGeocaches(@Query("cache_codes") String codes, @Query("fields") String fields, @Query("log_fields") String logFields);
 
-    @GET("logs/logs")
-    Call<ArrayList<GeocacheLog>> getGeocacheLogs(@Query("cache_code") String code, @Query("fields") String fields, @Query("offset") int offset, @Query("limit") int limit);
-
     @GET("caches/geocache")
     Call<Geocache> getGeocacheInfo(@Query("cache_code") String code, @Query("fields") String fields);
 
-    @POST("logs/submit")
-    Call<String> submitNewGeocacheLog(@Body NewGeocacheLog newGeocacheLog);
+    //LOGS
 
-    @POST("logs/submit")
-    Call<String> submitNewGeocacheLog(@Query("cache_code") String code, @Query("logtype") String logType, @Query("comment") String comment);
+    @GET("logs/logs")
+    Call<ArrayList<GeocacheLog>> getGeocacheLogs(@Query("cache_code") String code, @Query("fields") String fields, @Query("offset") int offset, @Query("limit") int limit);
 
+    @FormUrlEncoded
+    @POST("logs/submit")
+    Call<NewGeocacheLogResponse> submitNewGeocacheLog(@FieldMap Map<String, String> newLogFieldsMap);
 
 }

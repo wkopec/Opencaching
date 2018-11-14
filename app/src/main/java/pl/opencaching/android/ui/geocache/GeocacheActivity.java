@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -46,7 +47,7 @@ import pl.opencaching.android.utils.GeocacheUtils;
  * Created by Wojtek on 26.07.2017.
  */
 
-public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSelectedListener, OnMapReadyCallback {
+public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSelectedListener, ViewPager.OnPageChangeListener,  OnMapReadyCallback {
 
     @Inject
     SessionManager sessionManager;
@@ -64,6 +65,8 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
     FrameLayout mapFrame;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.newLogButton)
+    FloatingActionButton newLogButton;
 
     private static Geocache geocache;
 
@@ -74,6 +77,7 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
         ButterKnife.bind(this);
         geocache = getIntent().getExtras().getParcelable(GEOCACHE);
         configureTabLayout();
+        newLogButton.hide();
         setSupportActionBar(toolbar);
         setupActionBar();
         setTranslucentStatusBar(getWindow());
@@ -90,6 +94,7 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
         viewPager.setAdapter(sectionsPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(this);
+        viewPager.addOnPageChangeListener(this);
     }
 
     private void setupCollapsingToolbar() {
@@ -158,16 +163,16 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.geocache_menu, menu);
-        return true;
-    }
-
     @OnClick(R.id.newLogButton)
     public void onNewLogClick() {
         NewLogTypeDialog messageDialog = NewLogTypeDialog.newInstance(geocache.getCode(), NewLogTypeDialog.NEW_LOG);
         messageDialog.show(getSupportFragmentManager(), NewLogTypeDialog.class.getName());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.geocache_menu, menu);
+        return true;
     }
 
     @Override
@@ -199,4 +204,22 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
 
     }
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if(position == 1) {
+            newLogButton.show();
+        } else {
+            newLogButton.hide();
+        }
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 }

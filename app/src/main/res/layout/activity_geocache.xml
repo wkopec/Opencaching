@@ -81,23 +81,22 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:overScrollMode="never"
-            app:layout_constraintBottom_toTopOf="@+id/newLogButton"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/newLogButton"
-            style="@style/Button.PrimaryDark"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/spacing_small"
-            android:text="@string/new_log"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/viewPager" />
-
     </android.support.constraint.ConstraintLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/newLogButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_new_log"
+        android:tint="@color/white"
+        app:fabSize="normal" />
+
 </android.support.design.widget.CoordinatorLayout>
 

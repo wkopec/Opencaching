@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import pl.opencaching.android.R;
@@ -68,7 +69,6 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHold
         DateTime logDate = geocacheLog.getDate();
         holder.logDateTextView.setText(StringUtils.getDateString(logDate, context));
         holder.logTimeTextView.setText(String.format(context.getString(R.string.separated_time), logDate.getHourOfDay(), logDate.getMinuteOfHour()));
-        //holder.logTimeTextView.setText(logDate.getHourOfDay() + ":" + logDate.getMinuteOfHour());
         holder.logTypeImageView.setImageResource(GeocacheUtils.getLogIcon(geocacheLog.getType()));
         holder.logTypeImageView.setColorFilter(ContextCompat.getColor(context, GeocacheUtils.getLogIconColor(geocacheLog.getType())));
 

@@ -181,7 +181,7 @@ public class NewGeocacheLog  extends RealmObject {
         return isNeedMaintenance;
     }
 
-    public void setNeedMaintenance(boolean needMaintenance) {
+    public void setNeedMaintenance(Boolean needMaintenance) {
         isNeedMaintenance = needMaintenance;
     }
 }

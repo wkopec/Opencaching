@@ -6,8 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -15,6 +13,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import pl.opencaching.android.R;
+import pl.opencaching.android.app.prefs.SessionManager;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.data.repository.GeocacheRepository;
 import pl.opencaching.android.ui.base.BaseDialog;
@@ -25,11 +24,17 @@ import static pl.opencaching.android.ui.base.BaseFragmentActivity.NEW_LOG_FRAGME
 import static pl.opencaching.android.ui.base.BaseFragmentActivity.launchFragmentActivity;
 import static pl.opencaching.android.ui.geocache.GeocacheActivity.GEOCACHE_CODE;
 import static pl.opencaching.android.ui.geocache.new_log.NewLogFragment.NEW_LOG_TYPE;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_STATUS_AVAILABLE;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_STATUS_TEMP_UNAVAILABLE;
 import static pl.opencaching.android.utils.Constants.GEOCACHE_TYPE_EVENT;
+import static pl.opencaching.android.utils.Constants.LOG_TYPE_ARCHIVED;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_ATTENDED;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_COMMENT;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_FOUND;
+import static pl.opencaching.android.utils.Constants.LOG_TYPE_MAINTENANCE_PERFORMED;
+import static pl.opencaching.android.utils.Constants.LOG_TYPE_NEEDS_MAINTENANCE;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_NOT_FOUND;
+import static pl.opencaching.android.utils.Constants.LOG_TYPE_TEMP_UNAVAILABLE;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_WILL_ATTEND;
 
 public class NewLogTypeDialog extends BaseDialog implements OnNewLogTypeClickListener {
@@ -43,6 +48,8 @@ public class NewLogTypeDialog extends BaseDialog implements OnNewLogTypeClickLis
     Context context;
     @Inject
     GeocacheRepository geocacheRepository;
+    @Inject
+    SessionManager sessionManager;
 
     @BindView(R.id.logTypeRecyclerView)
     RecyclerView logTypeRecyclerView;
@@ -62,7 +69,7 @@ public class NewLogTypeDialog extends BaseDialog implements OnNewLogTypeClickLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments() != null) {
+        if (getArguments() != null) {
             geocacheCode = getArguments().getString(GEOCACHE_CODE);
             dialogMode = getArguments().getInt(DIALOG_MODE);
         }
@@ -91,22 +98,36 @@ public class NewLogTypeDialog extends BaseDialog implements OnNewLogTypeClickLis
     private ArrayList<String> getAvailableLogTypes(String geocacheCode) {
         ArrayList<String> logTypes = new ArrayList<>();
         Geocache geocache = geocacheRepository.loadGeocacheByCode(geocacheCode);
-        if(geocache.getType().equals(GEOCACHE_TYPE_EVENT)) {
+
+        if (geocache.getOwner().getUuid().equals(sessionManager.getUserUuid())) {
+            if(geocache.getStatus().equals(GEOCACHE_STATUS_AVAILABLE)) {
+                logTypes.add(LOG_TYPE_TEMP_UNAVAILABLE);
+                logTypes.add(LOG_TYPE_ARCHIVED);
+            } else if(geocache.getStatus().equals(GEOCACHE_STATUS_TEMP_UNAVAILABLE)) {
+                logTypes.add(LOG_TYPE_TEMP_UNAVAILABLE);
+                logTypes.add(LOG_TYPE_ARCHIVED);
+            }
+        }
+        if (geocache.getType().equals(GEOCACHE_TYPE_EVENT)) {
             logTypes.add(LOG_TYPE_WILL_ATTEND);
             logTypes.add(LOG_TYPE_ATTENDED);
-        } else {
+        } else if (!geocache.getOwner().getUuid().equals(sessionManager.getUserUuid())){
             if(!geocache.isFound()) {
                 logTypes.add(LOG_TYPE_FOUND);
                 logTypes.add(LOG_TYPE_NOT_FOUND);
             }
+            if(geocache.getStatus().equals(GEOCACHE_STATUS_AVAILABLE)) {
+                logTypes.add(LOG_TYPE_NEEDS_MAINTENANCE);
+            }
         }
+        logTypes.add(LOG_TYPE_MAINTENANCE_PERFORMED);
         logTypes.add(LOG_TYPE_COMMENT);
         return logTypes;
     }
 
     @Override
     public void OnNewLogTypeClick(String newLogType) {
-        switch(dialogMode) {
+        switch (dialogMode) {
             case NEW_LOG:
                 startNewLogActivity(newLogType);
                 break;

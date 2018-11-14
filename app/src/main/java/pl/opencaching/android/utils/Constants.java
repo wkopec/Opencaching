@@ -40,6 +40,8 @@ public class Constants {
     public static final String GEOCACHE_TYPE_EVENT = "Event";
     public static final String GEOCACHE_TYPE_EWBCAM = "Webcam";
 
-
-
+    // Geocache statuses
+    public static final String GEOCACHE_STATUS_AVAILABLE = "Available";
+    public static final String GEOCACHE_STATUS_TEMP_UNAVAILABLE = "Temporarily unavailable";
+    public static final String GEOCACHE_STATUS_ARCHIVED = "Archived";
 }

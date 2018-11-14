@@ -14,6 +14,19 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
+import static pl.opencaching.android.utils.Constants.GEOCACHE_STATUS_ARCHIVED;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_STATUS_AVAILABLE;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_STATUS_TEMP_UNAVAILABLE;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_TYPE_EVENT;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_TYPE_EWBCAM;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_TYPE_MOVING;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_TYPE_MULTI;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_TYPE_OTHER;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_TYPE_OWN;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_TYPE_QUIZ;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_TYPE_TRADITIONAL;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_TYPE_VIRTUAL;
+
 public class GeocacheRepository extends RealmRepository<Geocache> {
 
     private MapFiltersManager mapFiltersManager;
@@ -66,13 +79,13 @@ public class GeocacheRepository extends RealmRepository<Geocache> {
         }
 
         if (!mapFiltersManager.isAvailableFilter()) {
-            query.notEqualTo("status", "Available");
+            query.notEqualTo("status", GEOCACHE_STATUS_AVAILABLE);
         }
         if (!mapFiltersManager.isTempUnavailableFilter()) {
-            query.notEqualTo("status", "Temporarily unavailable");
+            query.notEqualTo("status", GEOCACHE_STATUS_TEMP_UNAVAILABLE);
         }
         if (!mapFiltersManager.isArchivedFilter()) {
-            query.notEqualTo("status", "Archived");
+            query.notEqualTo("status", GEOCACHE_STATUS_ARCHIVED);
         }
         if (!mapFiltersManager.isOwnedFilter()) {
             query.notEqualTo("owner.uuid", sessionManager.getUserUuid());
@@ -92,31 +105,31 @@ public class GeocacheRepository extends RealmRepository<Geocache> {
 
         // Geocaches
         if (!mapFiltersManager.isTraditionalFilter()) {
-            query.notEqualTo("type", "Traditional");
+            query.notEqualTo("type", GEOCACHE_TYPE_TRADITIONAL);
         }
         if (!mapFiltersManager.isMulticacheFilter()) {
-            query.notEqualTo("type", "Multi");
+            query.notEqualTo("type", GEOCACHE_TYPE_MULTI);
         }
         if (!mapFiltersManager.isQuizFilter()) {
-            query.notEqualTo("type", "Quiz");
+            query.notEqualTo("type", GEOCACHE_TYPE_QUIZ);
         }
         if (!mapFiltersManager.isUnknownFilter()) {
-            query.notEqualTo("type", "Other");
+            query.notEqualTo("type", GEOCACHE_TYPE_OTHER);
         }
         if (!mapFiltersManager.isVirtualFilter()) {
-            query.notEqualTo("type", "Virtual");
+            query.notEqualTo("type", GEOCACHE_TYPE_VIRTUAL);
         }
         if (!mapFiltersManager.isEventFilter()) {
-            query.notEqualTo("type", "Event");
+            query.notEqualTo("type", GEOCACHE_TYPE_EVENT);
         }
         if (!mapFiltersManager.isOwncacheFilter()) {
-            query.notEqualTo("type", "Own");
+            query.notEqualTo("type", GEOCACHE_TYPE_OWN);
         }
         if (!mapFiltersManager.isMovingFilter()) {
-            query.notEqualTo("type", "Moving");
+            query.notEqualTo("type", GEOCACHE_TYPE_MOVING);
         }
         if (!mapFiltersManager.isWebcamFilter()) {
-            query.notEqualTo("type", "Webcam");
+            query.notEqualTo("type", GEOCACHE_TYPE_EWBCAM);
         }
         return query;
     }

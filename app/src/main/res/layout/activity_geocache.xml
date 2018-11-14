@@ -94,8 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_new_log"
-        android:tint="@color/white"
+        android:src="@drawable/ic_plus"
         app:fabSize="normal" />
 
 </android.support.design.widget.CoordinatorLayout>

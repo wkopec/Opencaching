@@ -39,6 +39,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static pl.opencaching.android.utils.Constants.GEOCACHES_STANDARD_FIELDS;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_STATUS_ARCHIVED;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_STATUS_AVAILABLE;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_STATUS_TEMP_UNAVAILABLE;
 import static pl.opencaching.android.utils.Constants.LOGS_STANDARD_FIELDS;
 
 /**
@@ -273,19 +276,19 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
     private String getSelectedStatus() {
         StringBuilder status = new StringBuilder();
         if (mapFiltersManager.isAvailableFilter()) {
-            status.append("Available");
+            status.append(GEOCACHE_STATUS_AVAILABLE);
         }
         if (mapFiltersManager.isTempUnavailableFilter()) {
             if (status.length() != 0) {
                 status.append("|");
             }
-            status.append("Temporarily unavailable");
+            status.append(GEOCACHE_STATUS_TEMP_UNAVAILABLE);
         }
         if (mapFiltersManager.isArchivedFilter()) {
             if (status.length() != 0) {
                 status.append("|");
             }
-            status.append("Archived");
+            status.append(GEOCACHE_STATUS_ARCHIVED);
         }
 
         return status.toString();

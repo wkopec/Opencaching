@@ -134,8 +134,8 @@ public class GeocacheUtils {
             case LOG_TYPE_AVAILABLE: return R.string.log_available;
             case LOG_TYPE_ARCHIVED: return R.string.log_archived;
             case LOG_TYPE_TEMP_UNAVAILABLE: return R.string.log_temporarily_unavailable;
-            //case "Needs maintenance": return R.drawable.ic_need_maintenance;
-            //case "Maintenance performed": return R.drawable.ic_maintenance_performed;
+            case LOG_TYPE_NEEDS_MAINTENANCE: return R.string.log_needs_maintenance;
+            case LOG_TYPE_MAINTENANCE_PERFORMED: return R.string.log_maintenance_performed;
             //case "Moved": return R.drawable.ic_moved;
             //case "OC Team comment": return R.drawable.ic_cog;
             case LOG_TYPE_ATTENDED: return R.string.log_attended;

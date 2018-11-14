@@ -44,7 +44,10 @@ import pl.opencaching.android.utils.events.ChangeLogTypeEvent;
 import pl.opencaching.android.utils.views.CustomSmileRating;
 
 import static pl.opencaching.android.ui.geocache.GeocacheActivity.GEOCACHE_CODE;
+import static pl.opencaching.android.utils.Constants.LOG_TYPE_COMMENT;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_FOUND;
+import static pl.opencaching.android.utils.Constants.LOG_TYPE_MAINTENANCE_PERFORMED;
+import static pl.opencaching.android.utils.Constants.LOG_TYPE_NEEDS_MAINTENANCE;
 import static pl.opencaching.android.utils.GeocacheUtils.getLogType;
 
 public class NewLogFragment extends BaseFragment implements NewLogContract.View {
@@ -89,7 +92,6 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_log, null);
         unbinder = ButterKnife.bind(this, view);
-        //newGeocacheLog = new NewGeocacheLog("OP28F9");    //geocache created for test purposes
         newGeocacheLog = new NewGeocacheLog(getArguments().getString(GEOCACHE_CODE));
         newGeocacheLog.setLogType(getArguments().getString(NEW_LOG_TYPE));
 
@@ -162,6 +164,21 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
         if (geocache.isPasswordRequired()) {
             newGeocacheLog.setPassword(password.getText().toString());
         }
+
+        switch (newGeocacheLog.getLogType()) {
+            case LOG_TYPE_NEEDS_MAINTENANCE:
+                newGeocacheLog.setLogType(LOG_TYPE_COMMENT);
+                newGeocacheLog.setNeedMaintenance(true);
+                break;
+            case LOG_TYPE_MAINTENANCE_PERFORMED:
+                newGeocacheLog.setLogType(LOG_TYPE_COMMENT);
+                newGeocacheLog.setNeedMaintenance(false);
+                break;
+            default:
+                newGeocacheLog.setNeedMaintenance(null);
+                break;
+        }
+
         presenter.submitNewLog(newGeocacheLog);
     }
 
@@ -169,6 +186,11 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     public void onChangeLogTypeClick() {
         NewLogTypeDialog messageDialog = NewLogTypeDialog.newInstance(newGeocacheLog.getGeocacheCode(), NewLogTypeDialog.CHANGE_LOG_TYPE);
         messageDialog.show(requireActivity().getSupportFragmentManager(), NewLogTypeDialog.class.getName());
+    }
+
+    @OnClick(R.id.usePattern)
+    public void onUsePatternClick() {
+
     }
 
     @OnClick({R.id.logDateTextView, R.id.logTimeTextView})
@@ -200,6 +222,7 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     public void onChangeLogType(ChangeLogTypeEvent event) {
         newGeocacheLog.setLogType(event.getLogType());
         setupLogType(newGeocacheLog.getLogType());
+
         setupPasswordLabel(geocache.isPasswordRequired());
         EventBus.getDefault().removeStickyEvent(event);
     }

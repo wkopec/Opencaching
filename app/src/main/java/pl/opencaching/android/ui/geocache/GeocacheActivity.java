@@ -21,6 +21,7 @@ import pl.opencaching.android.R;
 
 import pl.opencaching.android.app.prefs.SessionManager;
 import pl.opencaching.android.data.models.okapi.Geocache;
+import pl.opencaching.android.data.repository.GeocacheRepository;
 import pl.opencaching.android.ui.base.BaseActivity;
 import pl.opencaching.android.ui.base.SectionsPagerAdapter;
 import pl.opencaching.android.ui.dialogs.NewLogTypeDialog;
@@ -51,6 +52,8 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
 
     @Inject
     SessionManager sessionManager;
+    @Inject
+    GeocacheRepository geocacheRepository;
 
     public static final String GEOCACHE = "geocache";
     public static final String GEOCACHE_CODE = "geocache_code:";
@@ -75,6 +78,7 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_geocache);
         ButterKnife.bind(this);
+        //geocache = geocacheRepository.loadGeocacheByCode("OP28F9");     //geocache created for test purposes
         geocache = getIntent().getExtras().getParcelable(GEOCACHE);
         configureTabLayout();
         newLogButton.hide();

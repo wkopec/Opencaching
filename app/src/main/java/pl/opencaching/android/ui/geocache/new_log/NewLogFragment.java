@@ -42,6 +42,7 @@ import pl.opencaching.android.utils.GeocacheUtils;
 import pl.opencaching.android.utils.StringUtils;
 import pl.opencaching.android.utils.events.ChangeLogTypeEvent;
 import pl.opencaching.android.utils.views.CustomSmileRating;
+import pl.opencaching.android.utils.views.like_button.LikeButtonView;
 
 import static pl.opencaching.android.ui.geocache.GeocacheActivity.GEOCACHE_CODE;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_COMMENT;
@@ -77,6 +78,8 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     ConstraintLayout rateLabel;
     @BindView(R.id.smileRating)
     CustomSmileRating smileRating;
+    @BindView(R.id.recommendationButton)
+    LikeButtonView recommendationButton;
     @BindView(R.id.comment)
     EditText comment;
     @BindView(R.id.passwordLabel)
@@ -94,7 +97,6 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
         unbinder = ButterKnife.bind(this, view);
         newGeocacheLog = new NewGeocacheLog(getArguments().getString(GEOCACHE_CODE));
         newGeocacheLog.setLogType(getArguments().getString(NEW_LOG_TYPE));
-
 
         setupView();
         setPresenter(presenter);

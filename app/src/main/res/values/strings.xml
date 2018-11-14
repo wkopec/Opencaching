@@ -160,6 +160,7 @@
     <string name="geocache_submited">Wpis dodany</string>
     <string name="password_hint">Podaj wymagane hasło do wpisu</string>
     <string name="use_pattern">Zastosuj wzór</string>
+    <string name="recommendation">Reko</string>
 
 
 </resources>

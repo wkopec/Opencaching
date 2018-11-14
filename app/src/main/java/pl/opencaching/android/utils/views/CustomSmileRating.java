@@ -178,21 +178,18 @@ public class CustomSmileRating extends BaseRating {
     }
 
     private ValueAnimator.AnimatorUpdateListener mAnimatorUpdateListener
-            = new ValueAnimator.AnimatorUpdateListener() {
-        @Override
-        public void onAnimationUpdate(ValueAnimator animation) {
-            if (mSmileyNotSelectedPreviously) {
-                mMainSmileyTransformaFraction = animation.getAnimatedFraction();
-                if (NONE == mSelectedSmile) {
-                    mMainSmileyTransformaFraction = 1f - mMainSmileyTransformaFraction;
+            = animation -> {
+                if (mSmileyNotSelectedPreviously) {
+                    mMainSmileyTransformaFraction = animation.getAnimatedFraction();
+                    if (NONE == mSelectedSmile) {
+                        mMainSmileyTransformaFraction = 1f - mMainSmileyTransformaFraction;
+                    }
+                    invalidate();
+                } else {
+                    float anim = (float) animation.getAnimatedValue();
+                    moveSmile(anim);
                 }
-                invalidate();
-            } else {
-                float anim = (float) animation.getAnimatedValue();
-                moveSmile(anim);
-            }
-        }
-    };
+            };
 
     private Animator.AnimatorListener mAnimatorListener = new Animator.AnimatorListener() {
         @Override

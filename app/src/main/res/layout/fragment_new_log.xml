@@ -77,9 +77,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/spacing_very_small"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintBottom_toBottomOf="@id/logType"
                     app:layout_constraintEnd_toStartOf="@+id/logType"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toEndOf="@+id/guideline"
                     app:layout_constraintTop_toTopOf="@id/logType"
@@ -152,13 +152,35 @@
 
                 <pl.opencaching.android.utils.views.CustomSmileRating
                     android:id="@+id/smileRating"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="@dimen/_500sdp"
                     android:layout_marginTop="@dimen/spacing_small"
+                    android:layout_marginEnd="@dimen/_48sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rateTv" />
+
+                <pl.opencaching.android.utils.views.like_button.LikeButtonView
+                    android:id="@+id/recommendationButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_19sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.65999997"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/recommendationTv"
+                    style="@style/Text.Secondary.Tiny"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recommendation"
+                    android:layout_marginTop="@dimen/_73sdp"
+                    app:layout_constraintEnd_toEndOf="@+id/recommendationButton"
+                    app:layout_constraintStart_toStartOf="@+id/recommendationButton"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </android.support.constraint.ConstraintLayout>
 
@@ -208,20 +230,20 @@
                     android:layout_marginTop="@dimen/spacing_small"
                     android:layout_marginBottom="@dimen/spacing_small"
                     android:text="@string/comment"
+                    app:layout_constraintBottom_toTopOf="@+id/comment"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/comment"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/usePattern"
                     style="@style/Text.Primary.VerySmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/spacing_small"
                     android:layout_marginEnd="@dimen/spacing_small"
+                    android:padding="@dimen/spacing_small"
                     android:text="@string/use_pattern"
-                    android:textStyle="bold"
                     android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

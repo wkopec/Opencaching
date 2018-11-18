@@ -6,6 +6,7 @@ import pl.opencaching.android.app.prefs.MapFiltersManager;
 import pl.opencaching.android.app.prefs.SessionManager;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.data.models.okapi.GeocacheLog;
+import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
 import pl.opencaching.android.data.repository.base.RealmRepository;
 
 import javax.inject.Inject;
@@ -137,9 +138,10 @@ public class GeocacheRepository extends RealmRepository<Geocache> {
     // Geocache logs
 
     public RealmList<GeocacheLog> loadLogsByCode(String code) {
-        return realm.where(Geocache.class)
+        Geocache geocache = realm.where(Geocache.class)
                 .equalTo("code", code)
-                .findFirst().getLatestGeocacheLogs();
+                .findFirst();
+        return geocache != null ? geocache.getGeocacheLogs() : null;
     }
 
 }

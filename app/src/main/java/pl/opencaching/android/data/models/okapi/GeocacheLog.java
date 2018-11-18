@@ -5,21 +5,26 @@ import com.google.gson.annotations.SerializedName;
 
 import org.joda.time.DateTime;
 
+import java.util.Date;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import pl.opencaching.android.ui.geocache.logs.GeocacheLogInterface;
 
 /**
  * Created by Volfram on 16.07.2017.
  */
 
-public class GeocacheLog extends RealmObject {
+public class GeocacheLog extends RealmObject implements GeocacheLogInterface {
 
     @SerializedName("uuid")
     @Expose
+    @PrimaryKey
     private String uuid;            //log ID
     @SerializedName("date")
     @Expose
-    private String date;            //date and time when the log was added
+    private Date date;              //date and time when the log was added
     @SerializedName("user")
     @Expose
     private User user;              //authot of the log
@@ -36,11 +41,14 @@ public class GeocacheLog extends RealmObject {
     @Expose
     private RealmList<Image> images;     //list of dictionaries
 
+    private String geocacheCode;
+
     public GeocacheLog() {
     }
 
-    public GeocacheLog(String uuid, String date, User user, String type, String comment) {
+    public GeocacheLog(String uuid, String geocacheCode, Date date, User user, String type, String comment) {
         this.uuid = uuid;
+        this.geocacheCode = geocacheCode;
         this.date = date;
         this.user = user;
         this.type = type;
@@ -51,27 +59,79 @@ public class GeocacheLog extends RealmObject {
         return uuid;
     }
 
-    public DateTime getDate() {
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    @Override
+    public DateTime getDateTime() {
         return new DateTime(date);
     }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    @Override
     public User getUser() {
         return user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
     public String getType() {
         return type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Override
     public String getComment() {
         return comment;
     }
 
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    @Override
     public boolean isRecommended() {
         return isRecommended;
     }
 
+    public void setRecommended(boolean recommended) {
+        isRecommended = recommended;
+    }
+
+    @Override
     public RealmList<Image> getImages() {
         return images;
     }
+
+    @Override
+    public Boolean isReadyToSync() {
+        return null;        // GeocacheLog is always synced, so it can not be ready to sync
+    }
+
+    public void setImages(RealmList<Image> images) {
+        this.images = images;
+    }
+
+    public String getGeocacheCode() {
+        return geocacheCode;
+    }
+
+    public void setGeocacheCode(String geocacheCode) {
+        this.geocacheCode = geocacheCode;
+    }
+
 }

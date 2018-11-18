@@ -1,6 +1,5 @@
 package pl.opencaching.android.data.models.okapi;
 
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,24 +10,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import pl.opencaching.android.ui.geocache.logs.GeocacheLogInterface;
 
 import static dagger.internal.Preconditions.checkNotNull;
 import static pl.opencaching.android.utils.StringUtils.getApiFormatedDate;
 
-public class NewGeocacheLog  extends RealmObject {
+public class GeocacheLogDraw extends RealmObject implements GeocacheLogInterface {
 
     @SerializedName("log_uuid")
     @Expose
     @PrimaryKey
-    private String uuid;            //created log ID
+    private String uuid;
     @SerializedName("cache_code")
     @Expose
     private String geocacheCode;    //code of the geocache
     @SerializedName("logtype")
     @Expose
-    private String logType;         //type of the log entry
+    private String type;            //type of the log entry
     @SerializedName("comment")
     @Expose
     private String comment;         //text to be submitted with the log entry
@@ -37,7 +38,7 @@ public class NewGeocacheLog  extends RealmObject {
     private String commentFormat;   //indicates the format of your comment. Values: auto, html, plaintext
     @SerializedName("when")
     @Expose
-    private Date logDate;           //date and time of new log
+    private Date date;              //date and time of new log
     @SerializedName("password")
     @Expose
     private String password;        //password for "Found it" or "Attended" logs if needed
@@ -52,28 +53,34 @@ public class NewGeocacheLog  extends RealmObject {
     private int rate;               //rate between 1 and 5 of "Found it" or "Attended" logs.
     @SerializedName("recommend")
     @Expose
-    private boolean isRecommend;    //recommendation for "Found it" or "Attended" logs
+    private boolean isRecommended;    //recommendation for "Found it" or "Attended" logs
     @SerializedName("needs_maintenance2")
     @Expose
     private Boolean isNeedMaintenance;  //indicate if the cache needs some special attention of its owner
 
-    public NewGeocacheLog() {
+    private Boolean isReadyToSync;
+
+    private User user;
+
+    private RealmList<Image> images;
+
+    public GeocacheLogDraw() {
     }
 
-    public NewGeocacheLog(String geocacheCode) {
+    public GeocacheLogDraw(String geocacheCode) {
         this.geocacheCode = checkNotNull(geocacheCode);
         this.uuid = UUID.randomUUID().toString();
-        this.logDate = new DateTime().toDate();
+        this.date = new DateTime().toDate();
         this.commentFormat = "plaintext";
     }
 
     public Map<String, String> getMap() {
         Map<String, String> map = new HashMap<>();
         map.put("cache_code", geocacheCode);
-        map.put("logtype", logType);
+        map.put("logtype", type);
         map.put("comment", comment);
-        map.put("when", getApiFormatedDate(logDate));
-        map.put("isRecommend", String.valueOf(isRecommend));
+        map.put("when", getApiFormatedDate(date));
+        map.put("recommend", String.valueOf(isRecommended));
         if(password != null) {
             map.put("password", password);
         }
@@ -105,14 +112,16 @@ public class NewGeocacheLog  extends RealmObject {
         this.geocacheCode = geocacheCode;
     }
 
-    public String getLogType() {
-        return logType;
+    @Override
+    public String getType() {
+        return type;
     }
 
-    public void setLogType(String logType) {
-        this.logType = logType;
+    public void setType(String type) {
+        this.type = type;
     }
 
+    @Override
     public String getComment() {
         return comment;
     }
@@ -129,12 +138,17 @@ public class NewGeocacheLog  extends RealmObject {
         this.commentFormat = commentFormat;
     }
 
-    public DateTime getLogDate() {
-        return new DateTime(logDate);
+    public Date getDate() {
+        return date;
     }
 
-    public void setLogDate(Date logDate) {
-        this.logDate = logDate;
+    @Override
+    public DateTime getDateTime() {
+        return new DateTime(date);
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getPassword() {
@@ -169,19 +183,48 @@ public class NewGeocacheLog  extends RealmObject {
         this.rate = rate;
     }
 
-    public boolean isRecommend() {
-        return isRecommend;
+    @Override
+    public boolean isRecommended() {
+        return isRecommended;
     }
 
-    public void setRecommend(boolean recommend) {
-        isRecommend = recommend;
+    public void setRecommended(boolean recommended) {
+        isRecommended = recommended;
     }
 
-    public boolean isNeedMaintenance() {
+    public Boolean getNeedMaintenance() {
         return isNeedMaintenance;
     }
 
     public void setNeedMaintenance(Boolean needMaintenance) {
         isNeedMaintenance = needMaintenance;
     }
+
+    @Override
+    public Boolean isReadyToSync() {
+        return isReadyToSync;
+    }
+
+    public void setReadyToSync(boolean readyToSync) {
+        isReadyToSync = readyToSync;
+    }
+
+    @Override
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public RealmList<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(RealmList<Image> images) {
+        this.images = images;
+    }
+
 }

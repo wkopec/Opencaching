@@ -12,6 +12,7 @@ import pl.opencaching.android.api.GoogleMapsService;
 import pl.opencaching.android.api.OkapiService;
 import pl.opencaching.android.app.prefs.MapFiltersManager;
 import pl.opencaching.android.app.prefs.SessionManager;
+import pl.opencaching.android.data.models.okapi.GeocacheLog;
 import pl.opencaching.android.data.models.okapi.User;
 import pl.opencaching.android.data.repository.GeocacheRepository;
 import pl.opencaching.android.ui.base.BasePresenter;
@@ -127,7 +128,7 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
     }
 
     private void getGeocaches(String codes, final boolean isMore) {
-        Call<Map<String, Geocache>> loginCall = okapiService.getGeocaches(codes, GEOCACHES_STANDARD_FIELDS, LOGS_STANDARD_FIELDS);
+        Call<Map<String, Geocache>> loginCall = okapiService.getGeocaches(codes, GEOCACHES_STANDARD_FIELDS, LOGS_STANDARD_FIELDS, 5);
         loginCall.enqueue(new Callback<Map<String, Geocache>>() {
             @Override
             public void onResponse(@NonNull Call<Map<String, Geocache>> call, @NonNull Response<Map<String, Geocache>> response) {
@@ -168,6 +169,9 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
             if(geocache.isPasswordRequired()) {
                 geocache.getAttributeCodes().add("A999");
             }
+            for( GeocacheLog log : geocache.getGeocacheLogs()) {
+                log.setGeocacheCode(geocache.getCode());
+            }
             //geocache.setApiRequestCounter();
             downloadedGeocachesArray.add(geocache);
             if (!iterator.hasNext()) {
@@ -203,9 +207,11 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
                         view.hideProgress();
                     } else {
                         view.showMapInfo(R.string.no_matches_for_location_querry);
+                        view.hideProgress();
                     }
                 } else {
                     view.showMapInfo(R.string.something_went_wrong);
+                    view.hideProgress();
                 }
             }
 
@@ -258,7 +264,7 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
         }
     }
 
-    public void clearStoredGeocaches() {
+    private void clearStoredGeocaches() {
         coveredArea.clear();
         showedGeocachesCodes.clear();
         geocacheRepository.clearUnsavedGeocaches();

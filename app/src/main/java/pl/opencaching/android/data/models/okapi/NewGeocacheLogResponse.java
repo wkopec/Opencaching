@@ -11,9 +11,9 @@ public class NewGeocacheLogResponse {
     @SerializedName("message")
     @Expose
     private String message;
-    @SerializedName("log_uuid")
+    @SerializedName("logUuid")
     @Expose
-    private String log_uuid;
+    private String logUuid;
 
     public boolean isSuccess() {
         return isSuccess;
@@ -23,7 +23,7 @@ public class NewGeocacheLogResponse {
         return message;
     }
 
-    public String getLog_uuid() {
-        return log_uuid;
+    public String getLogUuid() {
+        return logUuid;
     }
 }

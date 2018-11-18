@@ -45,7 +45,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         if (image != null) {
             if(image.isSpoiler()) {
                 //TODO: change spoiler drawable
-                holder.photo.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_attribute_password));
+                holder.photo.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_spoiler));
             } else {
                 Picasso.with(context)
                         .load(image.getImageUrl())

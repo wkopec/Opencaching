@@ -116,7 +116,7 @@ public class Geocache extends RealmObject implements Parcelable {
     private RealmList<String> attributeCodes;   //unordered list of OKAPI geocache-attribute IDs (A-codes) with which the cache was tagged
     @SerializedName("latest_logs")
     @Expose
-    private RealmList<GeocacheLog> latestGeocacheLogs;  //a couple of latest log entries in the cache
+    private RealmList<GeocacheLog> geocacheLogs;  //a couple of latest log entries in the cache
     @SerializedName("my_notes")
     @Expose
     private String notes;               //user's notes on the cache
@@ -305,8 +305,8 @@ public class Geocache extends RealmObject implements Parcelable {
         return attributeCodes;
     }
 
-    public RealmList<GeocacheLog> getLatestGeocacheLogs() {
-        return latestGeocacheLogs;
+    public RealmList<GeocacheLog> getGeocacheLogs() {
+        return geocacheLogs;
     }
 
     public String getNotes() {
@@ -345,17 +345,28 @@ public class Geocache extends RealmObject implements Parcelable {
         return hiddenDate;
     }
 
-    public LatLng getPosition() {
-        String[] location = getLocation().split("\\|");
-        return new LatLng(Double.parseDouble(location[0]), Double.parseDouble(location[1]));
-    }
-
     public int getApiRequestCounter() {
         return apiRequestCounter;
     }
 
     public void setApiRequestCounter(int apiRequestCounter) {
         this.apiRequestCounter = apiRequestCounter;
+    }
+
+    public void setGeocacheLogs(RealmList<GeocacheLog> geocacheLogs) {
+        this.geocacheLogs = geocacheLogs;
+    }
+
+    public void addNewLog(GeocacheLog log) {
+        if(geocacheLogs == null) {
+            geocacheLogs = new RealmList<>();
+        }
+        geocacheLogs.add(log);
+    }
+
+    public LatLng getPosition() {
+        String[] location = getLocation().split("\\|");
+        return new LatLng(Double.parseDouble(location[0]), Double.parseDouble(location[1]));
     }
 
     public GeocacheClusterItem getClusterItem() {

@@ -24,8 +24,14 @@ public class MessageDialog extends BaseDialog {
     private String title;
     private String message;
 
+    View.OnClickListener listener;
+
     public static MessageDialog newInstance(String message) {
         return newInstance( -1, null, message);
+    }
+
+    public static MessageDialog newInstance(String title, String message) {
+        return newInstance( -1, title, message);
     }
 
     public static MessageDialog newInstance(int icon, String message) {
@@ -71,8 +77,15 @@ public class MessageDialog extends BaseDialog {
         tvMessage.setText(message);
     }
 
+    public void setOnOkClickListener(View.OnClickListener listener) {
+        this.listener = listener;
+    }
+
     @OnClick(R.id.ok)
-    public void onOkClick() {
+    public void onOkClick(View view) {
+        if(listener != null) {
+            listener.onClick(view);
+        }
         dismiss();
     }
 }

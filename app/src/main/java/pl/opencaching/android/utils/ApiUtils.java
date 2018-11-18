@@ -10,10 +10,8 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Map;
 
 import okhttp3.ResponseBody;
-import pl.opencaching.android.data.models.okapi.NewGeocacheLog;
 
 /**
  * Created by Volfram on 16.07.2017.
@@ -24,7 +22,7 @@ public class ApiUtils {
     public static Error getErrorSingle(Throwable t){
         t.printStackTrace();
         if (t instanceof ConnectException || t instanceof UnknownHostException){
-            return new Error(R.string.check_internet_connection);
+            return new Error(R.string.no_internet_connection);
         } else if (t instanceof SocketTimeoutException){
             return new Error(R.string.couldn_connect_to_server);
         }
@@ -56,7 +54,7 @@ public class ApiUtils {
         }
     }
 
-//    public static Map<String, String> getNewLogFieldsMap(NewGeocacheLog newGeocacheLog) {
+//    public static Map<String, String> getNewLogFieldsMap(GeocacheLogDraw newGeocacheLog) {
 //        StringBuilder builder = new StringBuilder();
 //        builder.append("cache_code&")
 //        return builder.toString();

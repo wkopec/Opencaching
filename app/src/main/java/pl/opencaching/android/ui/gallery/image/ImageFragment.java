@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.transition.Transition;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,7 +29,7 @@ public class ImageFragment extends Fragment {
     @BindView(R.id.photo)
     PhotoView photo;
     @BindView(R.id.spoiler)
-    ImageView spoiler;
+    ConstraintLayout spoiler;
 
 
     @Nullable

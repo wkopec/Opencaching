@@ -46,7 +46,7 @@ public interface OkapiService {
     Call<WaypointResults> getWaypoints(@Query("center") String center, @Query("limit") int limit, @Query("radius") int radius, @Query("status") String status);
 
     @GET("caches/geocaches")
-    Call<Map<String, Geocache>> getGeocaches(@Query("cache_codes") String codes, @Query("fields") String fields, @Query("log_fields") String logFields);
+    Call<Map<String, Geocache>> getGeocaches(@Query("cache_codes") String codes, @Query("fields") String fields, @Query("log_fields") String logFields, @Query("lpc") int logFieldsLimit );
 
     @GET("caches/geocache")
     Call<Geocache> getGeocacheInfo(@Query("cache_code") String code, @Query("fields") String fields);

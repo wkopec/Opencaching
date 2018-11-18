@@ -1,6 +1,5 @@
 package pl.opencaching.android.ui.geocache.new_log;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -34,9 +33,10 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import pl.opencaching.android.R;
 import pl.opencaching.android.data.models.okapi.Geocache;
-import pl.opencaching.android.data.models.okapi.NewGeocacheLog;
+import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
 import pl.opencaching.android.ui.base.BaseActivity;
 import pl.opencaching.android.ui.base.BaseFragment;
+import pl.opencaching.android.ui.dialogs.MessageDialog;
 import pl.opencaching.android.ui.dialogs.NewLogTypeDialog;
 import pl.opencaching.android.utils.GeocacheUtils;
 import pl.opencaching.android.utils.StringUtils;
@@ -45,6 +45,7 @@ import pl.opencaching.android.utils.views.CustomSmileRating;
 import pl.opencaching.android.utils.views.like_button.LikeButtonView;
 
 import static pl.opencaching.android.ui.geocache.GeocacheActivity.GEOCACHE_CODE;
+import static pl.opencaching.android.utils.Constants.LOG_TYPE_ATTENDED;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_COMMENT;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_FOUND;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_MAINTENANCE_PERFORMED;
@@ -88,20 +89,48 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     EditText password;
 
     private Geocache geocache;
-    private NewGeocacheLog newGeocacheLog;
+    private GeocacheLogDraw geocacheLogDraw;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_log, null);
         unbinder = ButterKnife.bind(this, view);
-        newGeocacheLog = new NewGeocacheLog(getArguments().getString(GEOCACHE_CODE));
-        newGeocacheLog.setLogType(getArguments().getString(NEW_LOG_TYPE));
+        geocacheLogDraw = new GeocacheLogDraw(getArguments().getString(GEOCACHE_CODE));
+        geocacheLogDraw.setType(getArguments().getString(NEW_LOG_TYPE));
 
         setupView();
         setPresenter(presenter);
-        presenter.start(newGeocacheLog.getGeocacheCode());
+        presenter.start(geocacheLogDraw.getGeocacheCode());
         return view;
+    }
+
+    @OnClick(R.id.submitButton)
+    public void onNewLogClick() {
+        geocacheLogDraw.setComment(comment.getText().toString());
+        if (geocache.isPasswordRequired()) {
+            geocacheLogDraw.setPassword(password.getText().toString());
+        }
+        switch (geocacheLogDraw.getType()) {
+            case LOG_TYPE_NEEDS_MAINTENANCE:
+                geocacheLogDraw.setType(LOG_TYPE_COMMENT);
+                geocacheLogDraw.setNeedMaintenance(true);
+                break;
+            case LOG_TYPE_MAINTENANCE_PERFORMED:
+                geocacheLogDraw.setType(LOG_TYPE_COMMENT);
+                geocacheLogDraw.setNeedMaintenance(false);
+                break;
+            default:
+                geocacheLogDraw.setNeedMaintenance(null);
+                break;
+        }
+        if(geocacheLogDraw.getType().equals(LOG_TYPE_FOUND) || geocacheLogDraw.getType().equals(LOG_TYPE_ATTENDED)) {
+            if(smileRating.getRating() > 0 && smileRating.getRating() < 6) {
+                geocacheLogDraw.setRate(smileRating.getRating());
+            }
+            geocacheLogDraw.setRecommended(recommendationButton.isChecked());
+        }
+        presenter.submitNewLog(geocacheLogDraw);
     }
 
     @Override
@@ -120,8 +149,8 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     private void setupView() {
         setupActionBar();
         setupSmileRating();
-        setupLogType(newGeocacheLog.getLogType());
-        setupLogDate(newGeocacheLog.getLogDate());
+        setupLogType(geocacheLogDraw.getType());
+        setupLogDate(geocacheLogDraw.getDateTime());
     }
 
     private void setupActionBar() {
@@ -157,36 +186,12 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     }
 
     private void setupPasswordLabel(boolean isPasswordRequires) {
-        passwordLabel.setVisibility(isPasswordRequires && newGeocacheLog.getLogType().equals(LOG_TYPE_FOUND) ? View.VISIBLE : View.GONE);
-    }
-
-    @OnClick(R.id.submitButton)
-    public void onNewLogClick() {
-        newGeocacheLog.setComment(comment.getText().toString());
-        if (geocache.isPasswordRequired()) {
-            newGeocacheLog.setPassword(password.getText().toString());
-        }
-
-        switch (newGeocacheLog.getLogType()) {
-            case LOG_TYPE_NEEDS_MAINTENANCE:
-                newGeocacheLog.setLogType(LOG_TYPE_COMMENT);
-                newGeocacheLog.setNeedMaintenance(true);
-                break;
-            case LOG_TYPE_MAINTENANCE_PERFORMED:
-                newGeocacheLog.setLogType(LOG_TYPE_COMMENT);
-                newGeocacheLog.setNeedMaintenance(false);
-                break;
-            default:
-                newGeocacheLog.setNeedMaintenance(null);
-                break;
-        }
-
-        presenter.submitNewLog(newGeocacheLog);
+        passwordLabel.setVisibility(isPasswordRequires && geocacheLogDraw.getType().equals(LOG_TYPE_FOUND) ? View.VISIBLE : View.GONE);
     }
 
     @OnClick({R.id.logType, R.id.logTypeIcon})
     public void onChangeLogTypeClick() {
-        NewLogTypeDialog messageDialog = NewLogTypeDialog.newInstance(newGeocacheLog.getGeocacheCode(), NewLogTypeDialog.CHANGE_LOG_TYPE);
+        NewLogTypeDialog messageDialog = NewLogTypeDialog.newInstance(geocacheLogDraw.getGeocacheCode(), NewLogTypeDialog.CHANGE_LOG_TYPE);
         messageDialog.show(requireActivity().getSupportFragmentManager(), NewLogTypeDialog.class.getName());
     }
 
@@ -197,21 +202,21 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
 
     @OnClick({R.id.logDateTextView, R.id.logTimeTextView})
     public void onChangeDateClick() {
-        DateTime date = newGeocacheLog.getLogDate();
+        DateTime date = geocacheLogDraw.getDateTime();
         DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(),
                 (view, year, monthOfYear, dayOfMonth) -> {
-                    newGeocacheLog.setLogDate(newGeocacheLog.getLogDate()
+                    geocacheLogDraw.setDate(geocacheLogDraw.getDateTime()
                             .withYear(year)
                             .withMonthOfYear(monthOfYear)
                             .withDayOfMonth(dayOfMonth).toDate());
-                    setupLogDate(newGeocacheLog.getLogDate());
+                    setupLogDate(geocacheLogDraw.getDateTime());
 
                     TimePickerDialog timePickerDialog = new TimePickerDialog(requireActivity(),
                             (view1, hourOfDay, minute) -> {
-                                newGeocacheLog.setLogDate(newGeocacheLog.getLogDate()
+                                geocacheLogDraw.setDate(geocacheLogDraw.getDateTime()
                                         .withHourOfDay(hourOfDay)
                                         .withMinuteOfHour(minute).toDate());
-                                setupLogDate(newGeocacheLog.getLogDate());
+                                setupLogDate(geocacheLogDraw.getDateTime());
                             }, date.getHourOfDay(), date.getMinuteOfHour(), true);
                     timePickerDialog.show();
 
@@ -222,11 +227,19 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onChangeLogType(ChangeLogTypeEvent event) {
-        newGeocacheLog.setLogType(event.getLogType());
-        setupLogType(newGeocacheLog.getLogType());
+        geocacheLogDraw.setType(event.getLogType());
+        setupLogType(geocacheLogDraw.getType());
 
         setupPasswordLabel(geocache.isPasswordRequired());
         EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Override
+    public void showMessage(String title, String message) {
+        MessageDialog messageDialog = MessageDialog.newInstance(title, message);
+        messageDialog.setOnOkClickListener(v -> requireActivity().finish());
+        messageDialog.setCancelable(false);
+        messageDialog.show(requireActivity().getSupportFragmentManager(), MessageDialog.class.getName());
     }
 
     @Override

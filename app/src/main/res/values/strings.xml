@@ -89,7 +89,8 @@
     <string name="map_search_hint">Wyszukaj miejsca na mapie</string>
 
     <!--Base messages-->
-    <string name="check_internet_connection">Sprawdź połączenie internetowe</string>
+    <!--<string name="check_internet_connection">Sprawdź połączenie internetowe</string>-->
+    <string name="no_internet_connection">Brak połączenia internetowego</string>
     <string name="something_went_wrong">Ops… Coś poszło nie tak.</string>
     <string name="session_has_ended">Sesja została zakończona, zaloguj się ponownie</string>
     <string name="single_back_press_message">Wciśnij ponownie Wstecz aby wyjść</string>
@@ -161,6 +162,10 @@
     <string name="password_hint">Podaj wymagane hasło do wpisu</string>
     <string name="use_pattern">Zastosuj wzór</string>
     <string name="recommendation">Reko</string>
+    <string name="spoiler">Spoiler</string>
+    <string name="new_log_auto_submit_message">Wpis zostanie automatycznie wysłany po uzyskaniu połączenia</string>
+    <string name="log_not_synchronized_yet">Wpis nie został jeszcze zsynchronizowany</string>
+    <string name="draw_of_log">Szkic wpisu</string>
 
 
 </resources>

@@ -120,7 +120,7 @@ public class NewLogTypeDialog extends BaseDialog implements OnNewLogTypeClickLis
                 logTypes.add(LOG_TYPE_NEEDS_MAINTENANCE);
             }
         }
-        logTypes.add(LOG_TYPE_MAINTENANCE_PERFORMED);
+        //logTypes.add(LOG_TYPE_MAINTENANCE_PERFORMED);
         logTypes.add(LOG_TYPE_COMMENT);
         return logTypes;
     }

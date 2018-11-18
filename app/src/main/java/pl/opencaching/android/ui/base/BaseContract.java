@@ -32,6 +32,8 @@ public abstract class BaseContract {
 
         void showMessage(String message);
 
+        void showMessage(String title, String message);
+
 
     }
 }

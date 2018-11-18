@@ -1,7 +1,7 @@
 package pl.opencaching.android.ui.geocache.new_log;
 
 import pl.opencaching.android.data.models.okapi.Geocache;
-import pl.opencaching.android.data.models.okapi.NewGeocacheLog;
+import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
 import pl.opencaching.android.ui.base.BaseContract;
 
 public class NewLogContract {
@@ -18,7 +18,7 @@ public class NewLogContract {
 
         void start(String geocacheCode);
 
-        void submitNewLog(NewGeocacheLog newGeocacheLog);
+        void submitNewLog(GeocacheLogDraw geocacheLogDraw);
 
     }
 

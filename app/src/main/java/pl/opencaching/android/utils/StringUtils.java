@@ -54,6 +54,11 @@ public class StringUtils {
         return displayDate;
     }
 
+    public static String getTimeString(int hour, int minute, Context context) {
+        DecimalFormat df = new DecimalFormat("00");
+        return String.format(context.getString(R.string.separated_time), df.format(hour), df.format(minute));
+    }
+
     public static String getOathToken(String url) {
         url = url.substring(url.indexOf("oauth_token"));
         String[] pairs = url.split("&");

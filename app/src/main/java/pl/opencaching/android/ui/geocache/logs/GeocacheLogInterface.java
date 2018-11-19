@@ -6,7 +6,7 @@ import io.realm.RealmList;
 import pl.opencaching.android.data.models.okapi.Image;
 import pl.opencaching.android.data.models.okapi.User;
 
-public interface GeocacheLogInterface {
+public interface GeocacheLogInterface extends Comparable<GeocacheLogInterface>{
 
     String getComment();
     User getUser();

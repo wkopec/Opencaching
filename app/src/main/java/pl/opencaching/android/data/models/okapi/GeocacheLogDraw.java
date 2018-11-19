@@ -1,5 +1,7 @@
 package pl.opencaching.android.data.models.okapi;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -227,4 +229,9 @@ public class GeocacheLogDraw extends RealmObject implements GeocacheLogInterface
         this.images = images;
     }
 
+    @Override
+    public int compareTo(@NonNull GeocacheLogInterface geocacheLog) {
+        //return getDateTime().compareTo(geocacheLog.getDateTime());
+        return geocacheLog.getDateTime().compareTo(getDateTime());
+    }
 }

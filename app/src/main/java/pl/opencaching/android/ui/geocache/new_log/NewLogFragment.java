@@ -51,6 +51,8 @@ import static pl.opencaching.android.utils.Constants.LOG_TYPE_FOUND;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_MAINTENANCE_PERFORMED;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_NEEDS_MAINTENANCE;
 import static pl.opencaching.android.utils.GeocacheUtils.getLogType;
+import static pl.opencaching.android.utils.StringUtils.getDateString;
+import static pl.opencaching.android.utils.StringUtils.getTimeString;
 
 public class NewLogFragment extends BaseFragment implements NewLogContract.View {
 
@@ -170,8 +172,8 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     }
 
     private void setupLogDate(DateTime logDate) {
-        logDateTextView.setText(StringUtils.getDateString(logDate, context));
-        logTimeTextView.setText(String.format(context.getString(R.string.separated_time), logDate.getHourOfDay(), logDate.getMinuteOfHour()));
+        logDateTextView.setText(getDateString(logDate, context));
+        logTimeTextView.setText(getTimeString(logDate.getHourOfDay(), logDate.getMinuteOfHour(), context));
     }
 
     private void setupLogType(String newLogType) {

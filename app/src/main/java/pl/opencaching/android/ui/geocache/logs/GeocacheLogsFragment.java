@@ -13,6 +13,7 @@ import pl.opencaching.android.ui.base.BaseActivity;
 import pl.opencaching.android.ui.base.BaseFragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.inject.Inject;
 
@@ -56,6 +57,7 @@ public class GeocacheLogsFragment extends BaseFragment implements GeocacheLogsCo
 
     @Override
     public void setLogs(ArrayList<GeocacheLogInterface> geocacheLogs) {
+        Collections.sort(geocacheLogs);
         configureRecyclerView(geocacheLogs);
     }
 

@@ -1,5 +1,7 @@
 package pl.opencaching.android.data.models.okapi;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -41,14 +43,11 @@ public class GeocacheLog extends RealmObject implements GeocacheLogInterface {
     @Expose
     private RealmList<Image> images;     //list of dictionaries
 
-    private String geocacheCode;
-
     public GeocacheLog() {
     }
 
     public GeocacheLog(String uuid, String geocacheCode, Date date, User user, String type, String comment) {
         this.uuid = uuid;
-        this.geocacheCode = geocacheCode;
         this.date = date;
         this.user = user;
         this.type = type;
@@ -122,16 +121,9 @@ public class GeocacheLog extends RealmObject implements GeocacheLogInterface {
         return null;        // GeocacheLog is always synced, so it can not be ready to sync
     }
 
-    public void setImages(RealmList<Image> images) {
-        this.images = images;
+    @Override
+    public int compareTo(@NonNull GeocacheLogInterface geocacheLog) {
+        //return getDateTime().compareTo(geocacheLog.getDateTime());
+        return geocacheLog.getDateTime().compareTo(getDateTime());
     }
-
-    public String getGeocacheCode() {
-        return geocacheCode;
-    }
-
-    public void setGeocacheCode(String geocacheCode) {
-        this.geocacheCode = geocacheCode;
-    }
-
 }

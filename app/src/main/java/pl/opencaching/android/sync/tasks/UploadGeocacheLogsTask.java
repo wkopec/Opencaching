@@ -53,7 +53,7 @@ public class UploadGeocacheLogsTask implements Runnable {
                         NewGeocacheLogResponse newLogResponse = response.body();
                         if(newLogResponse.isSuccess()) {
                             GeocacheLog newGeocacheLog = new GeocacheLog(newLogResponse.getLogUuid(), geocacheLogDraw.getGeocacheCode(), geocacheLogDraw.getDate(), userRespository.getLoggedUser(), geocacheLogDraw.getType(), geocacheLogDraw.getComment());
-                            Geocache geocache = geocacheRepository.loadGeocacheByCode(newGeocacheLog.getGeocacheCode());
+                            Geocache geocache = geocacheRepository.loadGeocacheByCode(geocacheLogDraw.getGeocacheCode());
 
                             realm.beginTransaction();
                             if(geocache != null) {

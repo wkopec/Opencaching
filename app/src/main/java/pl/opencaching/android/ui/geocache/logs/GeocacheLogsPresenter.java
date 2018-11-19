@@ -56,12 +56,9 @@ public class GeocacheLogsPresenter extends BasePresenter implements GeocacheLogs
                 if (response.body() != null) {
                     ArrayList<GeocacheLog> fetchedGocacheLogs = response.body();
 
-                    for( GeocacheLog log : fetchedGocacheLogs) {
-                        log.setGeocacheCode(code);
-                    }
-
                     Geocache geocache = geocacheRepository.loadGeocacheByCode(code);
                     realm.beginTransaction();
+                    geocache.getGeocacheLogs().clear();
                     geocache.getGeocacheLogs().addAll(fetchedGocacheLogs);
                     realm.commitTransaction();
 

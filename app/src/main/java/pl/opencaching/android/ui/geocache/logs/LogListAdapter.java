@@ -19,6 +19,7 @@ import pl.opencaching.android.R;
 
 import org.joda.time.DateTime;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,7 +28,9 @@ import pl.opencaching.android.ui.gallery.PhotosAdapter;
 import pl.opencaching.android.utils.GeocacheUtils;
 import pl.opencaching.android.utils.StringUtils;
 
+import static pl.opencaching.android.utils.StringUtils.getDateString;
 import static pl.opencaching.android.utils.StringUtils.getFormatedHtmlString;
+import static pl.opencaching.android.utils.StringUtils.getTimeString;
 
 /**
  * Created by Wojtek on 27.07.2017.
@@ -66,8 +69,9 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHold
 
         holder.logAuthorTextView.setText(geocacheLog.getUser().getUsername());
         DateTime logDate = geocacheLog.getDateTime();
-        holder.logDateTextView.setText(StringUtils.getDateString(logDate, context));
-        holder.logTimeTextView.setText(String.format(context.getString(R.string.separated_time), logDate.getHourOfDay(), logDate.getMinuteOfHour()));
+        holder.logDateTextView.setText(getDateString(logDate, context));
+        holder.logTimeTextView.setText(getTimeString(logDate.getHourOfDay(), logDate.getMinuteOfHour(), context));
+
         holder.logTypeImageView.setImageResource(GeocacheUtils.getLogIcon(geocacheLog.getType()));
         holder.logTypeImageView.setColorFilter(ContextCompat.getColor(context, GeocacheUtils.getLogIconColor(geocacheLog.getType())));
 

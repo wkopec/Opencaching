@@ -157,7 +157,7 @@
     <string name="gallery">Galeria</string>
     <string name="description">Opis</string>
     <string name="separated_indicators" translatable="false" >%d/%d</string>
-    <string name="separated_time" translatable="false" >%d:%d</string>
+    <string name="separated_time" translatable="false" >%s:%s</string>
     <string name="geocache_submited">Wpis dodany</string>
     <string name="password_hint">Podaj wymagane hasło do wpisu</string>
     <string name="use_pattern">Zastosuj wzór</string>

@@ -169,9 +169,6 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
             if(geocache.isPasswordRequired()) {
                 geocache.getAttributeCodes().add("A999");
             }
-            for( GeocacheLog log : geocache.getGeocacheLogs()) {
-                log.setGeocacheCode(geocache.getCode());
-            }
             //geocache.setApiRequestCounter();
             downloadedGeocachesArray.add(geocache);
             if (!iterator.hasNext()) {

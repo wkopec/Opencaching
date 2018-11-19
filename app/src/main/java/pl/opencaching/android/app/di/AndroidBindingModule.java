@@ -1,5 +1,7 @@
 package pl.opencaching.android.app.di;
 
+import pl.opencaching.android.sync.NetworkChangeReceiver;
+import pl.opencaching.android.sync.SyncService;
 import pl.opencaching.android.ui.authorization.LoginActivity;
 import pl.opencaching.android.ui.authorization.login.LoginFragment;
 import pl.opencaching.android.ui.authorization.login.LoginModule;
@@ -73,5 +75,15 @@ public interface AndroidBindingModule {
 
     @ContributesAndroidInjector()
     BaseFragmentActivity galleryBaseFragmentActivity();
+
+    //Broadcast Receivers
+
+    @ContributesAndroidInjector()
+    NetworkChangeReceiver networkChangeReceiver();
+
+    //Services
+
+    @ContributesAndroidInjector()
+    SyncService syncService();
 
 }

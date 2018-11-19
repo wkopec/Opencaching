@@ -73,5 +73,4 @@ public class NetworkModule {
                 .client(okHttpClient)
                 .build().create(GoogleMapsService.class);
     }
-
 }

@@ -25,8 +25,6 @@ import pl.opencaching.android.sync.NetworkChangeReceiver;
 public class App extends DaggerApplication {
 
     private static final String DB_NAME = "OpencachingDB.realm";
-    @Inject
-    SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate() {
@@ -34,7 +32,7 @@ public class App extends DaggerApplication {
         init();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            registerReceiver(new NetworkChangeReceiver(sharedPreferences),
+            registerReceiver(new NetworkChangeReceiver(),
                     new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         }
     }

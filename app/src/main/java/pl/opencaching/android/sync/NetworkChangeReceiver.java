@@ -32,12 +32,7 @@ public class NetworkChangeReceiver extends DaggerBroadcastReceiver {
         if (isInternetConnection(context)) {
             RealmResults<GeocacheLogDraw> logDraws = logDrawRepository.loadAllLogDrawsBySyncReady(true);
             if (!logDraws.isEmpty() && !sharedPreferences.getBoolean((HAS_PENDING_SYNC), false)) {
-
-                //Sometimes Internet connection is not performed immediately after onReceive
-                Completable.timer(3, TimeUnit.SECONDS)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(() -> startMergeService(context, sharedPreferences));
-
+                startMergeService(context, sharedPreferences);
             }
         }
 

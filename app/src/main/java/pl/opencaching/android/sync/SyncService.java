@@ -47,8 +47,7 @@ public class SyncService extends DaggerIntentService {
         String serviceAction = intent.getAction();
         switch (serviceAction) {
             case ACTION_LOG_SYNC:
-                RealmResults<GeocacheLogDraw> logDraws = logDrawRepository.loadAllLogDrawsBySyncReady(true);
-                if(!logDraws.isEmpty() && !sharedPreferences.getBoolean((HAS_PENDING_SYNC), false)) {
+                if(!sharedPreferences.getBoolean((HAS_PENDING_SYNC), false)) {
                     Timber.d(LOG_TAG, "Starting log sync data action");
                     new Handler(getMainLooper()).post(new UploadGeocacheLogsTask(realm, okapiService, logDrawRepository, geocacheRepository, userRespository) {
                         @Override

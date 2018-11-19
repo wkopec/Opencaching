@@ -64,7 +64,7 @@ public class NewLogPresenter extends BasePresenter implements NewLogContract.Pre
                         realm.beginTransaction();
                         geocache.getGeocacheLogs().add(newGeocacheLog);
                         realm.commitTransaction();
-                        view.onGeocacheSubmited();
+                        view.finish();
                     } else if(!newLogResponse.isSuccess() && newLogResponse.getMessage() != null) {
                         view.showMessage(newLogResponse.getMessage());
                     }
@@ -75,11 +75,21 @@ public class NewLogPresenter extends BasePresenter implements NewLogContract.Pre
 
             @Override
             public void onFailure(Call<NewGeocacheLogResponse> call, Throwable t) {
-                geocacheLogDraw.setReadyToSync(true);
-                geocacheLogDraw.setUser(userRespository.getLoggedUser());
-                logDrawRepository.addOrUpdate(geocacheLogDraw);
+                createGeocacheDraft(geocacheLogDraw, true);
                 view.showMessage(context.getString(ApiUtils.getErrorSingle(t).getMessage()), context.getString(R.string.new_log_auto_submit_message));
             }
         });
+    }
+
+    @Override
+    public void createDraft(GeocacheLogDraw geocacheLogDraw) {
+        createGeocacheDraft(geocacheLogDraw, false);
+        view.finish();
+    }
+
+    private void createGeocacheDraft(GeocacheLogDraw geocacheLogDraw, boolean isReadyToSync) {
+        geocacheLogDraw.setReadyToSync(isReadyToSync);
+        geocacheLogDraw.setUser(userRespository.getLoggedUser());
+        logDrawRepository.addOrUpdate(geocacheLogDraw);
     }
 }

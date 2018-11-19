@@ -10,7 +10,7 @@ public class NewLogContract {
 
         void setupGeocache(Geocache geocache);
 
-        void onGeocacheSubmited();
+        void finish();
 
     }
 
@@ -19,6 +19,8 @@ public class NewLogContract {
         void start(String geocacheCode);
 
         void submitNewLog(GeocacheLogDraw geocacheLogDraw);
+
+        void createDraft(GeocacheLogDraw geocacheLogDraw);
 
     }
 

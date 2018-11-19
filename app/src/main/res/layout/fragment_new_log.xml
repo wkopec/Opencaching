@@ -9,7 +9,7 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/submitButton"
+        app:layout_constraintBottom_toTopOf="@+id/buttonViewSwitcher"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -92,6 +92,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/spacing_very_small"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/logTypeTv"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -106,6 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/spacing_very_small"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/logDateTv"
                     app:layout_constraintEnd_toStartOf="@+id/logTimeTextView"
@@ -123,6 +125,7 @@
                     android:layout_gravity="bottom"
                     android:padding="@dimen/spacing_very_small"
                     android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark"
                     app:layout_constraintBottom_toBottomOf="@+id/logDateTextView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/logDateTextView"
@@ -272,16 +275,33 @@
 
     </ScrollView>
 
-    <Button
-        android:id="@+id/submitButton"
-        style="@style/Button.PrimaryDark"
+    <ViewSwitcher
+        android:id="@+id/buttonViewSwitcher"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/spacing_small"
-        android:text="@string/submit_log"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView">
+
+        <Button
+            android:id="@+id/submitButton"
+            style="@style/Button.PrimaryDark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_small"
+            android:text="@string/submit_log" />
+
+        <Button
+            android:id="@+id/createDraftButton"
+            style="@style/Button.Accent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_small"
+            android:text="@string/save_draft" />
+
+    </ViewSwitcher>
+
+
 
 </android.support.constraint.ConstraintLayout>

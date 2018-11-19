@@ -166,6 +166,9 @@
     <string name="new_log_auto_submit_message">Wpis zostanie automatycznie wysłany po uzyskaniu połączenia</string>
     <string name="log_not_synchronized_yet">Wpis nie został jeszcze zsynchronizowany</string>
     <string name="draw_of_log">Szkic wpisu</string>
+    <string name="draft">Szkic</string>
+    <string name="add_image">Dodaj zdjęcia</string>
+    <string name="save_draft">Zapisz szkic</string>
 
 
 </resources>

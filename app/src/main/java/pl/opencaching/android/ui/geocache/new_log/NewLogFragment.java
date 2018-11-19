@@ -10,13 +10,19 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.hsalf.smilerating.BaseRating;
 
@@ -58,13 +64,13 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
 
     public static final String NEW_LOG_TYPE = "new_log_type:";
 
-    private Unbinder unbinder;
-
     @Inject
     Context context;
     @Inject
     NewLogContract.Presenter presenter;
 
+    @BindView(R.id.buttonViewSwitcher)
+    ViewSwitcher buttonViewSwitcher;
     @BindView(R.id.scrollView)
     ScrollView scrollView;
     @BindView(R.id.geocacheName)
@@ -97,7 +103,7 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_log, null);
-        unbinder = ButterKnife.bind(this, view);
+        ButterKnife.bind(this, view);
         geocacheLogDraw = new GeocacheLogDraw(getArguments().getString(GEOCACHE_CODE));
         geocacheLogDraw.setType(getArguments().getString(NEW_LOG_TYPE));
 
@@ -105,34 +111,6 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
         setPresenter(presenter);
         presenter.start(geocacheLogDraw.getGeocacheCode());
         return view;
-    }
-
-    @OnClick(R.id.submitButton)
-    public void onNewLogClick() {
-        geocacheLogDraw.setComment(comment.getText().toString());
-        if (geocache.isPasswordRequired()) {
-            geocacheLogDraw.setPassword(password.getText().toString());
-        }
-        switch (geocacheLogDraw.getType()) {
-            case LOG_TYPE_NEEDS_MAINTENANCE:
-                geocacheLogDraw.setType(LOG_TYPE_COMMENT);
-                geocacheLogDraw.setNeedMaintenance(true);
-                break;
-            case LOG_TYPE_MAINTENANCE_PERFORMED:
-                geocacheLogDraw.setType(LOG_TYPE_COMMENT);
-                geocacheLogDraw.setNeedMaintenance(false);
-                break;
-            default:
-                geocacheLogDraw.setNeedMaintenance(null);
-                break;
-        }
-        if(geocacheLogDraw.getType().equals(LOG_TYPE_FOUND) || geocacheLogDraw.getType().equals(LOG_TYPE_ATTENDED)) {
-            if(smileRating.getRating() > 0 && smileRating.getRating() < 6) {
-                geocacheLogDraw.setRate(smileRating.getRating());
-            }
-            geocacheLogDraw.setRecommended(recommendationButton.isChecked());
-        }
-        presenter.submitNewLog(geocacheLogDraw);
     }
 
     @Override
@@ -143,8 +121,8 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     }
 
     @Override
-    public void onGeocacheSubmited() {
-        Toast.makeText(requireActivity(), R.string.geocache_submited, Toast.LENGTH_SHORT).show();
+    public void finish() {
+        //Toast.makeText(requireActivity(), R.string.geocache_submited, Toast.LENGTH_SHORT).show();
         requireActivity().finish();
     }
 
@@ -156,11 +134,27 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     }
 
     private void setupActionBar() {
-        BaseActivity activity = (BaseActivity) requireActivity();
-        ActionBar actionBar = activity.getSupportActionBar();
+        ActionBar actionBar = ((BaseActivity) requireActivity()).getSupportActionBar();
+        setHasOptionsMenu(true);
         if (actionBar != null) {
             actionBar.setTitle(getResources().getString(R.string.new_log));
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.new_log_menu, menu);
+
+        Switch draftSwitch = menu.findItem(R.id.switchItem).getActionView().findViewById(R.id.draftSwitch);
+        draftSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked){
+                buttonViewSwitcher.showNext();
+            } else {
+                buttonViewSwitcher.showPrevious();
+            }
+
+        });
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     private void setupSmileRating() {
@@ -189,6 +183,43 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
 
     private void setupPasswordLabel(boolean isPasswordRequires) {
         passwordLabel.setVisibility(isPasswordRequires && geocacheLogDraw.getType().equals(LOG_TYPE_FOUND) ? View.VISIBLE : View.GONE);
+    }
+
+    private GeocacheLogDraw getGeocacheLogDraw() {
+        geocacheLogDraw.setComment(comment.getText().toString());
+        if (geocache.isPasswordRequired()) {
+            geocacheLogDraw.setPassword(password.getText().toString());
+        }
+        switch (geocacheLogDraw.getType()) {
+            case LOG_TYPE_NEEDS_MAINTENANCE:
+                geocacheLogDraw.setType(LOG_TYPE_COMMENT);
+                geocacheLogDraw.setNeedMaintenance(true);
+                break;
+            case LOG_TYPE_MAINTENANCE_PERFORMED:
+                geocacheLogDraw.setType(LOG_TYPE_COMMENT);
+                geocacheLogDraw.setNeedMaintenance(false);
+                break;
+            default:
+                geocacheLogDraw.setNeedMaintenance(null);
+                break;
+        }
+        if(geocacheLogDraw.getType().equals(LOG_TYPE_FOUND) || geocacheLogDraw.getType().equals(LOG_TYPE_ATTENDED)) {
+            if(smileRating.getRating() > 0 && smileRating.getRating() < 6) {
+                geocacheLogDraw.setRate(smileRating.getRating());
+            }
+            geocacheLogDraw.setRecommended(recommendationButton.isChecked());
+        }
+        return geocacheLogDraw;
+    }
+
+    @OnClick(R.id.submitButton)
+    public void onNewLogClick() {
+        presenter.submitNewLog(getGeocacheLogDraw());
+    }
+
+    @OnClick(R.id.createDraftButton)
+    public void onCreateDraftClick() {
+        presenter.createDraft(getGeocacheLogDraw());
     }
 
     @OnClick({R.id.logType, R.id.logTypeIcon})

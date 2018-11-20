@@ -35,6 +35,7 @@
     <style name="Text.Primary">
         <item name="android:alpha">0.87</item>
     </style>
+
     <style name="Text.Secondary">
         <item name="android:alpha">0.54</item>
     </style>
@@ -78,6 +79,23 @@
         <item name="android:textSize">@dimen/text_size_tiny</item>
     </style>
 
+    <style name="TextButton" parent="Text.Primary">
+        <item name="android:textColor">@color/text_button_selector</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextButton.Normal">
+        <item name="android:textSize">@dimen/text_size_normal</item>
+    </style>
+
+    <style name="TextButton.Small">
+        <item name="android:textSize">@dimen/text_size_small</item>
+    </style>
+
+    <style name="TextButton.VerySmall">
+        <item name="android:textSize">@dimen/text_size_very_small</item>
+    </style>
+
     <!--Buttons-->
 
     <style name="Button" parent="Base.Widget.AppCompat.Button">
@@ -107,6 +125,20 @@
         <item name="colorControlActivated">@color/white</item>
         <item name="colorControlHighlight">@color/white</item>
     </style>
+
+    <!--<style name="Switch" parent="Theme.AppCompat.Light">-->
+        <!--&lt;!&ndash; active thumb & track color (30% transparency) &ndash;&gt;-->
+        <!--<item name="colorControlActivated">@color/colorPrimaryDark</item>-->
+
+        <!--&lt;!&ndash; inactive thumb color &ndash;&gt;-->
+        <!--<item name="colorSwitchThumbNormal">#f1f1f1-->
+        <!--</item>-->
+
+        <!--&lt;!&ndash; inactive track color (30% transparency) &ndash;&gt;-->
+        <!--<item name="android:colorForeground">#42221f1f-->
+        <!--</item>-->
+    <!--</style>-->
+
 
     <!--Other-->
 

@@ -227,13 +227,14 @@
 
     <TextView
         android:id="@+id/filterGeocaches"
-        style="@style/Text.Primary.Normal"
+        style="@style/TextButton.Normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/spacing_small"
+        android:paddingTop="@dimen/spacing_small"
+        android:paddingBottom="@dimen/spacing_small"
+        android:paddingStart="@dimen/spacing_normal_x4"
+        android:paddingEnd="@dimen/spacing_normal_x4"
         android:text="@string/filter_geocaches"
-        android:textColor="@color/colorPrimaryDark"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

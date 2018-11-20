@@ -4,13 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 
 import dagger.android.DaggerBroadcastReceiver;
-import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.realm.RealmResults;
 import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
 import pl.opencaching.android.data.repository.LogDrawRepository;

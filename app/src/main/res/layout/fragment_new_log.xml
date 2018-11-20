@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray_background">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -88,27 +89,22 @@
 
                 <TextView
                     android:id="@+id/logType"
-                    style="@style/Text.Primary.Small"
+                    style="@style/TextButton.Small"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/spacing_very_small"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/logTypeTv"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/logTypeIcon"
                     app:layout_constraintTop_toTopOf="@+id/logTypeTv"
                     tools:text="Temporary unavailable" />
 
-
                 <TextView
                     android:id="@+id/logDateTextView"
-                    style="@style/Text.Primary.Small"
+                    style="@style/TextButton.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/spacing_very_small"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/logDateTv"
                     app:layout_constraintEnd_toStartOf="@+id/logTimeTextView"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -119,13 +115,11 @@
 
                 <TextView
                     android:id="@+id/logTimeTextView"
-                    style="@style/Text.Secondary.VerySmall"
+                    style="@style/TextButton.VerySmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:padding="@dimen/spacing_very_small"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimaryDark"
                     app:layout_constraintBottom_toBottomOf="@+id/logDateTextView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/logDateTextView"
@@ -239,14 +233,12 @@
 
                 <TextView
                     android:id="@+id/usePattern"
-                    style="@style/Text.Primary.VerySmall"
+                    style="@style/TextButton.VerySmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/spacing_small"
                     android:padding="@dimen/spacing_small"
                     android:text="@string/use_pattern"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -283,6 +275,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView">
+
+
 
         <Button
             android:id="@+id/submitButton"

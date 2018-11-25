@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item>
-        <shape android:shape="oval">
-            <solid android:color="@color/transparent_gray" />
-            <size
-                android:width="@dimen/_32sdp"
-                android:height="@dimen/_32sdp"/>
-        </shape>
-    </item>
+<item>
+    <shape android:shape="oval">
+        <solid android:color="@color/transparent_gray" />
+        <size
+            android:width="@dimen/_32sdp"
+            android:height="@dimen/_32sdp"/>
+    </shape>
+</item>
 
-    <item
-        android:bottom="@dimen/_1sdp">
-        <shape android:shape="oval">
-            <solid android:color="@color/white"/>
-            <size
-                android:width="@dimen/_32sdp"
-                android:height="@dimen/_32sdp"/>
-        </shape>
-    </item>
+<item
+    android:bottom="@dimen/_1sdp">
+    <shape android:shape="oval">
+        <solid android:color="@color/white"/>
+        <size
+            android:width="@dimen/_32sdp"
+            android:height="@dimen/_32sdp"/>
+    </shape>
+</item>
 </layer-list>

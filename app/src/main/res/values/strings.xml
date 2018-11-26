@@ -169,6 +169,10 @@
     <string name="draft">Szkic</string>
     <string name="add_image">Dodaj zdjęcia</string>
     <string name="save_draft">Zapisz szkic</string>
+    <string name="geocache_map_info_found">Znaleziona</string>
+    <string name="geocache_map_info_not_found">Nieznaleziona</string>
+    <string name="cancel">Anuluj</string>
+    <string name="yes">Tak</string>
 
 
 </resources>

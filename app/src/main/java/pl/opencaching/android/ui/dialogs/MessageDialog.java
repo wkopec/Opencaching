@@ -20,6 +20,13 @@ public class MessageDialog extends BaseDialog {
     @BindView(R.id.message)
     TextView tvMessage;
 
+    @BindView(R.id.okButton)
+    TextView okButton;
+    @BindView(R.id.cancelButton)
+    TextView cancelButton;
+    @BindView(R.id.yesButton)
+    TextView yesButton;
+
     private int icon;
     private String title;
     private String message;
@@ -81,11 +88,28 @@ public class MessageDialog extends BaseDialog {
         this.listener = listener;
     }
 
-    @OnClick(R.id.ok)
+    public void setOptionMode(boolean isOptionMode) {
+        if (isOptionMode) {
+            okButton.setVisibility(View.GONE);
+            cancelButton.setVisibility(View.VISIBLE);
+            yesButton.setVisibility(View.VISIBLE);
+        } else {
+            okButton.setVisibility(View.VISIBLE);
+            cancelButton.setVisibility(View.GONE);
+            yesButton.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick({R.id.okButton, R.id.yesButton})
     public void onOkClick(View view) {
         if(listener != null) {
             listener.onClick(view);
         }
+        dismiss();
+    }
+
+    @OnClick(R.id.cancelButton)
+    public void onCancelClick() {
         dismiss();
     }
 }

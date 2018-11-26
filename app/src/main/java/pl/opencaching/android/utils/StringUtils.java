@@ -81,7 +81,11 @@ public class StringUtils {
     }
 
     public static String getFormatedHtmlString(String httpString) {
-        return httpString.replaceAll("<img", "<img style=\"max-width:100%; height: auto; width: auto;\"");
+        if(httpString != null) {
+            return httpString.replaceAll("<img", "<img style=\"max-width:100%; height: auto; width: auto;\"");
+        } else {
+            return null;
+        }
     }
 
     public static String getFormatedCoordinates(LatLng coordinates) {

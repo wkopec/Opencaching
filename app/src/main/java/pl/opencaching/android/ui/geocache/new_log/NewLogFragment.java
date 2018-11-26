@@ -122,7 +122,6 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
 
     @Override
     public void finish() {
-        //Toast.makeText(requireActivity(), R.string.geocache_submited, Toast.LENGTH_SHORT).show();
         requireActivity().finish();
     }
 
@@ -271,7 +270,6 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     public void showMessage(String title, String message) {
         MessageDialog messageDialog = MessageDialog.newInstance(title, message);
         messageDialog.setOnOkClickListener(v -> requireActivity().finish());
-        messageDialog.setCancelable(false);
         messageDialog.show(requireActivity().getSupportFragmentManager(), MessageDialog.class.getName());
     }
 

@@ -204,7 +204,7 @@ public class GeocacheLogDraw extends RealmObject implements GeocacheLogInterface
 
     @Override
     public Boolean isReadyToSync() {
-        return isReadyToSync;
+        return checkNotNull(isReadyToSync);     //Only synced logs can be null, drafts are never synced by its definition
     }
 
     public void setReadyToSync(boolean readyToSync) {

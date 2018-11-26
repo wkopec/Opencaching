@@ -1,5 +1,7 @@
 package pl.opencaching.android.ui.base;
 
+import android.view.View;
+
 import pl.opencaching.android.data.models.Error;
 
 /**
@@ -33,7 +35,6 @@ public abstract class BaseContract {
         void showMessage(String message);
 
         void showMessage(String title, String message);
-
 
     }
 }

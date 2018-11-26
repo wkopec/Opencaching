@@ -23,12 +23,12 @@
         android:id="@+id/mapTypeDefaultBorder"
         android:layout_width="@dimen/item_map_type_border_height"
         android:layout_height="@dimen/item_map_type_border_height"
-        android:background="@drawable/background_primary_dark_rounded"
+        android:background="@drawable/map_type_icon_background"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/mapTypeDefaultIcon"
-        app:layout_constraintEnd_toEndOf="@+id/mapTypeDefaultIcon"
-        app:layout_constraintStart_toStartOf="@+id/mapTypeDefaultIcon"
-        app:layout_constraintTop_toTopOf="@+id/mapTypeDefaultIcon" />
+        app:layout_constraintBottom_toBottomOf="@+id/mapTypeSatelliteIcon"
+        app:layout_constraintEnd_toStartOf="@+id/mapTypeSatelliteIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/mapTypeSatelliteIcon" />
 
     <ImageButton
         android:id="@+id/mapTypeDefaultIcon"
@@ -36,10 +36,10 @@
         android:layout_height="@dimen/item_map_type_height"
         android:background="@drawable/type_default"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/mapTypeSatelliteIcon"
-        app:layout_constraintEnd_toStartOf="@+id/mapTypeSatelliteIcon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/mapTypeSatelliteIcon" />
+        app:layout_constraintBottom_toBottomOf="@+id/mapTypeDefaultBorder"
+        app:layout_constraintEnd_toEndOf="@+id/mapTypeDefaultBorder"
+        app:layout_constraintStart_toStartOf="@+id/mapTypeDefaultBorder"
+        app:layout_constraintTop_toTopOf="@+id/mapTypeDefaultBorder"/>
 
     <TextView
         android:id="@+id/mapTypeDefault"
@@ -57,12 +57,13 @@
         android:id="@+id/mapTypeSatelliteBorder"
         android:layout_width="@dimen/item_map_type_border_height"
         android:layout_height="@dimen/item_map_type_border_height"
-        android:background="@drawable/background_primary_dark_rounded"
+        android:background="@drawable/map_type_icon_background"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/mapTypeSatelliteIcon"
-        app:layout_constraintEnd_toEndOf="@+id/mapTypeSatelliteIcon"
-        app:layout_constraintStart_toStartOf="@+id/mapTypeSatelliteIcon"
-        app:layout_constraintTop_toTopOf="@+id/mapTypeSatelliteIcon" />
+        android:layout_margin="@dimen/spacing_normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/mapTypeTerrainIcon"
+        app:layout_constraintStart_toEndOf="@id/mapTypeDefaultIcon"
+        app:layout_constraintTop_toBottomOf="@+id/mapType" />
 
     <ImageButton
         android:id="@+id/mapTypeSatelliteIcon"
@@ -70,11 +71,10 @@
         android:layout_height="@dimen/item_map_type_height"
         android:background="@drawable/type_satellite"
         android:scaleType="fitCenter"
-        android:layout_margin="@dimen/spacing_normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/mapTypeTerrainIcon"
-        app:layout_constraintStart_toEndOf="@id/mapTypeDefaultIcon"
-        app:layout_constraintTop_toBottomOf="@+id/mapType" />
+        app:layout_constraintBottom_toBottomOf="@+id/mapTypeSatelliteBorder"
+        app:layout_constraintEnd_toEndOf="@+id/mapTypeSatelliteBorder"
+        app:layout_constraintStart_toStartOf="@+id/mapTypeSatelliteBorder"
+        app:layout_constraintTop_toTopOf="@+id/mapTypeSatelliteBorder"/>
 
     <TextView
         android:id="@+id/mapTypeSatellite"
@@ -92,12 +92,12 @@
         android:id="@+id/mapTypeTerrainBorder"
         android:layout_width="@dimen/item_map_type_border_height"
         android:layout_height="@dimen/item_map_type_border_height"
-        android:background="@drawable/background_primary_dark_rounded"
+        android:background="@drawable/map_type_icon_background"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/mapTypeTerrainIcon"
-        app:layout_constraintEnd_toEndOf="@+id/mapTypeTerrainIcon"
-        app:layout_constraintStart_toStartOf="@+id/mapTypeTerrainIcon"
-        app:layout_constraintTop_toTopOf="@+id/mapTypeTerrainIcon" />
+        app:layout_constraintBottom_toBottomOf="@+id/mapTypeSatelliteIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/mapTypeSatelliteIcon"
+        app:layout_constraintTop_toTopOf="@+id/mapTypeSatelliteIcon" />
 
     <ImageButton
         android:id="@+id/mapTypeTerrainIcon"
@@ -105,10 +105,10 @@
         android:layout_height="@dimen/item_map_type_height"
         android:background="@drawable/type_terrain"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/mapTypeSatelliteIcon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/mapTypeSatelliteIcon"
-        app:layout_constraintTop_toTopOf="@+id/mapTypeSatelliteIcon"/>
+        app:layout_constraintBottom_toBottomOf="@+id/mapTypeTerrainBorder"
+        app:layout_constraintEnd_toEndOf="@+id/mapTypeTerrainBorder"
+        app:layout_constraintStart_toStartOf="@+id/mapTypeTerrainBorder"
+        app:layout_constraintTop_toTopOf="@+id/mapTypeTerrainBorder"/>
 
     <TextView
         android:id="@+id/mapTypeTerrain"

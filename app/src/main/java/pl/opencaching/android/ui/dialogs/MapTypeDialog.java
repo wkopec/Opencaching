@@ -1,5 +1,6 @@
 package pl.opencaching.android.ui.dialogs;
 
+import android.graphics.Typeface;
 import android.view.View;
 import android.widget.TextView;
 
@@ -58,36 +59,30 @@ public class MapTypeDialog extends BaseDialog {
 
     private void setSelectedMapType(int mapType) {
 
-        if(selectedTextView != null) {
-            selectedTextView.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-            selectedBorder.setVisibility(View.VISIBLE);
-        }
-
         switch (mapType) {
             case MAP_TYPE_NORMAL:
-                mapTypeDefaultBorder.setVisibility(View.VISIBLE);
-                mapTypeDefault.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 selectedTextView = mapTypeDefault;
                 selectedBorder = mapTypeDefaultBorder;
                 break;
             case MAP_TYPE_SATELLITE:
-                mapTypeSatelliteBorder.setVisibility(View.VISIBLE);
-                mapTypeSatellite.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 selectedTextView = mapTypeSatellite;
                 selectedBorder = mapTypeSatelliteBorder;
                 break;
             case MAP_TYPE_TERRAIN:
-                mapTypeTerrainBorder.setVisibility(View.VISIBLE);
-                mapTypeTerrain.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 selectedTextView = mapTypeTerrain;
                 selectedBorder = mapTypeTerrainBorder;
                 break;
             default:
-                mapTypeDefaultBorder.setVisibility(View.VISIBLE);
-                mapTypeDefault.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 selectedTextView = mapTypeDefault;
                 selectedBorder = mapTypeDefaultBorder;
         }
+
+        if(selectedTextView != null) {
+            selectedTextView.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            selectedTextView.setTypeface(null, Typeface.BOLD);
+            selectedBorder.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @OnClick({R.id.mapTypeDefaultIcon, R.id.mapTypeDefault})

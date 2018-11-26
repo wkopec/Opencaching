@@ -251,6 +251,8 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
                         if (sheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
                             if(geocacheInfoMenu.getMenu().hasVisibleItems()){
                                 setGeocacheManuButtonVisible(true);
+                            } else {
+                                setGeocacheManuButtonVisible(false);
                             }
                         }
 

@@ -88,6 +88,7 @@ import timber.log.Timber;
 import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL;
 import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE;
 import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_TERRAIN;
+import static pl.opencaching.android.utils.Constants.GEOCACHE_TYPE_EVENT;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_FOUND;
 
 /**
@@ -243,14 +244,16 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
                         setLastSelectedMarkerIcon();
                         lastSelectedMarker = marker;
                         marker.setIcon(BitmapDescriptorFactory.fromResource(GeocacheUtils.getGeocacheSelectedIcon(geocache.getType())));
+
+                        showGeocahceInfo(geocache);
+                        updateGeocacheMenu(geocacheRepository.loadGeocacheByCode(lastSelectedMarker.getSnippet()));
+
                         if (sheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
-                            if(isGeocacheFound(geocache.getCode())) {
-                                setGeocacheManuButtonVisible(false);
-                            } else {
+                            if(geocacheInfoMenu.getMenu().hasVisibleItems()){
                                 setGeocacheManuButtonVisible(true);
                             }
                         }
-                        showGeocahceInfo(geocache);
+
                         moveMapCamera(marker.getPosition(), mMap.getCameraPosition().zoom, 500);
                     }
                     activity.hideSearchView();
@@ -419,7 +422,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
                     setGeocacheManuButtonVisible(false);
                     navigateButton.setScaleX(slideOffset + 1);
                     navigateButton.setScaleY(slideOffset + 1);
-                } else if(!isGeocacheFound(lastSelectedMarker.getSnippet())){
+                } else if(geocacheInfoMenu.getMenu().hasVisibleItems()){
                     setGeocacheManuButtonVisible(true);
                 }
             }
@@ -490,13 +493,19 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
                     Timber.d("On fast found click");
                     if (lastSelectedMarker != null) {
                         presenter.saveGeocacheDraft(lastSelectedMarker.getSnippet(), true);
+                        hideGeocacheInfo();
                     }
                     break;
                 case R.id.action_fast_not_found:
                     Timber.d("On fast not found click");
                     if (lastSelectedMarker != null) {
                         presenter.saveGeocacheDraft(lastSelectedMarker.getSnippet(), false);
+                        hideGeocacheInfo();
                     }
+                    break;
+                case R.id.action_fast_save:
+                    presenter.saveGeocache(lastSelectedMarker.getSnippet());
+                    hideGeocacheInfo();
                     break;
             }
             return true;
@@ -505,13 +514,19 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
 
     @OnClick(R.id.geocacheMenuButton)
     public void onGeocacheMenuClick() {
+        geocacheInfoMenu.show();
+    }
+
+    private void updateGeocacheMenu(Geocache geocache){
         geocacheInfoMenu.getMenu().clear();
-        if (lastSelectedMarker != null && !isGeocacheFound(lastSelectedMarker.getSnippet())) {
-            geocacheInfoMenu.getMenu().add(Menu.NONE, R.id.action_fast_found, 1, getResources().getString(R.string.geocache_map_info_found));
-            geocacheInfoMenu.getMenu().add(Menu.NONE, R.id.action_fast_found, 2, getResources().getString(R.string.geocache_map_info_not_found));
-        }
-        if(geocacheInfoMenu.getMenu().hasVisibleItems()) {
-            geocacheInfoMenu.show();
+        if(geocache != null) {
+            if(!geocache.getType().equals(GEOCACHE_TYPE_EVENT) && !isGeocacheFound(geocache.getCode())) {
+                geocacheInfoMenu.getMenu().add(Menu.NONE, R.id.action_fast_found, 1, getResources().getString(R.string.geocache_map_info_found));
+                geocacheInfoMenu.getMenu().add(Menu.NONE, R.id.action_fast_not_found, 2, getResources().getString(R.string.geocache_map_info_not_found));
+            }
+            if(!geocache.isSaved()) {
+                geocacheInfoMenu.getMenu().add(Menu.NONE, R.id.action_fast_save, 3, getResources().getString(R.string.save));
+            }
         }
     }
 

@@ -66,7 +66,7 @@ public class Geocache extends RealmObject implements Parcelable {
     @SerializedName("founds")
     @Expose
     private int founds;                 //number of times the geocache was successfully isFound
-    @SerializedName("notFounds")
+    @SerializedName("notfounds")
     @Expose
     private int notFounds;              //number of times the geocache was not isFound
     @SerializedName("willattends")
@@ -351,6 +351,14 @@ public class Geocache extends RealmObject implements Parcelable {
 
     public void setApiRequestCounter(int apiRequestCounter) {
         this.apiRequestCounter = apiRequestCounter;
+    }
+
+    public boolean isSaved() {
+        return isSaved;
+    }
+
+    public void setSaved(boolean saved) {
+        isSaved = saved;
     }
 
     public void setGeocacheLogs(RealmList<GeocacheLog> geocacheLogs) {

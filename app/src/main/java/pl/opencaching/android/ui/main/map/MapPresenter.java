@@ -3,17 +3,14 @@ package pl.opencaching.android.ui.main.map;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
 
 import io.reactivex.Completable;
-import io.reactivex.functions.Action;
 import io.realm.Realm;
 import pl.opencaching.android.R;
 import pl.opencaching.android.api.GoogleMapsService;
 import pl.opencaching.android.api.OkapiService;
 import pl.opencaching.android.app.prefs.MapFiltersManager;
 import pl.opencaching.android.app.prefs.SessionManager;
-import pl.opencaching.android.data.models.okapi.GeocacheLog;
 import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
 import pl.opencaching.android.data.models.okapi.User;
 import pl.opencaching.android.data.repository.GeocacheRepository;
@@ -30,9 +27,7 @@ import pl.opencaching.android.utils.ApiUtils;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -59,6 +54,8 @@ import static pl.opencaching.android.utils.Constants.LOG_TYPE_NOT_FOUND;
 
 public class MapPresenter extends BasePresenter implements MapContract.Presenter {
 
+    @Inject
+    Realm realm;
     @Inject
     GeocacheRepository geocacheRepository;
     @Inject
@@ -275,30 +272,6 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
 
     @Override
     public void saveGeocacheDraft(String geocacheCode, boolean isFound) {
-//        Geocache geocache = geocacheRepository.loadGeocacheByCode(geocacheCode);
-//        List<GeocacheLogDraw> createdDrafts = logDrawRepository.loadLogDrawsForGeocache(geocacheCode);
-//        if(isFound) {
-//            for(GeocacheLogDraw logDraw : createdDrafts) {
-//                if(logDraw.getType().equals(LOG_TYPE_FOUND)) {
-//                    view.showMessage("Posiadasz już szkic znalezienia dla tej skrzynki", "Czy chcesz go zastąpić z aktualną datą?", v ->  logDraw.setDate(new Date()));
-//                    return;
-//                }
-//            }
-//        }
-//        if(geocache.isFound()) {
-//            view.showMessage("");
-//        } else {
-//            GeocacheLogDraw geocacheLogDraw = new GeocacheLogDraw(geocacheCode);
-//            if(isFound) {
-//                geocacheLogDraw.setType(LOG_TYPE_FOUND);
-//            } else {
-//                geocacheLogDraw.setType(LOG_TYPE_NOT_FOUND);
-//            }
-//            geocacheLogDraw.setReadyToSync(false);
-//            geocacheLogDraw.setUser(userRespository.getLoggedUser());
-//            logDrawRepository.addOrUpdate(geocacheLogDraw);
-//        }
-
         GeocacheLogDraw geocacheLogDraw = new GeocacheLogDraw(geocacheCode);
         if(isFound) {
             geocacheLogDraw.setType(LOG_TYPE_FOUND);
@@ -309,6 +282,16 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
         geocacheLogDraw.setUser(userRespository.getLoggedUser());
         logDrawRepository.addOrUpdate(geocacheLogDraw);
 
+    }
+
+    @Override
+    public void saveGeocache(String geocacheCode) {
+        if(geocacheCode != null) {
+            Geocache geocache = geocacheRepository.loadGeocacheByCode(geocacheCode);
+            realm.beginTransaction();
+            geocache.setSaved(true);
+            realm.commitTransaction();
+        }
     }
 
     private void clearStoredGeocaches() {

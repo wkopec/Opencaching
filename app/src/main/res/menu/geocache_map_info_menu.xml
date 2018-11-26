@@ -14,4 +14,10 @@
         android:title="@string/geocache_map_info_not_found"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_fast_save"
+        android:orderInCategory="2"
+        android:title="@string/save"
+        app:showAsAction="never" />
+
 </menu>

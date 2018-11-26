@@ -46,6 +46,8 @@ public class MapContract{
 
         void saveGeocacheDraft(String geocacheCode, boolean isFound);
 
+        void saveGeocache(String geocacheCode);
+
         void refreshMap(boolean isAvailabilityChanged);
 
         //Geocache getGeocache(Marker marker);

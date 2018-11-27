@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -74,14 +73,20 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
         setStatusBarColor(R.color.colorPrimaryDark);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(android.view.Menu menu) {
-        getMenuInflater().inflate(R.menu.map_menu, menu);
-        MenuItem item = menu.findItem(R.id.action_search);
+//    @Override
+//    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+//        getMenuInflater().inflate(R.menu.map_menu, menu);
+//        MenuItem item = menu.findItem(R.id.action_search);
+//        if (item != null) {
+//            searchView.setMenuItem(item);
+//        }
+//        return super.onCreateOptionsMenu(menu);
+//    }
+
+    public void setSearchMenuItem(MenuItem item) {
         if (item != null) {
             searchView.setMenuItem(item);
         }
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

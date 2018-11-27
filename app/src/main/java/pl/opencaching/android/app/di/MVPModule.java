@@ -8,6 +8,8 @@ import pl.opencaching.android.ui.geocache.logs.GeocacheLogsContract;
 import pl.opencaching.android.ui.geocache.logs.GeocacheLogsPresenter;
 import pl.opencaching.android.ui.geocache.new_log.NewLogContract;
 import pl.opencaching.android.ui.geocache.new_log.NewLogPresenter;
+import pl.opencaching.android.ui.main.drafts.DraftsContract;
+import pl.opencaching.android.ui.main.drafts.DraftsPresenter;
 import pl.opencaching.android.ui.main.map.MapContract;
 import pl.opencaching.android.ui.main.map.MapPresenter;
 
@@ -31,5 +33,8 @@ public interface MVPModule {
 
     @Binds
     NewLogContract.Presenter bindNewLogPresenter(NewLogPresenter presenter);
+
+    @Binds
+    DraftsContract.Presenter bindDraftsPresenter(DraftsPresenter presenter);
 
 }

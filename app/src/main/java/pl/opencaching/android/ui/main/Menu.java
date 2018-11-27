@@ -7,6 +7,7 @@ import pl.opencaching.android.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.opencaching.android.ui.main.drafts.DraftsFragment;
 import pl.opencaching.android.ui.main.map.MapFragment;
 
 /**
@@ -25,11 +26,9 @@ class Menu {
 
     static Fragment getFragment(int tag) {
         switch (tag) {
-            case R.string.nav_map:
-                return new MapFragment();
-
-            default:
-                return new Fragment();
+            case R.string.nav_map: return new MapFragment();
+            case R.string.nav_drafts: return new DraftsFragment();
+            default: return new Fragment();
         }
     }
 

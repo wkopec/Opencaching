@@ -19,6 +19,8 @@ import pl.opencaching.android.ui.geocache.logs.GeocacheLogsModule;
 import pl.opencaching.android.ui.geocache.new_log.NewLogFragment;
 import pl.opencaching.android.ui.geocache.new_log.NewLogModule;
 import pl.opencaching.android.ui.main.MainActivity;
+import pl.opencaching.android.ui.main.drafts.DraftsFragment;
+import pl.opencaching.android.ui.main.drafts.DraftsModule;
 import pl.opencaching.android.ui.main.map.MapFragment;
 import pl.opencaching.android.ui.main.map.MapScreenModule;
 
@@ -44,6 +46,9 @@ public interface AndroidBindingModule {
 
     @ContributesAndroidInjector(modules = LoginModule.class)
     LoginFragment loginFragment();
+
+    @ContributesAndroidInjector(modules = DraftsModule.class)
+    DraftsFragment draftsFragment();
 
     //Dialogs
 

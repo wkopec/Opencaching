@@ -23,6 +23,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -182,6 +184,13 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         setGeocacheBottomSheet();
         setAnimations();
         setupGeocacheInfoMenu();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        requireActivity().getMenuInflater().inflate(R.menu.map_menu, menu);
+        activity.setSearchMenuItem(menu.findItem(R.id.action_search));
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     private void setupActionBar() {

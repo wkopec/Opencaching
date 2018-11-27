@@ -5,7 +5,6 @@ import dagger.Module;
 
 @Module
 public interface GeocacheLogsModule {
-
     @Binds
     GeocacheLogsContract.View bindView(GeocacheLogsFragment geocacheLogsFragment);
 }

@@ -27,16 +27,16 @@ import butterknife.OnClick;
  */
 
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
-    public static int HEADER = 0;
-    public static int GROUP = 1;
-    public static int ITEM = 2;
-    public static int SEPARATOR = 3;
+    static int HEADER = 0;
+    private static int GROUP = 1;
+    static int ITEM = 2;
+    static int SEPARATOR = 3;
 
     private List<MenuItem> items;
     private OnMenuItemCheckedListener listener;
     private int newSelectedPosition;
 
-    public MenuAdapter(List<MenuItem> items, OnMenuItemCheckedListener listener) {
+    MenuAdapter(List<MenuItem> items, OnMenuItemCheckedListener listener) {
         this.items = items;
         this.listener = listener;
     }
@@ -86,7 +86,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         Context context = holder.parent.getContext();
         int accentColor = ContextCompat.getColor(context, R.color.colorPrimaryDark);
         int grayColor = ContextCompat.getColor(context, R.color.black);
-        if (position == newSelectedPosition){
+        if (item.type == ITEM && position == newSelectedPosition){
             holder.parent.setBackgroundColor(ContextCompat.getColor(context,R.color.accent_gray));
             holder.iconImage.getDrawable().setColorFilter(accentColor, PorterDuff.Mode.SRC_ATOP);
             holder.titleTextView.setTextColor(accentColor);
@@ -100,10 +100,6 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
                 drawable.setColorFilter(grayColor, PorterDuff.Mode.SRC_ATOP);
             }
         }
-//
-//        if (item.type == HEADER){
-//            holder.parent.setBackgroundColor(accentColor);
-//        }
 
         if (item.type == GROUP){
             holder.parent.setBackgroundColor(ContextCompat.getColor(context,R.color.white));
@@ -154,7 +150,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
         @OnClick(R.id.parent)
         public void onClick(View view){
-            if (items.get(getAdapterPosition()).type != GROUP) {
+            if (items.get(getAdapterPosition()).type == ITEM) {
                 setItemSelected((Integer) view.getTag());
             }
         }

@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_150sdp"
-    android:maxHeight="@dimen/_150sdp"
+    android:layout_height="@dimen/_130sdp"
+    android:maxHeight="@dimen/_130sdp"
     android:id="@+id/parent"
     android:paddingBottom="@dimen/spacing_very_small">
 

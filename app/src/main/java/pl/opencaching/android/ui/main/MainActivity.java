@@ -1,6 +1,10 @@
 package pl.opencaching.android.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -11,13 +15,21 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import pl.opencaching.android.R;
+import pl.opencaching.android.app.prefs.SessionManager;
+import pl.opencaching.android.ui.authorization.LoginActivity;
 import pl.opencaching.android.ui.base.BaseActivity;
+
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import org.greenrobot.eventbus.EventBus;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +37,9 @@ import pl.opencaching.android.ui.main.map.MapFragment;
 import pl.opencaching.android.utils.events.SearchMapEvent;
 
 public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItemCheckedListener, DrawerLayout.DrawerListener {
+
+    @Inject
+    SessionManager sessionManager;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -56,13 +71,14 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
         toggle.syncState();
         configureMenuRecyclerView();
         setSearchView();
+        setStatusBarColor(R.color.colorPrimaryDark);
     }
 
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
         getMenuInflater().inflate(R.menu.map_menu, menu);
         MenuItem item = menu.findItem(R.id.action_search);
-        if(item != null) {
+        if (item != null) {
             searchView.setMenuItem(item);
         }
         return super.onCreateOptionsMenu(menu);
@@ -71,7 +87,7 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return false;
@@ -88,7 +104,7 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
         menuAdapter.setItemSelected(R.string.nav_map);
     }
 
-    private void setSearchView(){
+    private void setSearchView() {
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -117,7 +133,7 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START))
             drawer.closeDrawer(GravityCompat.START);
-        else if(searchView.isSearchOpen())
+        else if (searchView.isSearchOpen())
             searchView.closeSearch();
         else if (!(currentFragment instanceof MapFragment))
             menuAdapter.setItemSelected(R.string.nav_map);
@@ -132,7 +148,13 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
     @Override
     public void onMenuItemChecked(int tag) {
         if (Menu.isAction(tag)) {
-            Menu.performAction(this, tag);
+            switch (tag){
+                case R.string.nav_logout:
+                    sessionManager.clearLoggedUserData();
+                    startActivity(new Intent(this, LoginActivity.class));
+                    finish();
+                    break;
+            }
         } else {
             Fragment newFragment = Menu.getFragment(tag);
             if (currentFragment == null || !newFragment.getClass().equals(currentFragment.getClass())) {
@@ -143,19 +165,26 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
         drawer.closeDrawer(GravityCompat.START);
     }
 
+    private boolean isDrawerClosed = true;
+
     @Override
-    public void onDrawerSlide(View drawerView, float slideOffset) {
+    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+        if(isDrawerClosed) {
+            setStatusBarColor(R.color.transparent);
+            isDrawerClosed = false;
+        }
 
     }
 
     @Override
-    public void onDrawerOpened(View drawerView) {
+    public void onDrawerOpened(@NonNull View drawerView) {
 
     }
 
     @Override
-    public void onDrawerClosed(View drawerView) {
-
+    public void onDrawerClosed(@NonNull View drawerView) {
+        isDrawerClosed = true;
+        setStatusBarColor(R.color.colorPrimaryDark);
     }
 
     @Override
@@ -163,5 +192,17 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
 
     }
 
+    private void setStatusBarColor(@ColorRes int color) {
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                Window window = getWindow();
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.setStatusBarColor(getResources().getColor(color));
+            }
+        } catch (Exception e) {
+            //Crashlytics.logException(e);
+        }
+    }
 
 }

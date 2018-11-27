@@ -107,6 +107,15 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
         mapFrame.setLayoutParams(params);
     }
 
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
     public static void setTranslucentStatusBar(Window window) {
         if (window == null) return;
         int sdkInt = Build.VERSION.SDK_INT;
@@ -115,15 +124,6 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
         } else if (sdkInt >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatusBarKiKat(window);
         }
-    }
-
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

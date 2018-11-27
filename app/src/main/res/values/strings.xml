@@ -12,6 +12,7 @@
     <string name="options">Menu użytkownika</string>
     <string name="nav_news">Aktualności</string>
     <string name="nav_map">Mapa</string>
+    <string name="nav_drafts">Szkice</string>
     <string name="nav_notifications">Powiadomienia</string>
     <string name="nav_search">Szukaj</string>
     <string name="nav_settings">Ustawienia</string>

@@ -32,7 +32,7 @@
 
         <activity
             android:name="pl.opencaching.android.ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.TranslucentStatusBar"
             android:screenOrientation="portrait"/>
 
         <activity

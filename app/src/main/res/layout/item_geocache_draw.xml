@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/logTypeIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:layout_marginTop="@dimen/spacing_very_small"
+        app:layout_constraintBottom_toTopOf="@+id/geocacheName"
+        app:layout_constraintStart_toEndOf="@+id/checkbox"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_found"
+        tools:tint="@color/green" />
+
+    <TextView
+        android:id="@+id/logType"
+        style="@style/Text.Primary.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginStart="@dimen/spacing_very_small"
+        app:layout_constraintBottom_toTopOf="@+id/geocacheName"
+        app:layout_constraintStart_toEndOf="@+id/logTypeIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/found" />
+
+    <TextView
+        android:id="@+id/logDate"
+        style="@style/Text.Primary.VerySmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_very_small"
+        app:layout_constraintBottom_toBottomOf="@+id/logType"
+        app:layout_constraintStart_toEndOf="@+id/logType"
+        app:layout_constraintTop_toTopOf="@+id/logType"
+        tools:text="2017-06-12" />
+
+    <TextView
+        android:id="@+id/logTime"
+        style="@style/Text.Secondary.Tiny"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="@dimen/spacing_very_small"
+        app:layout_constraintBottom_toBottomOf="@+id/logDate"
+        app:layout_constraintStart_toEndOf="@+id/logDate"
+        app:layout_constraintTop_toTopOf="@+id/logDate"
+        tools:text="16:28" />
+
+    <ImageView
+        android:id="@+id/recommendationIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/spacing_very_small"
+        android:src="@drawable/ic_star"
+        android:tint="@color/darkGreen"
+        app:layout_constraintBottom_toBottomOf="@+id/logTime"
+        app:layout_constraintStart_toEndOf="@+id/logTime"
+        app:layout_constraintTop_toTopOf="@+id/logTime"/>
+
+    <TextView
+        android:id="@+id/geocacheName"
+        style="@style/Text.Primary.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:textStyle="bold"
+        android:layout_marginEnd="@dimen/spacing_small"
+        android:layout_marginTop="@dimen/spacing_very_small"
+        app:layout_constraintBottom_toTopOf="@+id/commentIcon"
+        app:layout_constraintStart_toEndOf="@+id/checkbox"
+        app:layout_constraintTop_toBottomOf="@+id/logTypeIcon"
+        app:layout_constraintEnd_toStartOf="@+id/moreIcon"
+        tools:text="Krosno Airport" />
+
+    <ImageView
+        android:id="@+id/commentIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:src="@drawable/ic_comment"
+        android:tint="@color/gray_hint"
+        android:layout_marginTop="@dimen/spacing_very_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/checkbox"
+        app:layout_constraintTop_toBottomOf="@+id/geocacheName"
+        app:layout_constraintBottom_toTopOf="@+id/separator" />
+
+    <ImageView
+        android:id="@+id/rateIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:src="@drawable/ic_face"
+        android:tint="@color/gray_hint"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/commentIcon"
+        app:layout_constraintTop_toBottomOf="@+id/geocacheName"
+        app:layout_constraintBottom_toTopOf="@+id/separator" />
+
+    <ImageView
+        android:id="@+id/passwordIcon"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:src="@drawable/ic_password_lock"
+        android:tint="@color/gray_hint"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rateIcon"
+        app:layout_constraintTop_toBottomOf="@+id/geocacheName"
+        app:layout_constraintBottom_toTopOf="@+id/separator" />
+
+    <ImageView
+        android:id="@+id/moreIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:src="@drawable/ic_more_horiz"
+        android:tint="@color/colorPrimaryDark"
+        android:layout_marginEnd="@dimen/spacing_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/accent_gray"
+        android:layout_marginTop="@dimen/spacing_very_small"
+        app:layout_constraintTop_toBottomOf="@+id/commentIcon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/commentIcon"/>
+
+
+</android.support.constraint.ConstraintLayout>

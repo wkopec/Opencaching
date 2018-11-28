@@ -8,9 +8,7 @@ import javax.inject.Inject;
 
 import dagger.android.DaggerIntentService;
 import io.realm.Realm;
-import io.realm.RealmResults;
 import pl.opencaching.android.api.OkapiService;
-import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
 import pl.opencaching.android.data.repository.GeocacheRepository;
 import pl.opencaching.android.data.repository.LogDrawRepository;
 import pl.opencaching.android.data.repository.UserRespository;

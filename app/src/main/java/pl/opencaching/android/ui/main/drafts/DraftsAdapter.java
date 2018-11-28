@@ -7,11 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,6 +33,7 @@ import static pl.opencaching.android.utils.StringUtils.getTimeString;
 public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder> {
 
     private List<GeocacheLogDraw> geocacheLogDrawList;
+    List<ViewHolder> views = new ArrayList<>();
     private GeocacheRepository geocacheRepository;
     private Context context;
 
@@ -66,16 +69,16 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
 
         holder.recommendationIcon.setVisibility(geocacheLogDraw.isRecommended() ? View.VISIBLE : View.GONE);
 
-        if(geocacheLogDraw.getComment() != null && !geocacheLogDraw.getComment().isEmpty()) {
+        if (geocacheLogDraw.getComment() != null && !geocacheLogDraw.getComment().isEmpty()) {
             holder.commentIcon.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimaryDark));
-        } else if(geocacheLogDraw.getType().equals(LOG_TYPE_COMMENT)){
+        } else if (geocacheLogDraw.getType().equals(LOG_TYPE_COMMENT)) {
             holder.commentIcon.setColorFilter(ContextCompat.getColor(context, R.color.red));
         } else {
             holder.commentIcon.setColorFilter(ContextCompat.getColor(context, R.color.gray_hint));
         }
 
-        if(geocacheLogDraw.getType().equals(LOG_TYPE_FOUND) || geocacheLogDraw.getType().equals(LOG_TYPE_ATTENDED)) {
-            if(geocacheLogDraw.getRate() > 0) {
+        if (geocacheLogDraw.getType().equals(LOG_TYPE_FOUND) || geocacheLogDraw.getType().equals(LOG_TYPE_ATTENDED)) {
+            if (geocacheLogDraw.getRate() > 0) {
                 holder.rateIcon.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimaryDark));
             } else {
                 holder.rateIcon.setColorFilter(ContextCompat.getColor(context, R.color.gray_hint));
@@ -85,8 +88,8 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
             holder.rateIcon.setVisibility(View.GONE);
         }
 
-        if(geocache.isPasswordRequired()) {
-            if(geocacheLogDraw.getPassword() == null) {
+        if (geocache.isPasswordRequired() && (geocacheLogDraw.getType().equals(LOG_TYPE_FOUND) || geocacheLogDraw.getType().equals(LOG_TYPE_ATTENDED))) {
+            if (geocacheLogDraw.getPassword() == null) {
                 holder.passwordIcon.setColorFilter(ContextCompat.getColor(context, R.color.red));
             } else {
                 holder.passwordIcon.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimaryDark));
@@ -98,6 +101,7 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
 
         //TODO: create photo indicator icon
 
+        views.add(holder);
     }
 
     @Override
@@ -105,7 +109,26 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
         return geocacheLogDrawList.size();
     }
 
+    void setMultipleChoiceMode(boolean isMultipleChoiceMode) {
+        for (ViewHolder holder : views) {
+            if (isMultipleChoiceMode) {
+                holder.checkbox.setVisibility(View.VISIBLE);
+                holder.moreIcon.setVisibility(View.GONE);
+
+            } else {
+                holder.checkbox.setVisibility(View.GONE);
+                holder.moreIcon.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+
     class ViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.checkbox)
+        CheckBox checkbox;
+        @BindView(R.id.moreIcon)
+        ImageView moreIcon;
 
         @BindView(R.id.geocacheName)
         TextView geocacheName;
@@ -129,4 +152,5 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
             ButterKnife.bind(this, itemView);
         }
     }
+
 }

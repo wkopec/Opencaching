@@ -176,6 +176,8 @@
     <string name="yes">Tak</string>
     <string name="set_rate">Ustaw ocenę</string>
     <string name="set_comment">Ustaw Komentarz</string>
+    <string name="multiple_choice">Tryb zaznaczania</string>
+    <string name="standard_mode">Tryb standardowy</string>
 
 
 </resources>

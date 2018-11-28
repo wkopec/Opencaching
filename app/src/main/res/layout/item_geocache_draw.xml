@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/spacing_small"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -74,6 +75,41 @@
         app:layout_constraintStart_toEndOf="@+id/logTime"
         app:layout_constraintTop_toTopOf="@+id/logTime"/>
 
+    <ImageView
+        android:id="@+id/passwordIcon"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginEnd="@dimen/spacing_small"
+        android:src="@drawable/ic_password_lock"
+        android:tint="@color/gray_hint"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rateIcon"
+        app:layout_constraintBottom_toTopOf="@+id/geocacheName" />
+
+    <ImageView
+        android:id="@+id/rateIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_small"
+        android:src="@drawable/ic_face"
+        android:tint="@color/gray_hint"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/commentIcon"
+        app:layout_constraintBottom_toTopOf="@+id/geocacheName" />
+
+    <ImageView
+        android:id="@+id/commentIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_small"
+        android:src="@drawable/ic_comment"
+        android:tint="@color/gray_hint"
+        android:layout_marginTop="@dimen/spacing_very_small"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/moreIcon"
+        app:layout_constraintBottom_toTopOf="@+id/geocacheName"/>
+
+
     <TextView
         android:id="@+id/geocacheName"
         style="@style/Text.Primary.Small"
@@ -83,57 +119,16 @@
         android:textStyle="bold"
         android:layout_marginEnd="@dimen/spacing_small"
         android:layout_marginTop="@dimen/spacing_very_small"
-        app:layout_constraintBottom_toTopOf="@+id/commentIcon"
+        app:layout_constraintBottom_toTopOf="@+id/separator"
         app:layout_constraintStart_toEndOf="@+id/checkbox"
         app:layout_constraintTop_toBottomOf="@+id/logTypeIcon"
         app:layout_constraintEnd_toStartOf="@+id/moreIcon"
         tools:text="Krosno Airport" />
 
     <ImageView
-        android:id="@+id/commentIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="@dimen/spacing_small"
-        android:src="@drawable/ic_comment"
-        android:tint="@color/gray_hint"
-        android:layout_marginTop="@dimen/spacing_very_small"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/checkbox"
-        app:layout_constraintTop_toBottomOf="@+id/geocacheName"
-        app:layout_constraintBottom_toTopOf="@+id/separator" />
-
-    <ImageView
-        android:id="@+id/rateIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="@dimen/spacing_small"
-        android:src="@drawable/ic_face"
-        android:tint="@color/gray_hint"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/commentIcon"
-        app:layout_constraintTop_toBottomOf="@+id/geocacheName"
-        app:layout_constraintBottom_toTopOf="@+id/separator" />
-
-    <ImageView
-        android:id="@+id/passwordIcon"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="@dimen/spacing_small"
-        android:src="@drawable/ic_password_lock"
-        android:tint="@color/gray_hint"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/rateIcon"
-        app:layout_constraintTop_toBottomOf="@+id/geocacheName"
-        app:layout_constraintBottom_toTopOf="@+id/separator" />
-
-    <ImageView
         android:id="@+id/moreIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/spacing_small"
         android:src="@drawable/ic_more_horiz"
         android:tint="@color/colorPrimaryDark"
@@ -148,10 +143,10 @@
         android:layout_height="1dp"
         android:background="@color/accent_gray"
         android:layout_marginTop="@dimen/spacing_very_small"
-        app:layout_constraintTop_toBottomOf="@+id/commentIcon"
+        app:layout_constraintTop_toBottomOf="@+id/geocacheName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/commentIcon"/>
+        app:layout_constraintStart_toStartOf="@+id/geocacheName"/>
 
 
 </android.support.constraint.ConstraintLayout>

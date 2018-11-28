@@ -32,6 +32,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pl.opencaching.android.ui.main.drafts.DraftsFragment;
 import pl.opencaching.android.ui.main.map.MapFragment;
 import pl.opencaching.android.utils.events.SearchMapEvent;
 
@@ -126,14 +127,22 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START))
+
+        if (currentFragment instanceof DraftsFragment) {
+            if(((DraftsFragment) currentFragment).onBackPressedHandled()) {
+                return;
+            }
+        }
+
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        else if (searchView.isSearchOpen())
+        } else if (searchView.isSearchOpen()) {
             searchView.closeSearch();
-        else if (!(currentFragment instanceof MapFragment))
+        } else if (!(currentFragment instanceof MapFragment)) {
             menuAdapter.setItemSelected(R.string.nav_map);
-        else
+        } else {
             finish();
+        }
     }
 
     public void hideSearchView() {
@@ -143,7 +152,7 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
     @Override
     public void onMenuItemChecked(int tag) {
         if (Menu.isAction(tag)) {
-            switch (tag){
+            switch (tag) {
                 case R.string.nav_logout:
                     sessionManager.clearLoggedUserData();
                     startActivity(new Intent(this, LoginActivity.class));
@@ -164,11 +173,10 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
 
     @Override
     public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-        if(isDrawerClosed) {
+        if (isDrawerClosed) {
             setStatusBarColor(R.color.transparent);
             isDrawerClosed = false;
         }
-
     }
 
     @Override

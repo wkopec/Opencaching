@@ -8,16 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Completable;
 import pl.opencaching.android.R;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
@@ -32,10 +36,14 @@ import static pl.opencaching.android.utils.StringUtils.getTimeString;
 
 public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder> {
 
-    private List<GeocacheLogDraw> geocacheLogDrawList;
-    List<ViewHolder> views = new ArrayList<>();
     private GeocacheRepository geocacheRepository;
     private Context context;
+    private Completable completable;
+
+    private List<GeocacheLogDraw> geocacheLogDrawList;
+    private List<ViewHolder> views = new ArrayList<>();
+    private Set<GeocacheLogDraw> selectedGeocacheDraws = new HashSet<>();
+
 
     public DraftsAdapter(Context context, GeocacheRepository geocacheRepository) {
         this.geocacheRepository = geocacheRepository;
@@ -99,6 +107,20 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
             holder.passwordIcon.setVisibility(View.GONE);
         }
 
+        holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    selectedGeocacheDraws.add(geocacheLogDrawList.get(position));
+                } else {
+                    selectedGeocacheDraws.remove(geocacheLogDrawList.get(position));
+                }
+                if(completable != null) {
+                    completable.subscribe();
+                }
+            }
+        });
+
         //TODO: create photo indicator icon
 
         views.add(holder);
@@ -107,6 +129,14 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return geocacheLogDrawList.size();
+    }
+
+    public void setSelectedGeocacheDrawsChangeCompletable(Completable completable) {
+        this.completable = completable;
+    }
+
+    public Set<GeocacheLogDraw> getSelectedGeocacheDraws() {
+        return selectedGeocacheDraws;
     }
 
     void setMultipleChoiceMode(boolean isMultipleChoiceMode) {

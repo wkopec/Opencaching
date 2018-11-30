@@ -9,10 +9,12 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -54,6 +56,7 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
     @BindView(R.id.search_view)
     MaterialSearchView searchView;
 
+    private ActionBarDrawerToggle toggle;
     public Fragment currentFragment;
     private MenuAdapter menuAdapter;
 
@@ -62,13 +65,12 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
+        setupView();
+    }
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, 0, 0);
-
-        drawer.addDrawerListener(toggle);
-        drawer.addDrawerListener(this);
-        toggle.syncState();
+    private void setupView() {
+        setToolbar();
+        setNavigationDrawer();
         configureMenuRecyclerView();
         setSearchView();
         setStatusBarColor(R.color.colorPrimaryDark);
@@ -88,8 +90,18 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
                 onBackPressed();
                 return false;
         }
-
         return false;
+    }
+
+    private void setNavigationDrawer() {
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, 0, 0);
+        drawer.addDrawerListener(toggle);
+        drawer.addDrawerListener(this);
+        toggle.syncState();
+    }
+
+    private void setToolbar() {
+        setSupportActionBar(toolbar);
     }
 
     private void configureMenuRecyclerView() {
@@ -148,6 +160,21 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
     public void hideSearchView() {
         searchView.closeSearch();
     }
+
+    public void displayHomeAsUpEnabled(boolean isHomeAsUpEnabled) {
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            if (isHomeAsUpEnabled) {
+                actionBar.setDisplayHomeAsUpEnabled(false);
+                toggle.setDrawerIndicatorEnabled(false);
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            } else {
+                toggle.setDrawerIndicatorEnabled(true);
+            }
+        }
+    }
+
+
 
     @Override
     public void onMenuItemChecked(int tag) {

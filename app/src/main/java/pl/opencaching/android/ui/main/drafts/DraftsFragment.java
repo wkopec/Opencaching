@@ -20,10 +20,14 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.functions.Action;
 import pl.opencaching.android.R;
 import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
 import pl.opencaching.android.data.repository.GeocacheRepository;
 import pl.opencaching.android.ui.base.BaseFragment;
+import pl.opencaching.android.ui.main.MainActivity;
 
 public class DraftsFragment extends BaseFragment implements DraftsContract.View {
 
@@ -60,12 +64,33 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View 
         configureRecyclerView();
     }
 
+    private void setupActionBar() {
+        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setElevation(0);
+            actionBar.setTitle(getString(R.string.nav_drafts));
+
+        }
+    }
+
+    private void configureRecyclerView() {
+        adapter = new DraftsAdapter(requireActivity(), geocacheRepository);
+        adapter.setSelectedGeocacheDrawsChangeCompletable(Completable.fromAction(() -> {
+            if(adapter.getSelectedGeocacheDraws().isEmpty()) {
+                showMultipleChoiceMenu(false);
+            } else {
+                showMultipleChoiceMenu(true);
+            }
+        }));
+        draftsRecycleView.setAdapter(adapter);
+        draftsRecycleView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         this.menu = menu;
         requireActivity().getMenuInflater().inflate(R.menu.drafts_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
-
     }
 
     @Override
@@ -73,9 +98,6 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View 
         switch (item.getItemId()) {
             case R.id.action_multiple_choice:
                 setMultipleChoiceMode(true);
-                return false;
-            case R.id.action_list_of_content:
-                setMultipleChoiceMode(false);
                 return false;
             case R.id.action_set_rate:
 
@@ -92,9 +114,18 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View 
         this.isMultipleChoiceMode = isMultipleChoiceMode;
         adapter.setMultipleChoiceMode(isMultipleChoiceMode);
         menu.findItem(R.id.action_multiple_choice).setVisible(!isMultipleChoiceMode);
-        menu.findItem(R.id.action_list_of_content).setVisible(isMultipleChoiceMode);
-        menu.findItem(R.id.action_set_rate).setVisible(isMultipleChoiceMode);
-        menu.findItem(R.id.action_set_comment).setVisible(isMultipleChoiceMode);
+        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            if(requireActivity() instanceof MainActivity) {
+                ((MainActivity)requireActivity()).displayHomeAsUpEnabled(isMultipleChoiceMode);
+            }
+        }
+
+    }
+
+    private void showMultipleChoiceMenu(boolean isMultipleChoiceMenuVisible) {
+        menu.findItem(R.id.action_set_rate).setVisible(isMultipleChoiceMenuVisible);
+        menu.findItem(R.id.action_set_comment).setVisible(isMultipleChoiceMenuVisible);
     }
 
     public boolean onBackPressedHandled() {
@@ -104,20 +135,6 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View 
         } else {
             return false;
         }
-    }
-
-    private void setupActionBar() {
-        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setElevation(0);
-            actionBar.setTitle(getString(R.string.nav_drafts));
-        }
-    }
-
-    private void configureRecyclerView() {
-        adapter = new DraftsAdapter(requireActivity(), geocacheRepository);
-        draftsRecycleView.setAdapter(adapter);
-        draftsRecycleView.setLayoutManager(new LinearLayoutManager(requireActivity()));
     }
 
     @Override

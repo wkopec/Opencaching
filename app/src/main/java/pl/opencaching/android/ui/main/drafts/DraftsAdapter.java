@@ -1,14 +1,16 @@
 package pl.opencaching.android.ui.main.drafts;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,36 +24,47 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Completable;
+import io.realm.Realm;
 import pl.opencaching.android.R;
 import pl.opencaching.android.data.models.okapi.Geocache;
-import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
+import pl.opencaching.android.data.models.okapi.GeocacheLogDraft;
 import pl.opencaching.android.data.repository.GeocacheRepository;
 import pl.opencaching.android.utils.GeocacheUtils;
 
+import static pl.opencaching.android.ui.base.BaseFragmentActivity.NEW_LOG_FRAGMENT;
+import static pl.opencaching.android.ui.base.BaseFragmentActivity.launchFragmentActivity;
+import static pl.opencaching.android.ui.geocache.GeocacheActivity.launchGeocacheActivity;
+import static pl.opencaching.android.ui.geocache.new_log.NewLogFragment.EXISTING_DRAFT_UUID;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_ATTENDED;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_COMMENT;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_FOUND;
 import static pl.opencaching.android.utils.StringUtils.getDateString;
 import static pl.opencaching.android.utils.StringUtils.getTimeString;
+import static pl.opencaching.android.utils.SyncUtils.startMergeService;
 
 public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder> {
 
     private GeocacheRepository geocacheRepository;
-    private Context context;
-    private Completable completable;
+    private Activity context;
+    private Realm realm;
+    private SharedPreferences sharedPreferences;
+    private Completable selectionChangeCompletable;
+    private Completable longItemClickCompletable;
 
-    private List<GeocacheLogDraw> geocacheLogDrawList;
+    private List<GeocacheLogDraft> geocacheLogDraftList;
     private List<ViewHolder> views = new ArrayList<>();
-    private Set<GeocacheLogDraw> selectedGeocacheDraws = new HashSet<>();
+    private Set<GeocacheLogDraft> selectedGeocacheDraws = new HashSet<>();
 
 
-    public DraftsAdapter(Context context, GeocacheRepository geocacheRepository) {
+    DraftsAdapter(Activity context, GeocacheRepository geocacheRepository, Realm realm, SharedPreferences sharedPreferences) {
         this.geocacheRepository = geocacheRepository;
         this.context = context;
+        this.sharedPreferences = sharedPreferences;
+        this.realm = realm;
     }
 
-    public void setGeocacheLogDrawList(List<GeocacheLogDraw> geocacheLogDrawList) {
-        this.geocacheLogDrawList = geocacheLogDrawList;
+    void setGeocacheLogDraftList(List<GeocacheLogDraft> geocacheLogDraftList) {
+        this.geocacheLogDraftList = geocacheLogDraftList;
     }
 
     @NonNull
@@ -63,30 +76,30 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        GeocacheLogDraw geocacheLogDraw = geocacheLogDrawList.get(position);
-        Geocache geocache = geocacheRepository.loadGeocacheByCode(geocacheLogDraw.getGeocacheCode());
+        GeocacheLogDraft geocacheLogDraft = geocacheLogDraftList.get(position);
+        Geocache geocache = geocacheRepository.loadGeocacheByCode(geocacheLogDraft.getGeocacheCode());
 
         holder.geocacheName.setText(geocache.getName());
 
-        holder.logTypeIcon.setImageResource(GeocacheUtils.getLogIcon(geocacheLogDraw.getType()));
-        holder.logTypeIcon.setColorFilter(ContextCompat.getColor(context, GeocacheUtils.getLogIconColor(geocacheLogDraw.getType())));
+        holder.logTypeIcon.setImageResource(GeocacheUtils.getLogIcon(geocacheLogDraft.getType()));
+        holder.logTypeIcon.setColorFilter(ContextCompat.getColor(context, GeocacheUtils.getLogIconColor(geocacheLogDraft.getType())));
 
-        DateTime logDate = geocacheLogDraw.getDateTime();
+        DateTime logDate = geocacheLogDraft.getDateTime();
         holder.logDate.setText(getDateString(logDate, context));
         holder.logTime.setText(getTimeString(logDate.getHourOfDay(), logDate.getMinuteOfHour(), context));
 
-        holder.recommendationIcon.setVisibility(geocacheLogDraw.isRecommended() ? View.VISIBLE : View.GONE);
+        holder.recommendationIcon.setVisibility(geocacheLogDraft.isRecommended() ? View.VISIBLE : View.GONE);
 
-        if (geocacheLogDraw.getComment() != null && !geocacheLogDraw.getComment().isEmpty()) {
+        if (geocacheLogDraft.getComment() != null && !geocacheLogDraft.getComment().isEmpty()) {
             holder.commentIcon.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimaryDark));
-        } else if (geocacheLogDraw.getType().equals(LOG_TYPE_COMMENT)) {
+        } else if (geocacheLogDraft.getType().equals(LOG_TYPE_COMMENT)) {
             holder.commentIcon.setColorFilter(ContextCompat.getColor(context, R.color.red));
         } else {
             holder.commentIcon.setColorFilter(ContextCompat.getColor(context, R.color.gray_hint));
         }
 
-        if (geocacheLogDraw.getType().equals(LOG_TYPE_FOUND) || geocacheLogDraw.getType().equals(LOG_TYPE_ATTENDED)) {
-            if (geocacheLogDraw.getRate() > 0) {
+        if (geocacheLogDraft.getType().equals(LOG_TYPE_FOUND) || geocacheLogDraft.getType().equals(LOG_TYPE_ATTENDED)) {
+            if (geocacheLogDraft.getRate() > 0) {
                 holder.rateIcon.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimaryDark));
             } else {
                 holder.rateIcon.setColorFilter(ContextCompat.getColor(context, R.color.gray_hint));
@@ -96,8 +109,8 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
             holder.rateIcon.setVisibility(View.GONE);
         }
 
-        if (geocache.isPasswordRequired() && (geocacheLogDraw.getType().equals(LOG_TYPE_FOUND) || geocacheLogDraw.getType().equals(LOG_TYPE_ATTENDED))) {
-            if (geocacheLogDraw.getPassword() == null) {
+        if (geocache.isPasswordRequired() && (geocacheLogDraft.getType().equals(LOG_TYPE_FOUND) || geocacheLogDraft.getType().equals(LOG_TYPE_ATTENDED))) {
+            if (geocacheLogDraft.getPassword() == null) {
                 holder.passwordIcon.setColorFilter(ContextCompat.getColor(context, R.color.red));
             } else {
                 holder.passwordIcon.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimaryDark));
@@ -107,19 +120,26 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
             holder.passwordIcon.setVisibility(View.GONE);
         }
 
-        holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    selectedGeocacheDraws.add(geocacheLogDrawList.get(position));
-                } else {
-                    selectedGeocacheDraws.remove(geocacheLogDrawList.get(position));
-                }
-                if(completable != null) {
-                    completable.subscribe();
-                }
+        holder.itemView.setOnLongClickListener(v -> {
+            longItemClickCompletable.subscribe();
+            holder.checkbox.setChecked(true);
+            return true;
+        });
+
+        holder.checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                selectedGeocacheDraws.add(geocacheLogDraftList.get(position));
+            } else {
+                selectedGeocacheDraws.remove(geocacheLogDraftList.get(position));
+            }
+            if (selectionChangeCompletable != null) {
+                selectionChangeCompletable.subscribe();
             }
         });
+
+        holder.moreIcon.setOnClickListener(v -> openDraftItemMenu(geocacheLogDraftList.get(position), holder.moreIcon));
+
+        holder.itemView.setOnClickListener(v -> startEditDraftActivity(geocacheLogDraft));
 
         //TODO: create photo indicator icon
 
@@ -128,14 +148,64 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return geocacheLogDrawList.size();
+        return geocacheLogDraftList.size();
     }
 
-    public void setSelectedGeocacheDrawsChangeCompletable(Completable completable) {
-        this.completable = completable;
+    void setAllItemsChecked(boolean isChecked) {
+        for (ViewHolder holder : views) {
+            holder.checkbox.setChecked(isChecked);
+        }
+        if (isChecked) {
+            selectedGeocacheDraws.addAll(geocacheLogDraftList);
+        } else {
+            selectedGeocacheDraws.clear();
+        }
     }
 
-    public Set<GeocacheLogDraw> getSelectedGeocacheDraws() {
+    private void openDraftItemMenu(GeocacheLogDraft logDraw, View view) {
+        PopupMenu draftItemMenu = new PopupMenu(context, view);
+        draftItemMenu.inflate(R.menu.draft_item_menu);
+
+        draftItemMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.action_show_geocache:
+                    launchGeocacheActivity(context, logDraw.getGeocacheCode());
+                    break;
+                case R.id.action_post:
+                    realm.beginTransaction();
+                    logDraw.setReadyToSync(true);
+                    realm.commitTransaction();
+                    startMergeService(context, sharedPreferences);
+                    break;
+                case R.id.action_delete:
+                    realm.beginTransaction();
+                    logDraw.deleteFromRealm();
+                    realm.commitTransaction();
+                    notifyDataSetChanged();
+                    break;
+            }
+            return true;
+        });
+
+        draftItemMenu.show();
+    }
+
+
+    private void startEditDraftActivity(GeocacheLogDraft logDraw) {
+        Bundle bundle = new Bundle();
+        bundle.putString(EXISTING_DRAFT_UUID, logDraw.getUuid());
+        launchFragmentActivity(context, NEW_LOG_FRAGMENT, bundle);
+    }
+
+    void setOnLongItemClickCompletable(Completable longItemClickCompletable) {
+        this.longItemClickCompletable = longItemClickCompletable;
+    }
+
+    void setSelectionChangeCompletable(Completable selectionChangeCompletable) {
+        this.selectionChangeCompletable = selectionChangeCompletable;
+    }
+
+    Set<GeocacheLogDraft> getSelectedGeocacheDraws() {
         return selectedGeocacheDraws;
     }
 

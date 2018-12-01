@@ -4,14 +4,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
-import pl.opencaching.android.data.repository.LogDrawRepository;
+import pl.opencaching.android.data.models.okapi.GeocacheLogDraft;
+import pl.opencaching.android.data.repository.LogDraftRepository;
 import pl.opencaching.android.ui.base.BasePresenter;
 
 public class DraftsPresenter extends BasePresenter implements DraftsContract.Presenter{
 
     @Inject
-    LogDrawRepository logDrawRepository;
+    LogDraftRepository logDraftRepository;
 
     private DraftsContract.View view;
 
@@ -22,7 +22,7 @@ public class DraftsPresenter extends BasePresenter implements DraftsContract.Pre
 
     @Override
     public void onStart() {
-        List<GeocacheLogDraw> geocacheLogDrawList = logDrawRepository.loadAllLogDraws();
-        view.setGeocacheDraws(geocacheLogDrawList);
+        List<GeocacheLogDraft> geocacheLogDraftList = logDraftRepository.loadAllLogDraws();
+        view.setGeocacheDraws(geocacheLogDraftList);
     }
 }

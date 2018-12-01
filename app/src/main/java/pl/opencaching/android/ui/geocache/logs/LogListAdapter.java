@@ -93,7 +93,7 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHold
             holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.white));
             holder.notSyncedInfo.setVisibility(View.GONE);
         } else {
-            //GeocacheLogDraw
+            //GeocacheLogDraft
             if(geocacheLog.isReadyToSync()) {
                 holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.accent_gray));
                 holder.notSyncedInfo.setText(context.getResources().getString(R.string.log_not_synchronized_yet));

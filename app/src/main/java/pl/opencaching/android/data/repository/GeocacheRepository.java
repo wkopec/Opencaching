@@ -6,7 +6,7 @@ import pl.opencaching.android.app.prefs.MapFiltersManager;
 import pl.opencaching.android.app.prefs.SessionManager;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.data.models.okapi.GeocacheLog;
-import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
+import pl.opencaching.android.data.models.okapi.GeocacheLogDraft;
 import pl.opencaching.android.data.repository.base.RealmRepository;
 
 import javax.inject.Inject;
@@ -58,9 +58,20 @@ public class GeocacheRepository extends RealmRepository<Geocache> {
         return query.findAll();
     }
 
-    public void clearUnsavedGeocaches() {
+//    public void clearUnsavedGeocaches() {
+//        realm.beginTransaction();
+//        realm.where(Geocache.class)
+//                .equalTo("isSaved", false)
+//                .findAll().deleteAllFromRealm();
+//        realm.commitTransaction();
+//    }
+
+    public void clearUnsavedGeocachesWithExcluded(String[] excludedCodes) {
         realm.beginTransaction();
-        realm.where(Geocache.class).equalTo("isSaved", false).findAll().deleteAllFromRealm();
+        realm.where(Geocache.class)
+                .equalTo("isSaved", false)
+                .not().in("code", excludedCodes)
+                .findAll().deleteAllFromRealm();
         realm.commitTransaction();
     }
 

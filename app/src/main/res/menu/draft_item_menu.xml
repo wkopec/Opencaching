@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_post"
+        android:orderInCategory="1"
+        android:title="@string/post_log"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_show_geocache"
+        android:orderInCategory="2"
+        android:title="@string/show_geocache"
+        app:showAsAction="never" />
+
+
+    <item
+        android:id="@+id/action_delete"
+        android:orderInCategory="3"
+        android:title="@string/delete_draft"
+        app:showAsAction="never" />
+
+</menu>

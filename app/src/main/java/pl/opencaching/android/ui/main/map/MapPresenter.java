@@ -11,10 +11,10 @@ import pl.opencaching.android.api.GoogleMapsService;
 import pl.opencaching.android.api.OkapiService;
 import pl.opencaching.android.app.prefs.MapFiltersManager;
 import pl.opencaching.android.app.prefs.SessionManager;
-import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
+import pl.opencaching.android.data.models.okapi.GeocacheLogDraft;
 import pl.opencaching.android.data.models.okapi.User;
 import pl.opencaching.android.data.repository.GeocacheRepository;
-import pl.opencaching.android.data.repository.LogDrawRepository;
+import pl.opencaching.android.data.repository.LogDraftRepository;
 import pl.opencaching.android.data.repository.UserRespository;
 import pl.opencaching.android.ui.base.BasePresenter;
 import pl.opencaching.android.data.models.CoveredArea;
@@ -22,12 +22,12 @@ import pl.opencaching.android.data.models.geocoding.GeocodingResults;
 import pl.opencaching.android.data.models.geocoding.Location;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.data.models.okapi.WaypointResults;
-
 import pl.opencaching.android.utils.ApiUtils;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -59,7 +59,7 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
     @Inject
     GeocacheRepository geocacheRepository;
     @Inject
-    LogDrawRepository logDrawRepository;
+    LogDraftRepository logDraftRepository;
     @Inject
     UserRespository userRespository;
     @Inject
@@ -272,15 +272,15 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
 
     @Override
     public void saveGeocacheDraft(String geocacheCode, boolean isFound) {
-        GeocacheLogDraw geocacheLogDraw = new GeocacheLogDraw(geocacheCode);
+        GeocacheLogDraft geocacheLogDraft = new GeocacheLogDraft(geocacheCode);
         if(isFound) {
-            geocacheLogDraw.setType(LOG_TYPE_FOUND);
+            geocacheLogDraft.setType(LOG_TYPE_FOUND);
         } else {
-            geocacheLogDraw.setType(LOG_TYPE_NOT_FOUND);
+            geocacheLogDraft.setType(LOG_TYPE_NOT_FOUND);
         }
-        geocacheLogDraw.setReadyToSync(false);
-        geocacheLogDraw.setUser(userRespository.getLoggedUser());
-        logDrawRepository.addOrUpdate(geocacheLogDraw);
+        geocacheLogDraft.setReadyToSync(false);
+        geocacheLogDraft.setUser(userRespository.getLoggedUser());
+        logDraftRepository.addOrUpdate(geocacheLogDraft);
 
     }
 
@@ -297,7 +297,14 @@ public class MapPresenter extends BasePresenter implements MapContract.Presenter
     private void clearStoredGeocaches() {
         coveredArea.clear();
         showedGeocachesCodes.clear();
-        geocacheRepository.clearUnsavedGeocaches();
+
+        //We will need those data for sync process
+        List<String> ceocacheDraftsCodes = new ArrayList<>();
+        List<GeocacheLogDraft> drafts = logDraftRepository.loadAllLogDraws();
+        for(GeocacheLogDraft draft : drafts) {
+            ceocacheDraftsCodes.add(draft.getGeocacheCode());
+        }
+        geocacheRepository.clearUnsavedGeocachesWithExcluded(ceocacheDraftsCodes.toArray(new String[]{}));
         view.clearMap();
     }
 

@@ -37,13 +37,12 @@ import android.widget.TextView;
 import pl.opencaching.android.R;
 import pl.opencaching.android.app.prefs.SessionManager;
 import pl.opencaching.android.data.models.GeocacheClusterItem;
-import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
+import pl.opencaching.android.data.models.okapi.GeocacheLogDraft;
 import pl.opencaching.android.data.repository.GeocacheRepository;
-import pl.opencaching.android.data.repository.LogDrawRepository;
+import pl.opencaching.android.data.repository.LogDraftRepository;
 import pl.opencaching.android.ui.base.BaseFragment;
 import pl.opencaching.android.ui.dialogs.MapFilterDialog;
 import pl.opencaching.android.ui.dialogs.MapTypeDialog;
-import pl.opencaching.android.ui.geocache.GeocacheActivity;
 import pl.opencaching.android.ui.main.MainActivity;
 import pl.opencaching.android.utils.events.MapFilterChangeEvent;
 import pl.opencaching.android.utils.events.MapTypeChangeEvent;
@@ -65,7 +64,6 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -90,6 +88,7 @@ import timber.log.Timber;
 import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL;
 import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE;
 import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_TERRAIN;
+import static pl.opencaching.android.ui.geocache.GeocacheActivity.launchGeocacheActivity;
 import static pl.opencaching.android.utils.Constants.GEOCACHE_TYPE_EVENT;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_FOUND;
 
@@ -145,7 +144,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     @Inject
     GeocacheRepository geocacheRepository;
     @Inject
-    LogDrawRepository logDrawRepository;
+    LogDraftRepository logDraftRepository;
     @Inject
     SessionManager sessionManager;
 
@@ -355,18 +354,11 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         }
     }
 
-    private void startGeocacheActivity(Geocache geocache) {
-        Intent intent = new Intent(activity, GeocacheActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(GeocacheActivity.GEOCACHE, geocache);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
 
     private void showGeocahceInfo(Geocache geocache) {
         setGeocacheInfoView(geocache);
 
-        geocacheBottomSheet.setOnClickListener(view -> startGeocacheActivity(geocache));
+        geocacheBottomSheet.setOnClickListener(view -> launchGeocacheActivity(requireActivity(), geocache.getCode()));
 
         geocacheBottomSheet.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -545,8 +537,8 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
         if(geocacheRepository.loadGeocacheByCode(geocacheCode).isFound()){
             return true;
         }
-        List<GeocacheLogDraw> createdDrafts = logDrawRepository.loadLogDrawsForGeocache(lastSelectedMarker.getSnippet());
-        for (GeocacheLogDraw logDraw : createdDrafts) {
+        List<GeocacheLogDraft> createdDrafts = logDraftRepository.loadLogDrawsForGeocache(lastSelectedMarker.getSnippet());
+        for (GeocacheLogDraft logDraw : createdDrafts) {
             if (logDraw.getType().equals(LOG_TYPE_FOUND)) {
                 return true;
             }

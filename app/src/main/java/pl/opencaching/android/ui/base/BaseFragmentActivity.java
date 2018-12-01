@@ -31,7 +31,7 @@ public class BaseFragmentActivity extends BaseActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        int fragmentKey = getIntent().getExtras().getInt(FRAGMENT_KEY, 0);
+        int fragmentKey = getIntent().getIntExtra(FRAGMENT_KEY, 0);
         BaseFragment fragment;
 
         switch (fragmentKey) {

@@ -8,8 +8,8 @@ import javax.inject.Inject;
 
 import dagger.android.DaggerBroadcastReceiver;
 import io.realm.RealmResults;
-import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
-import pl.opencaching.android.data.repository.LogDrawRepository;
+import pl.opencaching.android.data.models.okapi.GeocacheLogDraft;
+import pl.opencaching.android.data.repository.LogDraftRepository;
 
 import static pl.opencaching.android.utils.SyncUtils.HAS_PENDING_SYNC;
 import static pl.opencaching.android.utils.SyncUtils.isInternetConnection;
@@ -20,13 +20,13 @@ public class NetworkChangeReceiver extends DaggerBroadcastReceiver {
     @Inject
     SharedPreferences sharedPreferences;
     @Inject
-    LogDrawRepository logDrawRepository;
+    LogDraftRepository logDraftRepository;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         if (isInternetConnection(context)) {
-            RealmResults<GeocacheLogDraw> logDraws = logDrawRepository.loadAllLogDrawsBySyncReady(true);
+            RealmResults<GeocacheLogDraft> logDraws = logDraftRepository.loadAllLogDrawsBySyncReady(true);
             if (!logDraws.isEmpty() && !sharedPreferences.getBoolean((HAS_PENDING_SYNC), false)) {
                 startMergeService(context, sharedPreferences);
             }

@@ -54,7 +54,7 @@ public class ApiUtils {
         }
     }
 
-//    public static Map<String, String> getNewLogFieldsMap(GeocacheLogDraw newGeocacheLog) {
+//    public static Map<String, String> getNewLogFieldsMap(GeocacheLogDraft newGeocacheLog) {
 //        StringBuilder builder = new StringBuilder();
 //        builder.append("cache_code&")
 //        return builder.toString();

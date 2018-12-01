@@ -1,16 +1,20 @@
 package pl.opencaching.android.ui.geocache;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -48,7 +52,7 @@ import pl.opencaching.android.utils.GeocacheUtils;
  * Created by Wojtek on 26.07.2017.
  */
 
-public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSelectedListener, ViewPager.OnPageChangeListener,  OnMapReadyCallback {
+public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSelectedListener, ViewPager.OnPageChangeListener, OnMapReadyCallback {
 
     @Inject
     SessionManager sessionManager;
@@ -73,13 +77,21 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
 
     private static Geocache geocache;
 
+
+    public static void launchGeocacheActivity(Activity context, String geocacheCode) {
+        Intent intent = new Intent(context, GeocacheActivity.class);
+        intent.putExtra(GEOCACHE_CODE, geocacheCode);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_geocache);
         ButterKnife.bind(this);
         //geocache = geocacheRepository.loadGeocacheByCode("OP28F9");     //geocache created for test purposes
-        geocache = getIntent().getExtras().getParcelable(GEOCACHE);
+        String geocacheCode = getIntent().getStringExtra(GEOCACHE_CODE);
+        geocache = geocacheRepository.loadGeocacheByCode(geocacheCode);
         configureTabLayout();
         newLogButton.hide();
         setSupportActionBar(toolbar);
@@ -210,7 +222,7 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        if(position == 1) {
+        if (position == 1) {
             newLogButton.show();
         } else {
             newLogButton.hide();

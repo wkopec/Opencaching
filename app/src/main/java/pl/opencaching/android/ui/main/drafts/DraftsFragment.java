@@ -1,5 +1,6 @@
 package pl.opencaching.android.ui.main.drafts;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,10 +22,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Completable;
-import io.reactivex.CompletableObserver;
-import io.reactivex.functions.Action;
+import io.realm.Realm;
 import pl.opencaching.android.R;
-import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
+import pl.opencaching.android.data.models.okapi.GeocacheLogDraft;
 import pl.opencaching.android.data.repository.GeocacheRepository;
 import pl.opencaching.android.ui.base.BaseFragment;
 import pl.opencaching.android.ui.main.MainActivity;
@@ -33,6 +33,10 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View 
 
     @Inject
     GeocacheRepository geocacheRepository;
+    @Inject
+    Realm realm;
+    @Inject
+    SharedPreferences sharedPreferences;
     @Inject
     DraftsContract.Presenter presenter;
 
@@ -58,6 +62,14 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View 
         presenter.onStart();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     private void setupView() {
         setHasOptionsMenu(true);
         setupActionBar();
@@ -74,12 +86,17 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View 
     }
 
     private void configureRecyclerView() {
-        adapter = new DraftsAdapter(requireActivity(), geocacheRepository);
-        adapter.setSelectedGeocacheDrawsChangeCompletable(Completable.fromAction(() -> {
+        adapter = new DraftsAdapter(requireActivity(), geocacheRepository, realm, sharedPreferences);
+        adapter.setSelectionChangeCompletable(Completable.fromAction(() -> {
             if(adapter.getSelectedGeocacheDraws().isEmpty()) {
                 showMultipleChoiceMenu(false);
             } else {
                 showMultipleChoiceMenu(true);
+            }
+        }));
+        adapter.setOnLongItemClickCompletable(Completable.fromAction(() -> {
+            if(!isMultipleChoiceMode) {
+                setMultipleChoiceMode(true);
             }
         }));
         draftsRecycleView.setAdapter(adapter);
@@ -98,13 +115,13 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View 
         switch (item.getItemId()) {
             case R.id.action_multiple_choice:
                 setMultipleChoiceMode(true);
-                return false;
+                return true;
             case R.id.action_set_rate:
 
-                return false;
-            case R.id.action_set_comment:
+                return true;
+            case R.id.action_post:
 
-                return false;
+                return true;
             default:
                 return false;
         }
@@ -113,6 +130,9 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View 
     private void setMultipleChoiceMode(boolean isMultipleChoiceMode) {
         this.isMultipleChoiceMode = isMultipleChoiceMode;
         adapter.setMultipleChoiceMode(isMultipleChoiceMode);
+        if(!isMultipleChoiceMode) {
+            adapter.setAllItemsChecked(false);
+        }
         menu.findItem(R.id.action_multiple_choice).setVisible(!isMultipleChoiceMode);
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         if (actionBar != null) {
@@ -120,7 +140,6 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View 
                 ((MainActivity)requireActivity()).displayHomeAsUpEnabled(isMultipleChoiceMode);
             }
         }
-
     }
 
     private void showMultipleChoiceMenu(boolean isMultipleChoiceMenuVisible) {
@@ -138,8 +157,8 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View 
     }
 
     @Override
-    public void setGeocacheDraws(List<GeocacheLogDraw> geocacheLogDraws) {
-        adapter.setGeocacheLogDrawList(geocacheLogDraws);
+    public void setGeocacheDraws(List<GeocacheLogDraft> geocacheLogDrafts) {
+        adapter.setGeocacheLogDraftList(geocacheLogDrafts);
         adapter.notifyDataSetChanged();
     }
 }

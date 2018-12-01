@@ -165,8 +165,10 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) {
             if (isHomeAsUpEnabled) {
+                actionBar.setDisplayShowHomeEnabled(true);
                 actionBar.setDisplayHomeAsUpEnabled(false);
                 toggle.setDrawerIndicatorEnabled(false);
+                toggle.setToolbarNavigationClickListener(v -> onBackPressed());
                 actionBar.setDisplayHomeAsUpEnabled(true);
             } else {
                 toggle.setDrawerIndicatorEnabled(true);

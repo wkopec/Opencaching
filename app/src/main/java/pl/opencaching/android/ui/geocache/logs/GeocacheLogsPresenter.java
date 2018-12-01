@@ -12,7 +12,7 @@ import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.data.models.okapi.GeocacheLog;
 import pl.opencaching.android.data.repository.GeocacheLogRepository;
 import pl.opencaching.android.data.repository.GeocacheRepository;
-import pl.opencaching.android.data.repository.LogDrawRepository;
+import pl.opencaching.android.data.repository.LogDraftRepository;
 import pl.opencaching.android.ui.base.BasePresenter;
 import pl.opencaching.android.utils.ApiUtils;
 import retrofit2.Call;
@@ -32,7 +32,7 @@ public class GeocacheLogsPresenter extends BasePresenter implements GeocacheLogs
     @Inject
     GeocacheLogRepository geocacheLogRepository;
     @Inject
-    LogDrawRepository logDrawRepository;
+    LogDraftRepository logDraftRepository;
     @Inject
     GeocacheRepository geocacheRepository;
     @Inject
@@ -82,7 +82,7 @@ public class GeocacheLogsPresenter extends BasePresenter implements GeocacheLogs
     private ArrayList<GeocacheLogInterface> getLogs(String code) {
         ArrayList<GeocacheLogInterface> geocacheLogs = new ArrayList<>();
         geocacheLogs.addAll(geocacheLogRepository.loadLogsByCode(code));
-        geocacheLogs.addAll(logDrawRepository.loadLogDrawsForGeocache(code));
+        geocacheLogs.addAll(logDraftRepository.loadLogDrawsForGeocache(code));
         return geocacheLogs;
     }
 

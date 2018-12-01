@@ -1,20 +1,16 @@
 package pl.opencaching.android.app;
 
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Build;
 
 import net.danlew.android.joda.JodaTimeAndroid;
-
-import javax.inject.Inject;
 
 import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerApplication;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import pl.opencaching.android.app.di.DaggerApplicationComponent;
-import pl.opencaching.android.data.repository.LogDrawRepository;
 import pl.opencaching.android.sync.NetworkChangeReceiver;
 
 

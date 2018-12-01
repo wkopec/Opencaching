@@ -10,10 +10,10 @@ import pl.opencaching.android.api.OkapiService;
 import pl.opencaching.android.app.prefs.SessionManager;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.data.models.okapi.GeocacheLog;
-import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
+import pl.opencaching.android.data.models.okapi.GeocacheLogDraft;
 import pl.opencaching.android.data.models.okapi.NewGeocacheLogResponse;
 import pl.opencaching.android.data.repository.GeocacheRepository;
-import pl.opencaching.android.data.repository.LogDrawRepository;
+import pl.opencaching.android.data.repository.LogDraftRepository;
 import pl.opencaching.android.data.repository.UserRespository;
 import pl.opencaching.android.ui.base.BasePresenter;
 import pl.opencaching.android.utils.ApiUtils;
@@ -32,7 +32,7 @@ public class NewLogPresenter extends BasePresenter implements NewLogContract.Pre
     @Inject
     GeocacheRepository geocacheRepository;
     @Inject
-    LogDrawRepository logDrawRepository;
+    LogDraftRepository logDraftRepository;
     @Inject
     UserRespository userRespository;
     @Inject
@@ -53,17 +53,18 @@ public class NewLogPresenter extends BasePresenter implements NewLogContract.Pre
     }
 
     @Override
-    public void submitNewLog(GeocacheLogDraw geocacheLogDraw) {
-              okapiService.submitNewGeocacheLog(geocacheLogDraw.getMap()).enqueue(new Callback<NewGeocacheLogResponse>() {
+    public void submitNewLog(GeocacheLogDraft geocacheLogDraft) {
+              okapiService.submitNewGeocacheLog(geocacheLogDraft.getMap()).enqueue(new Callback<NewGeocacheLogResponse>() {
             @Override
             public void onResponse(Call<NewGeocacheLogResponse> call, Response<NewGeocacheLogResponse> response) {
                 if(response.isSuccessful() && response.body() != null) {
                     NewGeocacheLogResponse newLogResponse = response.body();
                     if(newLogResponse.isSuccess()) {
-                        GeocacheLog newGeocacheLog = new GeocacheLog(newLogResponse.getLogUuid(), geocacheLogDraw.getGeocacheCode(), geocacheLogDraw.getDate(), userRespository.getLoggedUser(), geocacheLogDraw.getType(), geocacheLogDraw.getComment());
+                        GeocacheLog newGeocacheLog = new GeocacheLog(newLogResponse.getLogUuid(), geocacheLogDraft.getGeocacheCode(), geocacheLogDraft.getDate(), userRespository.getLoggedUser(), geocacheLogDraft.getType(), geocacheLogDraft.getComment());
                         realm.beginTransaction();
                         geocache.getGeocacheLogs().add(newGeocacheLog);
                         realm.commitTransaction();
+                        geocacheLogDraft.deleteFromRealm();
                         view.finish();
                     } else if(!newLogResponse.isSuccess() && newLogResponse.getMessage() != null) {
                         view.showMessage(newLogResponse.getMessage());
@@ -75,21 +76,24 @@ public class NewLogPresenter extends BasePresenter implements NewLogContract.Pre
 
             @Override
             public void onFailure(Call<NewGeocacheLogResponse> call, Throwable t) {
-                createGeocacheDraft(geocacheLogDraw, true);
+                createGeocacheDraft(geocacheLogDraft, true);
                 view.showMessage(context.getString(ApiUtils.getErrorSingle(t).getMessage()), context.getString(R.string.new_log_auto_submit_message));
             }
         });
     }
 
     @Override
-    public void createDraft(GeocacheLogDraw geocacheLogDraw) {
-        createGeocacheDraft(geocacheLogDraw, false);
+    public void saveDraft(GeocacheLogDraft geocacheLogDraft) {
+        createGeocacheDraft(geocacheLogDraft, false);
         view.finish();
     }
 
-    private void createGeocacheDraft(GeocacheLogDraw geocacheLogDraw, boolean isReadyToSync) {
-        geocacheLogDraw.setReadyToSync(isReadyToSync);
-        geocacheLogDraw.setUser(userRespository.getLoggedUser());
-        logDrawRepository.addOrUpdate(geocacheLogDraw);
+    private void createGeocacheDraft(GeocacheLogDraft geocacheLogDraft, boolean isReadyToSync) {
+        realm.beginTransaction();
+        geocacheLogDraft.setReadyToSync(isReadyToSync);
+        geocacheLogDraft.setUser(userRespository.getLoggedUser());
+        realm.commitTransaction();
+        logDraftRepository.addOrUpdate(geocacheLogDraft);
+
     }
 }

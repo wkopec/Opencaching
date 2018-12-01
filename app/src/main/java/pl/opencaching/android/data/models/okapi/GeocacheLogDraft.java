@@ -20,7 +20,7 @@ import pl.opencaching.android.ui.geocache.logs.GeocacheLogInterface;
 import static dagger.internal.Preconditions.checkNotNull;
 import static pl.opencaching.android.utils.StringUtils.getApiFormatedDate;
 
-public class GeocacheLogDraw extends RealmObject implements GeocacheLogInterface {
+public class GeocacheLogDraft extends RealmObject implements GeocacheLogInterface {
 
     @SerializedName("log_uuid")
     @Expose
@@ -66,10 +66,10 @@ public class GeocacheLogDraw extends RealmObject implements GeocacheLogInterface
 
     private RealmList<Image> images;
 
-    public GeocacheLogDraw() {
+    public GeocacheLogDraft() {
     }
 
-    public GeocacheLogDraw(String geocacheCode) {
+    public GeocacheLogDraft(String geocacheCode) {
         this.geocacheCode = checkNotNull(geocacheCode);
         this.uuid = UUID.randomUUID().toString();
         this.date = new DateTime().toDate();

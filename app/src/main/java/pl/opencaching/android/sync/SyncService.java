@@ -10,7 +10,7 @@ import dagger.android.DaggerIntentService;
 import io.realm.Realm;
 import pl.opencaching.android.api.OkapiService;
 import pl.opencaching.android.data.repository.GeocacheRepository;
-import pl.opencaching.android.data.repository.LogDrawRepository;
+import pl.opencaching.android.data.repository.LogDraftRepository;
 import pl.opencaching.android.data.repository.UserRespository;
 import pl.opencaching.android.sync.tasks.UploadGeocacheLogsTask;
 import timber.log.Timber;
@@ -30,7 +30,7 @@ public class SyncService extends DaggerIntentService {
     @Inject
     SharedPreferences sharedPreferences;
     @Inject
-    LogDrawRepository logDrawRepository;
+    LogDraftRepository logDraftRepository;
     @Inject
     GeocacheRepository geocacheRepository;
     @Inject
@@ -47,7 +47,7 @@ public class SyncService extends DaggerIntentService {
             case ACTION_LOG_SYNC:
                 if(!sharedPreferences.getBoolean((HAS_PENDING_SYNC), false)) {
                     Timber.d(LOG_TAG, "Starting log sync data action");
-                    new Handler(getMainLooper()).post(new UploadGeocacheLogsTask(realm, okapiService, logDrawRepository, geocacheRepository, userRespository) {
+                    new Handler(getMainLooper()).post(new UploadGeocacheLogsTask(realm, okapiService, logDraftRepository, geocacheRepository, userRespository) {
                         @Override
                         public void run() {
                             super.run();

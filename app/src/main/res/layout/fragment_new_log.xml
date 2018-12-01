@@ -285,7 +285,7 @@
             android:text="@string/submit_log" />
 
         <Button
-            android:id="@+id/createDraftButton"
+            android:id="@+id/saveDraftButton"
             style="@style/Button.Accent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

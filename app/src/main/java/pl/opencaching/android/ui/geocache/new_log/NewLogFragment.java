@@ -12,16 +12,13 @@ import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.hsalf.smilerating.BaseRating;
@@ -36,16 +33,16 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
+import io.realm.Realm;
 import pl.opencaching.android.R;
 import pl.opencaching.android.data.models.okapi.Geocache;
-import pl.opencaching.android.data.models.okapi.GeocacheLogDraw;
+import pl.opencaching.android.data.models.okapi.GeocacheLogDraft;
+import pl.opencaching.android.data.repository.LogDraftRepository;
 import pl.opencaching.android.ui.base.BaseActivity;
 import pl.opencaching.android.ui.base.BaseFragment;
 import pl.opencaching.android.ui.dialogs.MessageDialog;
 import pl.opencaching.android.ui.dialogs.NewLogTypeDialog;
 import pl.opencaching.android.utils.GeocacheUtils;
-import pl.opencaching.android.utils.StringUtils;
 import pl.opencaching.android.utils.events.ChangeLogTypeEvent;
 import pl.opencaching.android.utils.views.CustomSmileRating;
 import pl.opencaching.android.utils.views.like_button.LikeButtonView;
@@ -63,9 +60,14 @@ import static pl.opencaching.android.utils.StringUtils.getTimeString;
 public class NewLogFragment extends BaseFragment implements NewLogContract.View {
 
     public static final String NEW_LOG_TYPE = "new_log_type:";
+    public static final String EXISTING_DRAFT_UUID = "draft_uuid:";
 
     @Inject
+    Realm realm;
+    @Inject
     Context context;
+    @Inject
+    LogDraftRepository logDraftRepository;
     @Inject
     NewLogContract.Presenter presenter;
 
@@ -97,20 +99,32 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     EditText password;
 
     private Geocache geocache;
-    private GeocacheLogDraw geocacheLogDraw;
+    private GeocacheLogDraft geocacheLogDraft;
+    private boolean isEditMode;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_log, null);
         ButterKnife.bind(this, view);
-        geocacheLogDraw = new GeocacheLogDraw(getArguments().getString(GEOCACHE_CODE));
-        geocacheLogDraw.setType(getArguments().getString(NEW_LOG_TYPE));
-
+        String logDrawUuid = getArguments().getString(EXISTING_DRAFT_UUID);
+        if(logDrawUuid != null){
+            geocacheLogDraft = logDraftRepository.loadLogDrawByUuid(logDrawUuid);
+            isEditMode = true;
+        } else {
+            geocacheLogDraft = new GeocacheLogDraft(getArguments().getString(GEOCACHE_CODE));
+            geocacheLogDraft.setType(getArguments().getString(NEW_LOG_TYPE));
+        }
         setupView();
+        setupLogData();
         setPresenter(presenter);
-        presenter.start(geocacheLogDraw.getGeocacheCode());
+        presenter.start(geocacheLogDraft.getGeocacheCode());
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
@@ -128,8 +142,16 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     private void setupView() {
         setupActionBar();
         setupSmileRating();
-        setupLogType(geocacheLogDraw.getType());
-        setupLogDate(geocacheLogDraw.getDateTime());
+    }
+
+    private void setupLogData() {
+        setupLogType(geocacheLogDraft.getType());
+        setupLogDate(geocacheLogDraft.getDateTime());
+        comment.setText(geocacheLogDraft.getComment());
+        setGeocacheRate(geocacheLogDraft.getRate());
+        if(geocacheLogDraft.isRecommended()) {
+            recommendationButton.onClick(recommendationButton);
+        }
     }
 
     private void setupActionBar() {
@@ -143,7 +165,6 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.new_log_menu, menu);
-
         Switch draftSwitch = menu.findItem(R.id.switchItem).getActionView().findViewById(R.id.draftSwitch);
         draftSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
@@ -151,9 +172,25 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
             } else {
                 buttonViewSwitcher.showPrevious();
             }
-
         });
+        if(isEditMode) {
+            draftSwitch.setChecked(true);
+        }
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void setGeocacheRate(int rate) {
+        switch (rate) {
+            case 1: smileRating.setSelectedSmile(BaseRating.TERRIBLE);
+                break;
+            case 2: smileRating.setSelectedSmile(BaseRating.BAD);
+                break;
+            case 3: smileRating.setSelectedSmile(BaseRating.OKAY);
+                break;
+            case 4: smileRating.setSelectedSmile(BaseRating.GOOD);
+                break;
+            case 5: smileRating.setSelectedSmile(BaseRating.GREAT);
+        }
     }
 
     private void setupSmileRating() {
@@ -181,49 +218,51 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     }
 
     private void setupPasswordLabel(boolean isPasswordRequires) {
-        passwordLabel.setVisibility(isPasswordRequires && geocacheLogDraw.getType().equals(LOG_TYPE_FOUND) ? View.VISIBLE : View.GONE);
+        passwordLabel.setVisibility(isPasswordRequires && geocacheLogDraft.getType().equals(LOG_TYPE_FOUND) ? View.VISIBLE : View.GONE);
     }
 
-    private GeocacheLogDraw getGeocacheLogDraw() {
-        geocacheLogDraw.setComment(comment.getText().toString());
+    private GeocacheLogDraft getGeocacheLogDraft() {
+        realm.beginTransaction();
+        geocacheLogDraft.setComment(comment.getText().toString());
         if (geocache.isPasswordRequired()) {
-            geocacheLogDraw.setPassword(password.getText().toString());
+            geocacheLogDraft.setPassword(password.getText().toString());
         }
-        switch (geocacheLogDraw.getType()) {
+        switch (geocacheLogDraft.getType()) {
             case LOG_TYPE_NEEDS_MAINTENANCE:
-                geocacheLogDraw.setType(LOG_TYPE_COMMENT);
-                geocacheLogDraw.setNeedMaintenance(true);
+                geocacheLogDraft.setType(LOG_TYPE_COMMENT);
+                geocacheLogDraft.setNeedMaintenance(true);
                 break;
             case LOG_TYPE_MAINTENANCE_PERFORMED:
-                geocacheLogDraw.setType(LOG_TYPE_COMMENT);
-                geocacheLogDraw.setNeedMaintenance(false);
+                geocacheLogDraft.setType(LOG_TYPE_COMMENT);
+                geocacheLogDraft.setNeedMaintenance(false);
                 break;
             default:
-                geocacheLogDraw.setNeedMaintenance(null);
+                geocacheLogDraft.setNeedMaintenance(null);
                 break;
         }
-        if(geocacheLogDraw.getType().equals(LOG_TYPE_FOUND) || geocacheLogDraw.getType().equals(LOG_TYPE_ATTENDED)) {
+        if(geocacheLogDraft.getType().equals(LOG_TYPE_FOUND) || geocacheLogDraft.getType().equals(LOG_TYPE_ATTENDED)) {
             if(smileRating.getRating() > 0 && smileRating.getRating() < 6) {
-                geocacheLogDraw.setRate(smileRating.getRating());
+                geocacheLogDraft.setRate(smileRating.getRating());
             }
-            geocacheLogDraw.setRecommended(recommendationButton.isChecked());
+            geocacheLogDraft.setRecommended(recommendationButton.isChecked());
         }
-        return geocacheLogDraw;
+        realm.commitTransaction();
+        return geocacheLogDraft;
     }
 
     @OnClick(R.id.submitButton)
     public void onNewLogClick() {
-        presenter.submitNewLog(getGeocacheLogDraw());
+        presenter.submitNewLog(getGeocacheLogDraft());
     }
 
-    @OnClick(R.id.createDraftButton)
+    @OnClick(R.id.saveDraftButton)
     public void onCreateDraftClick() {
-        presenter.createDraft(getGeocacheLogDraw());
+        presenter.saveDraft(getGeocacheLogDraft());
     }
 
     @OnClick({R.id.logType, R.id.logTypeIcon})
     public void onChangeLogTypeClick() {
-        NewLogTypeDialog messageDialog = NewLogTypeDialog.newInstance(geocacheLogDraw.getGeocacheCode(), NewLogTypeDialog.CHANGE_LOG_TYPE);
+        NewLogTypeDialog messageDialog = NewLogTypeDialog.newInstance(geocacheLogDraft.getGeocacheCode(), NewLogTypeDialog.CHANGE_LOG_TYPE);
         messageDialog.show(requireActivity().getSupportFragmentManager(), NewLogTypeDialog.class.getName());
     }
 
@@ -234,33 +273,40 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
 
     @OnClick({R.id.logDateTextView, R.id.logTimeTextView})
     public void onChangeDateClick() {
-        DateTime date = geocacheLogDraw.getDateTime();
+        DateTime date = geocacheLogDraft.getDateTime();
         DatePickerDialog datePickerDialog = new DatePickerDialog(requireActivity(),
                 (view, year, monthOfYear, dayOfMonth) -> {
-                    geocacheLogDraw.setDate(geocacheLogDraw.getDateTime()
+                    realm.beginTransaction();
+                    geocacheLogDraft.setDate(geocacheLogDraft.getDateTime()
                             .withYear(year)
                             .withMonthOfYear(monthOfYear)
                             .withDayOfMonth(dayOfMonth).toDate());
-                    setupLogDate(geocacheLogDraw.getDateTime());
-
-                    TimePickerDialog timePickerDialog = new TimePickerDialog(requireActivity(),
-                            (view1, hourOfDay, minute) -> {
-                                geocacheLogDraw.setDate(geocacheLogDraw.getDateTime()
-                                        .withHourOfDay(hourOfDay)
-                                        .withMinuteOfHour(minute).toDate());
-                                setupLogDate(geocacheLogDraw.getDateTime());
-                            }, date.getHourOfDay(), date.getMinuteOfHour(), true);
-                    timePickerDialog.show();
-
+                    setupLogDate(geocacheLogDraft.getDateTime());
+                    realm.commitTransaction();
                 }, date.getYear(), date.getMonthOfYear(), date.getDayOfMonth());
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         datePickerDialog.show();
     }
 
+    @OnClick(R.id.logTimeTextView)
+    public void onChangeTimeClick() {
+        DateTime date = geocacheLogDraft.getDateTime();
+        TimePickerDialog timePickerDialog = new TimePickerDialog(requireActivity(),
+                (view1, hourOfDay, minute) -> {
+                    realm.beginTransaction();
+                    geocacheLogDraft.setDate(geocacheLogDraft.getDateTime()
+                            .withHourOfDay(hourOfDay)
+                            .withMinuteOfHour(minute).toDate());
+                    setupLogDate(geocacheLogDraft.getDateTime());
+                    realm.commitTransaction();
+                }, date.getHourOfDay(), date.getMinuteOfHour(), true);
+        timePickerDialog.show();
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onChangeLogType(ChangeLogTypeEvent event) {
-        geocacheLogDraw.setType(event.getLogType());
-        setupLogType(geocacheLogDraw.getType());
+        geocacheLogDraft.setType(event.getLogType());
+        setupLogType(geocacheLogDraft.getType());
 
         setupPasswordLabel(geocache.isPasswordRequired());
         EventBus.getDefault().removeStickyEvent(event);

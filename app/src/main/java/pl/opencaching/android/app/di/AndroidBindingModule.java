@@ -2,7 +2,7 @@ package pl.opencaching.android.app.di;
 
 import pl.opencaching.android.sync.NetworkChangeReceiver;
 import pl.opencaching.android.sync.SyncService;
-import pl.opencaching.android.ui.authorization.LoginActivity;
+import pl.opencaching.android.ui.authorization.AuthorizationActivity;
 import pl.opencaching.android.ui.authorization.login.LoginFragment;
 import pl.opencaching.android.ui.authorization.login.LoginModule;
 import pl.opencaching.android.ui.base.BaseFragmentActivity;
@@ -26,6 +26,7 @@ import pl.opencaching.android.ui.main.map.MapScreenModule;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
+import pl.opencaching.android.ui.splash.SplashActivity;
 
 @Module
 public interface AndroidBindingModule {
@@ -67,7 +68,10 @@ public interface AndroidBindingModule {
     //Activities
 
     @ContributesAndroidInjector()
-    LoginActivity loginActivity();
+    SplashActivity splashActivity();
+
+    @ContributesAndroidInjector()
+    AuthorizationActivity loginActivity();
 
     @ContributesAndroidInjector()
     MainActivity mainActivity();

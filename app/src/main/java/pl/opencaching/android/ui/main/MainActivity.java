@@ -2,7 +2,6 @@ package pl.opencaching.android.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -14,7 +13,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -23,7 +21,7 @@ import android.widget.FrameLayout;
 
 import pl.opencaching.android.R;
 import pl.opencaching.android.app.prefs.SessionManager;
-import pl.opencaching.android.ui.authorization.LoginActivity;
+import pl.opencaching.android.ui.authorization.AuthorizationActivity;
 import pl.opencaching.android.ui.base.BaseActivity;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
@@ -184,7 +182,7 @@ public class MainActivity extends BaseActivity implements MenuAdapter.OnMenuItem
             switch (tag) {
                 case R.string.nav_logout:
                     sessionManager.clearLoggedUserData();
-                    startActivity(new Intent(this, LoginActivity.class));
+                    startActivity(new Intent(this, AuthorizationActivity.class));
                     finish();
                     break;
             }

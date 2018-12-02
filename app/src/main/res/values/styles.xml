@@ -8,8 +8,12 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="AppTheme.NoActionBar.Splash">
-        <item name="android:background">@drawable/image_splash_screen</item>
+
+    <style name="Theme.Splash" parent="android:Theme">
+        <item name="android:windowBackground">@drawable/image_splash_screen</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:scaleType">centerCrop</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

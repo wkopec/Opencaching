@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 import pl.opencaching.android.R;
 import pl.opencaching.android.app.prefs.SessionManager;
-import pl.opencaching.android.ui.authorization.LoginActivity;
+import pl.opencaching.android.ui.authorization.AuthorizationActivity;
 import pl.opencaching.android.ui.base.BaseFragment;
 
 import javax.inject.Inject;
@@ -63,7 +63,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
     ImageView background;
 
     private WebView webView;
-    private LoginActivity activity;
+    private AuthorizationActivity activity;
 
     @Inject
     LoginContract.Presenter presenter;
@@ -75,7 +75,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, null);
         ButterKnife.bind(this, view);
-        activity = (LoginActivity) requireActivity();
+        activity = (AuthorizationActivity) requireActivity();
         setPresenter(presenter);
         setWebView();
         setTermsOfService();

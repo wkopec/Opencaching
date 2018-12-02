@@ -19,7 +19,7 @@ import android.widget.Toast;
 import pl.opencaching.android.R;
 import pl.opencaching.android.app.prefs.SessionManager;
 import pl.opencaching.android.data.models.Error;
-import pl.opencaching.android.ui.authorization.LoginActivity;
+import pl.opencaching.android.ui.authorization.AuthorizationActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -142,7 +142,7 @@ public abstract class BaseActivity extends DaggerAppCompatActivity implements Ba
     public void performSessionEnded() {
         //setOauthTokenSecret(this, "");
         sessionManager.saveOauthTokenSecret("");
-        startActivity(new Intent(this, LoginActivity.class));
+        startActivity(new Intent(this, AuthorizationActivity.class));
         finish();
     }
 

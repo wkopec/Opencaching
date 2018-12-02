@@ -3,24 +3,24 @@ package pl.opencaching.android.ui.geocache;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import butterknife.OnClick;
+import io.realm.Realm;
 import pl.opencaching.android.R;
 
 import pl.opencaching.android.app.prefs.SessionManager;
@@ -54,6 +54,8 @@ import pl.opencaching.android.utils.GeocacheUtils;
 
 public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSelectedListener, ViewPager.OnPageChangeListener, OnMapReadyCallback {
 
+    @Inject
+    Realm realm;
     @Inject
     SessionManager sessionManager;
     @Inject
@@ -198,11 +200,24 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-//        if (id == android.R.id.home) {
-//            finish();
-//        }
-        return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.action_navigate:
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=" + geocache.getPosition().latitude + "," + geocache.getPosition().longitude));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                return true;
+            case R.id.action_save:
+                realm.beginTransaction();
+                geocache.setSaved(true);
+                realm.commitTransaction();
+                return true;
+            case R.id.action_compass:
+
+                return true;
+            default:
+                return false;
+        }
+
     }
 
     @Override

@@ -58,14 +58,6 @@ public class GeocacheRepository extends RealmRepository<Geocache> {
         return query.findAll();
     }
 
-//    public void clearUnsavedGeocaches() {
-//        realm.beginTransaction();
-//        realm.where(Geocache.class)
-//                .equalTo("isSaved", false)
-//                .findAll().deleteAllFromRealm();
-//        realm.commitTransaction();
-//    }
-
     public void clearUnsavedGeocachesWithExcluded(String[] excludedCodes) {
         realm.beginTransaction();
         realm.where(Geocache.class)

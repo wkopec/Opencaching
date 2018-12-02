@@ -64,6 +64,8 @@ public class GeocacheLogDraft extends RealmObject implements GeocacheLogInterfac
 
     private User user;
 
+    private String uploadErrorMessage;  //message that API have returned while sync
+
     private RealmList<Image> images;
 
     public GeocacheLogDraft() {
@@ -83,13 +85,13 @@ public class GeocacheLogDraft extends RealmObject implements GeocacheLogInterfac
         map.put("comment", comment);
         map.put("when", getApiFormatedDate(date));
         map.put("recommend", String.valueOf(isRecommended));
-        if(password != null) {
+        if (password != null) {
             map.put("password", password);
         }
-        if(rate > 0 && rate < 6) {
+        if (rate > 0 && rate < 6) {
             map.put("rating", String.valueOf(rate));
         }
-        if(isNeedMaintenance != null) {
+        if (isNeedMaintenance != null) {
             map.put("needs_maintenance2", String.valueOf(isNeedMaintenance));
         }
         map.put("comment_format", "plaintext");
@@ -212,6 +214,7 @@ public class GeocacheLogDraft extends RealmObject implements GeocacheLogInterfac
     }
 
     @Override
+
     public User getUser() {
         return user;
     }
@@ -229,9 +232,16 @@ public class GeocacheLogDraft extends RealmObject implements GeocacheLogInterfac
         this.images = images;
     }
 
+    public String getUploadErrorMessage() {
+        return uploadErrorMessage;
+    }
+
+    public void setUploadErrorMessage(String uploadErrorMessage) {
+        this.uploadErrorMessage = uploadErrorMessage;
+    }
+
     @Override
     public int compareTo(@NonNull GeocacheLogInterface geocacheLog) {
-        //return getDateTime().compareTo(geocacheLog.getDateTime());
         return geocacheLog.getDateTime().compareTo(getDateTime());
     }
 }

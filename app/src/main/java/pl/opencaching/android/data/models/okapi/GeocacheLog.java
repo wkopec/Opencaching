@@ -123,7 +123,6 @@ public class GeocacheLog extends RealmObject implements GeocacheLogInterface {
 
     @Override
     public int compareTo(@NonNull GeocacheLogInterface geocacheLog) {
-        //return getDateTime().compareTo(geocacheLog.getDateTime());
         return geocacheLog.getDateTime().compareTo(getDateTime());
     }
 }

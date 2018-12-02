@@ -24,7 +24,7 @@
     <color name="low_transparent">#35000000</color>
     <color name="halt_transparent">#c1000000</color>
     <color name="transparent">#00000000</color>
-
+    <color name="transparent_red">#96ff000d</color>
 
     <color name="progressbar_color_1">#f4b400</color>
     <color name="progressbar_color_2">#427fed</color>

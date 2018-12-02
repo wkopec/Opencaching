@@ -26,7 +26,7 @@ public class NetworkChangeReceiver extends DaggerBroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         if (isInternetConnection(context)) {
-            RealmResults<GeocacheLogDraft> logDraws = logDraftRepository.loadAllLogDrawsBySyncReady(true);
+            RealmResults<GeocacheLogDraft> logDraws = logDraftRepository.loadAllLogDrawsBySyncReadyAscending(true);
             if (!logDraws.isEmpty() && !sharedPreferences.getBoolean((HAS_PENDING_SYNC), false)) {
                 startMergeService(context, sharedPreferences);
             }

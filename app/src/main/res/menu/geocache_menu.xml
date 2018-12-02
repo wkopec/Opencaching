@@ -19,13 +19,7 @@
     <item
         android:id="@+id/action_save"
         android:orderInCategory="3"
-        android:title="@string/save_all"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_list_view"
-        android:orderInCategory="3"
-        android:title="@string/list_view"
+        android:title="@string/save"
         app:showAsAction="never" />
 
 </menu>

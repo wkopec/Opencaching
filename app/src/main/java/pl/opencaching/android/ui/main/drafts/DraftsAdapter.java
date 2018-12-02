@@ -23,7 +23,6 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Completable;
 import io.realm.Realm;
 import pl.opencaching.android.R;
 import pl.opencaching.android.data.models.okapi.Geocache;
@@ -40,27 +39,23 @@ import static pl.opencaching.android.utils.Constants.LOG_TYPE_COMMENT;
 import static pl.opencaching.android.utils.Constants.LOG_TYPE_FOUND;
 import static pl.opencaching.android.utils.StringUtils.getDateString;
 import static pl.opencaching.android.utils.StringUtils.getTimeString;
-import static pl.opencaching.android.utils.SyncUtils.startMergeService;
 
 public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder> {
 
     private GeocacheRepository geocacheRepository;
     private Activity context;
     private Realm realm;
-    private SharedPreferences sharedPreferences;
-    private Completable selectionChangeCompletable;
-    private Completable longItemClickCompletable;
-
+    private DraftsAdapretEventListener listener;
     private List<GeocacheLogDraft> geocacheLogDraftList;
     private List<ViewHolder> views = new ArrayList<>();
     private Set<GeocacheLogDraft> selectedGeocacheDraws = new HashSet<>();
 
 
-    DraftsAdapter(Activity context, GeocacheRepository geocacheRepository, Realm realm, SharedPreferences sharedPreferences) {
+    DraftsAdapter(Activity context, GeocacheRepository geocacheRepository, Realm realm, DraftsAdapretEventListener listener) {
         this.geocacheRepository = geocacheRepository;
         this.context = context;
-        this.sharedPreferences = sharedPreferences;
         this.realm = realm;
+        this.listener = listener;
     }
 
     void setGeocacheLogDraftList(List<GeocacheLogDraft> geocacheLogDraftList) {
@@ -120,8 +115,14 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
             holder.passwordIcon.setVisibility(View.GONE);
         }
 
+        if(geocacheLogDraft.getUploadErrorMessage() != null) {
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.transparent_red));
+        } else {
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+        }
+
         holder.itemView.setOnLongClickListener(v -> {
-            longItemClickCompletable.subscribe();
+            listener.onLongItemClick();
             holder.checkbox.setChecked(true);
             return true;
         });
@@ -132,9 +133,7 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
             } else {
                 selectedGeocacheDraws.remove(geocacheLogDraftList.get(position));
             }
-            if (selectionChangeCompletable != null) {
-                selectionChangeCompletable.subscribe();
-            }
+            listener.onDraftSelectionChange();
         });
 
         holder.moreIcon.setOnClickListener(v -> openDraftItemMenu(geocacheLogDraftList.get(position), holder.moreIcon));
@@ -172,10 +171,7 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
                     launchGeocacheActivity(context, logDraw.getGeocacheCode());
                     break;
                 case R.id.action_post:
-                    realm.beginTransaction();
-                    logDraw.setReadyToSync(true);
-                    realm.commitTransaction();
-                    startMergeService(context, sharedPreferences);
+                    listener.onPostDraft(logDraw);
                     break;
                 case R.id.action_delete:
                     realm.beginTransaction();
@@ -195,14 +191,6 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
         Bundle bundle = new Bundle();
         bundle.putString(EXISTING_DRAFT_UUID, logDraw.getUuid());
         launchFragmentActivity(context, NEW_LOG_FRAGMENT, bundle);
-    }
-
-    void setOnLongItemClickCompletable(Completable longItemClickCompletable) {
-        this.longItemClickCompletable = longItemClickCompletable;
-    }
-
-    void setSelectionChangeCompletable(Completable selectionChangeCompletable) {
-        this.selectionChangeCompletable = selectionChangeCompletable;
     }
 
     Set<GeocacheLogDraft> getSelectedGeocacheDraws() {

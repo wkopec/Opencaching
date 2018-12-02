@@ -1,6 +1,5 @@
 package pl.opencaching.android.ui.main.drafts;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -21,7 +21,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Completable;
 import io.realm.Realm;
 import pl.opencaching.android.R;
 import pl.opencaching.android.data.models.okapi.GeocacheLogDraft;
@@ -29,19 +28,19 @@ import pl.opencaching.android.data.repository.GeocacheRepository;
 import pl.opencaching.android.ui.base.BaseFragment;
 import pl.opencaching.android.ui.main.MainActivity;
 
-public class DraftsFragment extends BaseFragment implements DraftsContract.View {
+public class DraftsFragment extends BaseFragment implements DraftsContract.View, DraftsAdapretEventListener {
 
     @Inject
     GeocacheRepository geocacheRepository;
     @Inject
     Realm realm;
     @Inject
-    SharedPreferences sharedPreferences;
-    @Inject
     DraftsContract.Presenter presenter;
 
     @BindView(R.id.draftsRecycleView)
     RecyclerView draftsRecycleView;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
     private DraftsAdapter adapter;
     private Menu menu;
@@ -65,7 +64,7 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View 
     @Override
     public void onResume() {
         super.onResume();
-        if(adapter != null) {
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
     }
@@ -81,24 +80,11 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View 
         if (actionBar != null) {
             actionBar.setElevation(0);
             actionBar.setTitle(getString(R.string.nav_drafts));
-
         }
     }
 
     private void configureRecyclerView() {
-        adapter = new DraftsAdapter(requireActivity(), geocacheRepository, realm, sharedPreferences);
-        adapter.setSelectionChangeCompletable(Completable.fromAction(() -> {
-            if(adapter.getSelectedGeocacheDraws().isEmpty()) {
-                showMultipleChoiceMenu(false);
-            } else {
-                showMultipleChoiceMenu(true);
-            }
-        }));
-        adapter.setOnLongItemClickCompletable(Completable.fromAction(() -> {
-            if(!isMultipleChoiceMode) {
-                setMultipleChoiceMode(true);
-            }
-        }));
+        adapter = new DraftsAdapter(requireActivity(), geocacheRepository, realm, this);
         draftsRecycleView.setAdapter(adapter);
         draftsRecycleView.setLayoutManager(new LinearLayoutManager(requireActivity()));
     }
@@ -116,39 +102,44 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View 
             case R.id.action_multiple_choice:
                 setMultipleChoiceMode(true);
                 return true;
-            case R.id.action_set_rate:
-
-                return true;
+//            case R.id.action_set_rate:
+//
+//                return true;
+//            case R.id.action_set_comment:
+//
+//                return true;
             case R.id.action_post:
-
+                presenter.postDrafts(adapter.getSelectedGeocacheDraws());
                 return true;
             default:
                 return false;
         }
     }
 
-    private void setMultipleChoiceMode(boolean isMultipleChoiceMode) {
+    @Override
+    public void setMultipleChoiceMode(boolean isMultipleChoiceMode) {
         this.isMultipleChoiceMode = isMultipleChoiceMode;
         adapter.setMultipleChoiceMode(isMultipleChoiceMode);
-        if(!isMultipleChoiceMode) {
+        if (!isMultipleChoiceMode) {
             adapter.setAllItemsChecked(false);
         }
         menu.findItem(R.id.action_multiple_choice).setVisible(!isMultipleChoiceMode);
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         if (actionBar != null) {
-            if(requireActivity() instanceof MainActivity) {
-                ((MainActivity)requireActivity()).displayHomeAsUpEnabled(isMultipleChoiceMode);
+            if (requireActivity() instanceof MainActivity) {
+                ((MainActivity) requireActivity()).displayHomeAsUpEnabled(isMultipleChoiceMode);
             }
         }
     }
 
     private void showMultipleChoiceMenu(boolean isMultipleChoiceMenuVisible) {
-        menu.findItem(R.id.action_set_rate).setVisible(isMultipleChoiceMenuVisible);
-        menu.findItem(R.id.action_set_comment).setVisible(isMultipleChoiceMenuVisible);
+        menu.findItem(R.id.action_post).setVisible(isMultipleChoiceMenuVisible);
+//        menu.findItem(R.id.action_set_rate).setVisible(isMultipleChoiceMenuVisible);
+//        menu.findItem(R.id.action_set_comment).setVisible(isMultipleChoiceMenuVisible);
     }
 
     public boolean onBackPressedHandled() {
-        if(isMultipleChoiceMode) {
+        if (isMultipleChoiceMode) {
             setMultipleChoiceMode(false);
             return true;
         } else {
@@ -160,5 +151,37 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View 
     public void setGeocacheDraws(List<GeocacheLogDraft> geocacheLogDrafts) {
         adapter.setGeocacheLogDraftList(geocacheLogDrafts);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateData() {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showProgress(boolean isShown) {
+        progressBar.setVisibility(isShown ? View.VISIBLE : View.GONE);
+    }
+
+
+    @Override
+    public void onDraftSelectionChange() {
+        if (adapter.getSelectedGeocacheDraws().isEmpty()) {
+            showMultipleChoiceMenu(false);
+        } else {
+            showMultipleChoiceMenu(true);
+        }
+    }
+
+    @Override
+    public void onLongItemClick() {
+        if (!isMultipleChoiceMode) {
+            setMultipleChoiceMode(true);
+        }
+    }
+
+    @Override
+    public void onPostDraft(GeocacheLogDraft logDraft) {
+        presenter.postDraft(logDraft);
     }
 }

@@ -85,6 +85,10 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
     TextView logDateTextView;
     @BindView(R.id.logTimeTextView)
     TextView logTimeTextView;
+    @BindView(R.id.errorMessage)
+    TextView errorMessage;
+    @BindView(R.id.errorLabel)
+    ConstraintLayout errorLabel;
     @BindView(R.id.rateLabel)
     ConstraintLayout rateLabel;
     @BindView(R.id.smileRating)
@@ -151,6 +155,12 @@ public class NewLogFragment extends BaseFragment implements NewLogContract.View 
         setGeocacheRate(geocacheLogDraft.getRate());
         if(geocacheLogDraft.isRecommended()) {
             recommendationButton.onClick(recommendationButton);
+        }
+        if(geocacheLogDraft.getUploadErrorMessage() != null) {
+            errorMessage.setText(geocacheLogDraft.getUploadErrorMessage());
+            errorLabel.setVisibility(View.VISIBLE);
+        } else {
+            errorLabel.setVisibility(View.GONE);
         }
     }
 

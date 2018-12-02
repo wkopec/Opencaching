@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import static dagger.internal.Preconditions.checkNotNull;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import pl.opencaching.android.data.models.okapi.GeocacheLogDraft;
 import pl.opencaching.android.data.repository.base.RealmRepository;
 
@@ -34,9 +35,10 @@ public class LogDraftRepository extends RealmRepository<GeocacheLogDraft> {
                 .findAll();
     }
 
-    public RealmResults<GeocacheLogDraft> loadAllLogDrawsBySyncReady(boolean isReadyToSync) {
+    public RealmResults<GeocacheLogDraft> loadAllLogDrawsBySyncReadyAscending(boolean isReadyToSync) {
         return realm.where(GeocacheLogDraft.class)
                 .equalTo("isReadyToSync", isReadyToSync)
+                .sort("date", Sort.ASCENDING)
                 .findAll();
     }
 

@@ -523,7 +523,7 @@ public class MapFragment extends BaseFragment implements MapContract.View, OnMap
     private void updateGeocacheMenu(Geocache geocache){
         geocacheInfoMenu.getMenu().clear();
         if(geocache != null) {
-            if(!geocache.getType().equals(GEOCACHE_TYPE_EVENT) && !isGeocacheFound(geocache.getCode())) {
+            if(!geocache.getType().equals(GEOCACHE_TYPE_EVENT) && !geocache.getOwner().getUuid().equals(sessionManager.getUserUuid()) &&!isGeocacheFound(geocache.getCode())) {
                 geocacheInfoMenu.getMenu().add(Menu.NONE, R.id.action_fast_found, 1, getResources().getString(R.string.geocache_map_info_found));
                 geocacheInfoMenu.getMenu().add(Menu.NONE, R.id.action_fast_not_found, 2, getResources().getString(R.string.geocache_map_info_not_found));
             }

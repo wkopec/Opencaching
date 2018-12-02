@@ -1,5 +1,7 @@
 package pl.opencaching.android.sync.tasks;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 
 import io.realm.Realm;
@@ -12,9 +14,14 @@ import pl.opencaching.android.data.models.okapi.NewGeocacheLogResponse;
 import pl.opencaching.android.data.repository.GeocacheRepository;
 import pl.opencaching.android.data.repository.LogDraftRepository;
 import pl.opencaching.android.data.repository.UserRespository;
+import pl.opencaching.android.utils.events.LogSyncEvent;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static pl.opencaching.android.utils.events.LogSyncEvent.SyncStatus.COMPLETED;
+import static pl.opencaching.android.utils.events.LogSyncEvent.SyncStatus.FAILED;
+import static pl.opencaching.android.utils.events.LogSyncEvent.SyncStatus.WITH_ERRORS;
 
 public class UploadGeocacheLogsTask implements Runnable {
 
@@ -37,6 +44,7 @@ public class UploadGeocacheLogsTask implements Runnable {
         try {
             uploadNewGeocacheLogs();
             //uploadGeocacheLogsImages();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,7 +52,7 @@ public class UploadGeocacheLogsTask implements Runnable {
 
 
     private void uploadNewGeocacheLogs() throws IOException {
-        RealmResults<GeocacheLogDraft> logDraws = logDraftRepository.loadAllLogDrawsBySyncReady(true);
+        RealmResults<GeocacheLogDraft> logDraws = logDraftRepository.loadAllLogDrawsBySyncReadyAscending(true);
         for(GeocacheLogDraft geocacheLogDraft : logDraws) {
             okapiService.submitNewGeocacheLog(geocacheLogDraft.getMap()).enqueue(new Callback<NewGeocacheLogResponse>() {
                 @Override
@@ -64,11 +72,18 @@ public class UploadGeocacheLogsTask implements Runnable {
 
                             //TODO: upload images for this log
                             uploadGeocacheImages();
+
+                            EventBus.getDefault().post(new LogSyncEvent(COMPLETED));
+
                         } else if(!newLogResponse.isSuccess() && newLogResponse.getMessage() != null) {
-                            //TODO: handle error
+                            realm.beginTransaction();
+                            geocacheLogDraft.setReadyToSync(false);
+                            geocacheLogDraft.setUploadErrorMessage(newLogResponse.getMessage());
+                            realm.commitTransaction();
+                            EventBus.getDefault().post(new LogSyncEvent(WITH_ERRORS));
                         }
                     } else {
-                        //TODO: handle error
+                        EventBus.getDefault().post(new LogSyncEvent(FAILED));
                     }
                 }
 
@@ -77,8 +92,8 @@ public class UploadGeocacheLogsTask implements Runnable {
 
                 }
             });
-
         }
+
     }
 
     private void uploadGeocacheImages() {

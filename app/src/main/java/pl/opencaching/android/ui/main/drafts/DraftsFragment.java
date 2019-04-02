@@ -15,12 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import pl.opencaching.android.R;
 import pl.opencaching.android.data.models.okapi.GeocacheLogDraft;
@@ -28,7 +27,7 @@ import pl.opencaching.android.data.repository.GeocacheRepository;
 import pl.opencaching.android.ui.base.BaseFragment;
 import pl.opencaching.android.ui.main.MainActivity;
 
-public class DraftsFragment extends BaseFragment implements DraftsContract.View, DraftsAdapretEventListener {
+public class DraftsFragment extends BaseFragment implements DraftsContract.View, DraftsAdapterEventListener {
 
     @Inject
     GeocacheRepository geocacheRepository;
@@ -72,7 +71,7 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View,
     private void setupView() {
         setHasOptionsMenu(true);
         setupActionBar();
-        configureRecyclerView();
+        //configureRecyclerView();
     }
 
     private void setupActionBar() {
@@ -81,12 +80,6 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View,
             actionBar.setElevation(0);
             actionBar.setTitle(getString(R.string.nav_drafts));
         }
-    }
-
-    private void configureRecyclerView() {
-        adapter = new DraftsAdapter(requireActivity(), geocacheRepository, realm, this);
-        draftsRecycleView.setAdapter(adapter);
-        draftsRecycleView.setLayoutManager(new LinearLayoutManager(requireActivity()));
     }
 
     @Override
@@ -110,6 +103,12 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View,
 //                return true;
             case R.id.action_post:
                 presenter.postDrafts(adapter.getSelectedGeocacheDraws());
+                return true;
+            case R.id.action_delete:
+                //TODO: show confirmation dialog
+                presenter.deleteDrafts(adapter.getSelectedGeocacheDraws());
+                adapter.notifyDataSetChanged();
+                setMultipleChoiceMode(false);
                 return true;
             default:
                 return false;
@@ -136,6 +135,7 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View,
         menu.findItem(R.id.action_post).setVisible(isMultipleChoiceMenuVisible);
 //        menu.findItem(R.id.action_set_rate).setVisible(isMultipleChoiceMenuVisible);
 //        menu.findItem(R.id.action_set_comment).setVisible(isMultipleChoiceMenuVisible);
+        menu.findItem(R.id.action_delete).setVisible(isMultipleChoiceMenuVisible);
     }
 
     public boolean onBackPressedHandled() {
@@ -148,9 +148,10 @@ public class DraftsFragment extends BaseFragment implements DraftsContract.View,
     }
 
     @Override
-    public void setGeocacheDraws(List<GeocacheLogDraft> geocacheLogDrafts) {
-        adapter.setGeocacheLogDraftList(geocacheLogDrafts);
-        adapter.notifyDataSetChanged();
+    public void setGeocacheDraws(OrderedRealmCollection<GeocacheLogDraft> geocacheLogDrafts) {
+        adapter = new DraftsAdapter(requireActivity(), geocacheRepository, realm, this, geocacheLogDrafts);
+        draftsRecycleView.setAdapter(adapter);
+        draftsRecycleView.setLayoutManager(new LinearLayoutManager(requireActivity()));
     }
 
     @Override

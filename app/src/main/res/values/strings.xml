@@ -180,12 +180,15 @@
     <string name="standard_mode">Tryb standardowy</string>
     <string name="post_log">Wyślij wpis</string>
     <string name="delete_draft">Usuń szkic</string>
+    <string name="delete_drafts">Usuń szkice</string>
     <string name="show_geocache">Pokaż skrzynkę</string>
     <string name="post_logs">Wyślij wpisy</string>
     <string name="log_sync_success_message">Wpis został pomyślnie wysłany</string>
+    <string name="log_sync_fail_message">Wpis odrzucony przez serwer</string>
     <string name="logs_sync_success_message">Pomyślnie wysłano wszystkie wpisy</string>
     <string name="log_sync_with_errors_message">Niektóre wpisy zostały odrzucone przez serwer. Sprawdź ich błędy.</string>
     <string name="error_message">Błąd wpisu</string>
+
 
 
 </resources>

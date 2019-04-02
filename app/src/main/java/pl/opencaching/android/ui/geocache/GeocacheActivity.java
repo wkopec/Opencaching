@@ -214,8 +214,11 @@ public class GeocacheActivity extends BaseActivity implements TabLayout.OnTabSel
             case R.id.action_compass:
 
                 return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             default:
-                return false;
+                return super.onOptionsItemSelected(item);
         }
 
     }

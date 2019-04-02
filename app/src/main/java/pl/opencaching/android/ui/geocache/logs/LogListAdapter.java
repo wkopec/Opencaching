@@ -24,6 +24,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pl.opencaching.android.data.models.okapi.GeocacheLogDraft;
 import pl.opencaching.android.ui.gallery.PhotosAdapter;
 import pl.opencaching.android.utils.GeocacheUtils;
 import pl.opencaching.android.utils.StringUtils;
@@ -99,8 +100,12 @@ public class LogListAdapter extends RecyclerView.Adapter<LogListAdapter.ViewHold
                 holder.notSyncedInfo.setText(context.getResources().getString(R.string.log_not_synchronized_yet));
                 holder.notSyncedInfo.setVisibility(View.VISIBLE);
             } else {
+                if(((GeocacheLogDraft)geocacheLog).getUploadErrorMessage() != null) {
+                    holder.notSyncedInfo.setText(context.getResources().getString(R.string.log_sync_fail_message));
+                } else {
+                    holder.notSyncedInfo.setText(context.getResources().getString(R.string.draw_of_log));
+                }
                 holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.accent_gray));
-                holder.notSyncedInfo.setText(context.getResources().getString(R.string.draw_of_log));
                 holder.notSyncedInfo.setVisibility(View.VISIBLE);
             }
         }

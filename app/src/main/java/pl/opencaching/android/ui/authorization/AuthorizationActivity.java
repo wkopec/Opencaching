@@ -29,15 +29,8 @@ public class AuthorizationActivity extends BaseActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        setContentView(R.layout.activity_base_fragment);
         replaceFragment(new LoginFragment(), false);
-
-//        //TODO: change it to BaseFragmentActivity
-//        setContentView(R.layout.activity_base_fragment);
-//        if (sessionManager.isLoggedIn()) {
-//            startMainActivity();
-//        } else {
-//            replaceFragment(new LoginFragment(), false);
-//        }
 
     }
 

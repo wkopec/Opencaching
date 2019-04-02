@@ -1,7 +1,6 @@
 package pl.opencaching.android.ui.main.drafts;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -23,7 +22,9 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
+import io.realm.RealmRecyclerViewAdapter;
 import pl.opencaching.android.R;
 import pl.opencaching.android.data.models.okapi.Geocache;
 import pl.opencaching.android.data.models.okapi.GeocacheLogDraft;
@@ -40,27 +41,29 @@ import static pl.opencaching.android.utils.Constants.LOG_TYPE_FOUND;
 import static pl.opencaching.android.utils.StringUtils.getDateString;
 import static pl.opencaching.android.utils.StringUtils.getTimeString;
 
-public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder> {
+public class DraftsAdapter extends RealmRecyclerViewAdapter<GeocacheLogDraft, DraftsAdapter.ViewHolder> {
 
     private GeocacheRepository geocacheRepository;
     private Activity context;
     private Realm realm;
-    private DraftsAdapretEventListener listener;
+    private DraftsAdapterEventListener listener;
     private List<GeocacheLogDraft> geocacheLogDraftList;
     private List<ViewHolder> views = new ArrayList<>();
     private Set<GeocacheLogDraft> selectedGeocacheDraws = new HashSet<>();
 
 
-    DraftsAdapter(Activity context, GeocacheRepository geocacheRepository, Realm realm, DraftsAdapretEventListener listener) {
+    DraftsAdapter(Activity context, GeocacheRepository geocacheRepository, Realm realm, DraftsAdapterEventListener listener, OrderedRealmCollection<GeocacheLogDraft> geocacheLogDraftList) {
+        super(geocacheLogDraftList, true);
+        this.geocacheLogDraftList = geocacheLogDraftList;
         this.geocacheRepository = geocacheRepository;
         this.context = context;
         this.realm = realm;
         this.listener = listener;
     }
 
-    void setGeocacheLogDraftList(List<GeocacheLogDraft> geocacheLogDraftList) {
-        this.geocacheLogDraftList = geocacheLogDraftList;
-    }
+//    void setGeocacheLogDraftList(List<GeocacheLogDraft> geocacheLogDraftList) {
+//        this.geocacheLogDraftList = geocacheLogDraftList;
+//    }
 
     @NonNull
     @Override
@@ -174,6 +177,7 @@ public class DraftsAdapter extends RecyclerView.Adapter<DraftsAdapter.ViewHolder
                     listener.onPostDraft(logDraw);
                     break;
                 case R.id.action_delete:
+                    //TODO: show confirmation dialog
                     realm.beginTransaction();
                     logDraw.deleteFromRealm();
                     realm.commitTransaction();

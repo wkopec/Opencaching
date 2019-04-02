@@ -12,6 +12,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import pl.opencaching.android.R;
 import pl.opencaching.android.app.App;
@@ -49,7 +50,7 @@ public class DraftsPresenter extends BasePresenter implements DraftsContract.Pre
     @Override
     public void onStart() {
         EventBus.getDefault().register(this);
-        List<GeocacheLogDraft> geocacheLogDraftList = logDraftRepository.loadAllLogDraws();
+        OrderedRealmCollection<GeocacheLogDraft> geocacheLogDraftList = logDraftRepository.loadAllLogDraws();
         view.setGeocacheDraws(geocacheLogDraftList);
     }
 
@@ -75,8 +76,17 @@ public class DraftsPresenter extends BasePresenter implements DraftsContract.Pre
         view.showProgress(true);
     }
 
+    @Override
+    public void deleteDrafts(Set<GeocacheLogDraft> drafts) {
+        realm.beginTransaction();
+        for(GeocacheLogDraft draft : drafts) {
+            draft.deleteFromRealm();
+        }
+        realm.commitTransaction();
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onSearchMap(LogSyncEvent event) {
+    public void onLogSyncEvent(LogSyncEvent event) {
         syncedDrafts++;
         syncStatuses.add(event.getStatus());
         if (syncedDrafts == draftsForSyncCounter) {
